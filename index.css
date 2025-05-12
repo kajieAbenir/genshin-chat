@@ -1,0 +1,106 @@
+#background-pic {
+  background-image: url("src/img/asdf.jpg");
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
+/* Container for the entire chatbox */
+.chat-container {
+  width: 400px;
+  height: 600px;
+  margin: 50px auto;
+  border: 1px solid #ccc;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styling */
+.chat-header {
+  background: #4caf50;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Messages area uses flex-grow */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: scroll;
+  background: #e5ddd5;
+}
+
+/* Each message container */
+.chat-message {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Align sender messages to the right */
+.chat-message.sender {
+  align-items: flex-end;
+}
+
+/* Chat bubble styling for both sender and receiver */
+.chat-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  position: relative;
+}
+
+/* Specific style for sender bubble */
+.chat-message.sender .chat-bubble {
+  background: #dcf8c6;
+  border-bottom-right-radius: 0;
+}
+
+/* Specific style for receiver bubble */
+.chat-message.receiver .chat-bubble {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-bottom-left-radius: 0;
+}
+
+/* Input area styling */
+.chat-input {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input button {
+  margin-left: 10px;
+  padding: 10px 15px;
+  border: none;
+  background: #4caf50;
+  color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+}
