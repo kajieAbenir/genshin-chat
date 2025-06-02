@@ -17,7 +17,7 @@
       <div class="chat-container" id="chat-container">
         <div class="chat-header">Chat</div>
 
-        <div class="chat-messages">
+        <div class="chat-messages" id="chat-messages">
           <div class="chat-message receiver">
             <div class="chat-bubble">Hello! How can I help you today?</div>
           </div>
@@ -39,7 +39,7 @@
             id="chat-input"
             placeholder="Type your message..."
           />
-          <button id="send">Send</button>
+          <button id="send" onclick="addConversation()">Send</button>
         </div>
 
         <div class="chat-input center">
@@ -47,7 +47,7 @@
             <input type="checkbox" id="switch" />
             <span class="slider round"></span>
           </label>
-          <span>Toggle Chat</span>
+          <span style="color: white;">Toggle Chat</span>
         </div>
       </div>
     </div>

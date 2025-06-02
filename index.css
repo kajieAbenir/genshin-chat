@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "HYWenHei 85W";
+  font-style: normal;
+  font-weight: normal;
+  src: 
+    local("HYWenHei-85W"),
+    url("./src/fonts/zhcn.woff") format("woff");
+}
+
 #background-pic {
   background-image: url("src/img/asdf.jpg");
   background-size: cover;
@@ -13,7 +22,9 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+
+  font-family: "HYWenHei 85W", Arial, sans-serif !important;
+  
   background: #f2f2f2;
 }
 
@@ -47,8 +58,8 @@ body {
   overflow-y: scroll;
   background: linear-gradient(
     90deg,
-    rgba(34, 40, 62, 1) 25%,
-    rgba(34, 40, 62, 0.47) 79%,
+    rgba(34, 40, 62, 1) 50%,
+    rgba(34, 40, 62, 0.47) 85%,
     rgba(34, 40, 62, 0) 100%
   );
 }
@@ -93,14 +104,15 @@ body {
 
 /* Specific style for sender bubble */
 .chat-message.sender .chat-bubble {
-  background: #dcf8c6;
+  background: #d9cfc7;
   border-bottom-right-radius: 0;
 }
 
 /* Specific style for receiver bubble */
 .chat-message.receiver .chat-bubble {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: #3d4655;
+  color: white;
+  border: none;
   border-bottom-left-radius: 0;
 }
 
@@ -111,6 +123,8 @@ body {
   display: flex;
   align-items: center;
   background: #22283e;
+
+  
 }
 
 .chat-input input {
@@ -119,6 +133,8 @@ body {
   border: 1px solid #ccc;
   border-radius: 20px;
   outline: none;
+
+  font-family: "HYWenHei 85W", Arial, sans-serif !important;
 }
 
 .chat-input button {
@@ -129,6 +145,8 @@ body {
   color: #fff;
   border-radius: 20px;
   cursor: pointer;
+
+  font-family: "HYWenHei 85W", Arial, sans-serif !important;
 }
 
 /* for switch */
