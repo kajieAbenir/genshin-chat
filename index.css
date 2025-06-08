@@ -2,13 +2,13 @@
   font-family: "HYWenHei 85W";
   font-style: normal;
   font-weight: normal;
-  src: 
+  src:
     local("HYWenHei-85W"),
     url("./src/fonts/zhcn.woff") format("woff");
 }
 
 #background-pic {
-  background-image: url("src/img/asdf.jpg");
+  background-image: url("src/bg-img/asdf.jpg");
   background-size: cover;
   background-position: center;
   position: fixed;
@@ -24,7 +24,7 @@ body {
   padding: 0;
 
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
-  
+
   background: #f2f2f2;
 }
 
@@ -41,6 +41,20 @@ body {
   flex-direction: column;
 }
 
+@media (max-width: 600px) {
+  .chat-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    border: none;
+    background: none;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 /* Header styling */
 .chat-header {
   background: #22283e;
@@ -48,7 +62,11 @@ body {
   padding: 20px;
   text-align: center;
   font-size: 20px;
-  font-weight: bold;
+}
+
+.chat-header:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Messages area uses flex-grow */
@@ -63,6 +81,8 @@ body {
     rgba(34, 40, 62, 0) 100%
   );
 }
+
+/* scroll bar for chat */
 
 .chat-messages::-webkit-scrollbar {
   width: 5px;
@@ -87,6 +107,8 @@ body {
   margin: 10px 0;
   display: flex;
   flex-direction: column;
+
+  font-size: 19px;
 }
 
 /* Align sender messages to the right */
@@ -104,7 +126,7 @@ body {
 
 /* Specific style for sender bubble */
 .chat-message.sender .chat-bubble {
-  background: #d9cfc7;
+  background: #d1c9c1;
   border-bottom-right-radius: 0;
 }
 
@@ -123,14 +145,13 @@ body {
   display: flex;
   align-items: center;
   background: #22283e;
-
-  
 }
 
 .chat-input input {
   flex: 1;
   padding: 10px;
   border: 1px solid #ccc;
+  font-size: 15px;
   border-radius: 20px;
   outline: none;
 
@@ -141,12 +162,20 @@ body {
   margin-left: 10px;
   padding: 10px 15px;
   border: none;
-  background: #4caf50;
-  color: #fff;
+  background: #fff;
+  color: #3d4655;
   border-radius: 20px;
   cursor: pointer;
 
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
+}
+
+.chat-input #settings {
+  position: absolute;
+  right: 10px;
+  font-size: 26px;
+  color: white;
+  cursor: pointer;
 }
 
 /* for switch */
@@ -214,4 +243,55 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+/* for floating window */
+
+/* Modal overlay covers entire viewport */
+.floating-window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Floating window content */
+.floating-content {
+  background: #22283e;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  min-width: 70%;
+  max-width: 80%; /* Responsive width */
+  max-height: 90%; /* Responsive height */
+  position: relative;
+  overflow-y: auto; /* Scroll if content exceeds window size */
+}
+
+/* Close button styling */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: white;
+}
+
+.chat-input .charlist input {
+  font-size: 17px;
+  min-height: fit-content;
 }

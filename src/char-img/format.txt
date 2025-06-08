@@ -1,0 +1,21 @@
+please follow the format:
+
+nation-character
+
+e.g. 00-albedo
+
+if long name:
+
+e.g. 02-kaedehara_kazuha
+
+nation code:
+00 - mondstadt
+01 - liyue
+02 - inazuma
+03 - sumeru
+04 - fontaine
+05 - natlan
+06 - snezhnaya
+07 - khaenriah
+08 - others?
+p.s. if someone wants aloy here i'd be shocked lol

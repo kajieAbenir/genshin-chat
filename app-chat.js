@@ -1,39 +1,67 @@
 // app-chat
-// reason : 
+// reason :
 // > name
 //  - get list of characters
 //  - change name upon request
 //  - change pic upon request
 
 /* GLOBAL VARIABLES */
-const container = document.getElementById('chat-messages');
-const input = document.getElementById('chat-input');
-const switchCheck = document.getElementById('switch');
-
+const container = document.getElementById("chat-messages");
+const input = document.getElementById("chat-input");
+const switchCheck = document.getElementById("switch");
 
 /* EXECUTABLE FUNCTIONS */
 
 function addConversation() {
-    const messageElement = document.createElement("div");
-    const bubbleElement = document.createElement("div");
+  if (input.value == "") {
+    console.log(new Date().toLocaleString(), "No message");
+    return;
+  }
 
-    messageElement.classList.add("chat-message", switchCheck.checked ? "sender" : "receiver");
+  const messageElement = document.createElement("div");
+  const bubbleElement = document.createElement("div");
 
-    bubbleElement.classList.add("chat-bubble");
-    bubbleElement.textContent = input.value;
+  messageElement.classList.add(
+    "chat-message",
+    switchCheck.checked ? "sender" : "receiver"
+  );
 
-    messageElement.appendChild(bubbleElement);
-    container.appendChild(messageElement);
+  bubbleElement.classList.add("chat-bubble");
+  bubbleElement.textContent = input.value;
 
-    input.value = "";
+  messageElement.appendChild(bubbleElement);
+  container.appendChild(messageElement);
+
+  input.value = "";
+
+  console.log(
+    new Date().toLocaleString(),
+    "//",
+    switchCheck.checked ? "Sender" : "Receiver",
+    "\nMessage:",
+    bubbleElement.textContent
+  );
+}
+
+function changeBGImage(url) {
+  document.getElementById("background-pic").style.backgroundImage =
+    `url(${url})`;
 }
 
 /* EVENT LISTENERS */
 
 // adds event listener to the input element
 // when user press Enter, trigger the addConversation() function which will add the message to the chat log
-document.getElementById('chat-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        addConversation();
-    }
+document.getElementById("chat-input").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    addConversation();
+  }
+});
+
+document.getElementById("closeButton").addEventListener("click", function () {
+  document.getElementById("floatingWindow").style.display = "none";
+});
+
+document.getElementById("chat-name").addEventListener("click", function () {
+  document.getElementById("floatingWindow").style.display = "flex";
 });

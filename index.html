@@ -14,23 +14,90 @@
         <!-- insert bg pic here -->
       </div>
 
+      <!-- Floating window - for char list -->
+      <div class="floating-window" id="floatingWindow" style="display: none">
+        <div class="floating-content">
+          <button class="close-button" id="closeButton">&times;</button>
+          <h2>Select Receiver</h2>
+          <!-- search bar -->
+          <a class="chat-input charlist center"><input></a>
+          <div id="receiver-list" style="height: 150px; overflow-y: scroll">
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+          </div>
+          <h2>Select Sender</h2>
+          <!-- search bar -->
+          <a class="chat-input charlist center"><input></a>
+          <div id="sender-list" style="height: 150px; overflow-y: scroll">
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+            <p>
+              sybau bro 
+            </p>
+          </div>
+
+          <!-- Additional content can go here -->
+        </div>
+      </div>
+
       <div class="chat-container" id="chat-container">
-        <div class="chat-header">Chat</div>
+        <div class="chat-header" id="chat-name">Chat</div>
+        <div></div>
 
         <div class="chat-messages" id="chat-messages">
-          <div class="chat-message receiver">
-            <div class="chat-bubble">Hello! How can I help you today?</div>
-          </div>
-
-          <div class="chat-message sender">
-            <div class="chat-bubble">
-              I have a question about aligning chat bubbles.
-            </div>
-          </div>
-
-          <div class="chat-message receiver">
-            <div class="chat-bubble">Sure, let's dive into it.</div>
-          </div>
         </div>
 
         <div class="chat-input">
@@ -38,6 +105,8 @@
             type="text"
             id="chat-input"
             placeholder="Type your message..."
+            spellcheck="false"
+            autocomplete="off"
           />
           <button id="send" onclick="addConversation()">Send</button>
         </div>
@@ -48,11 +117,15 @@
             <span class="slider round"></span>
           </label>
           <span style="color: white;">Toggle Chat</span>
+
+          <label id="settings"> ⚙ </label>
         </div>
+
       </div>
     </div>
 
+    <!-- scripts -->
+    <script src="loading.js"></script>
     <script src="app-chat.js"></script>
-    <script src="app-bg.js"></script>
   </body>
 </html>
