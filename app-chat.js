@@ -1,19 +1,20 @@
-// app-chat
-// reason :
-// > name
-//  - get list of characters
-//  - change name upon request
-//  - change pic upon request
-
 /* GLOBAL VARIABLES */
 const container = document.getElementById("chat-messages");
 const input = document.getElementById("chat-input");
 const switchCheck = document.getElementById("switch");
+const toggleInputMenu = document.getElementById("toggleInputMenu");
+
+let toggleCount = 0;
 
 /* EXECUTABLE FUNCTIONS */
 
 function addConversation() {
   if (input.value == "") {
+    input.style.background = "red";
+    setTimeout(() => {
+      input.style.background = "";
+    }, 500);
+
     console.log(new Date().toLocaleString(), "No message");
     return;
   }
@@ -64,4 +65,21 @@ document.getElementById("closeButton").addEventListener("click", function () {
 
 document.getElementById("chat-name").addEventListener("click", function () {
   document.getElementById("floatingWindow").style.display = "flex";
+});
+
+// for chat input toggle.
+toggleInputMenu.addEventListener("click", function () {
+  const chatInputLowerIsHidden =
+    document.getElementById("chatInputLower").style.display === "none";
+
+  // - - - - -
+
+  document.getElementById("chatInputLower").style.display =
+    chatInputLowerIsHidden ? "flex" : "none";
+  document.getElementById("chatInputUpper").style.display =
+    chatInputLowerIsHidden ? "flex" : "none";
+
+  toggleInputMenu.textContent = chatInputLowerIsHidden ? "Hide" : "Show";
+
+  console.log(`Menu ${chatInputLowerIsHidden ? "shown" : "hidden"}`);
 });

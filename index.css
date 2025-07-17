@@ -70,16 +70,24 @@ body {
 }
 
 /* Messages area uses flex-grow */
+
+/* 
+  notes for background - linear gradient: 
+  - need to blur the right part (the 100% part)
+  - last gradient line (100%) should NOT be absolute zero
+*/
 .chat-messages {
   flex: 1;
-  padding: 10px;
+  padding: 2px;
   overflow-y: scroll;
   background: linear-gradient(
     90deg,
-    rgba(34, 40, 62, 1) 50%,
+    rgba(34, 40, 62, 1) 70%,
     rgba(34, 40, 62, 0.47) 85%,
     rgba(34, 40, 62, 0) 100%
   );
+  /* height: calc(100%+ 500px);
+  z-index: -2; */
 }
 
 /* scroll bar for chat */
@@ -90,7 +98,7 @@ body {
 }
 
 .chat-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
@@ -108,7 +116,7 @@ body {
   display: flex;
   flex-direction: column;
 
-  font-size: 19px;
+  font-size: 15px;
 }
 
 /* Align sender messages to the right */
@@ -127,7 +135,8 @@ body {
 /* Specific style for sender bubble */
 .chat-message.sender .chat-bubble {
   background: #d1c9c1;
-  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  user-select: none;
 }
 
 /* Specific style for receiver bubble */
@@ -135,12 +144,30 @@ body {
   background: #3d4655;
   color: white;
   border: none;
-  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  /* user-select: none; */
+}
+
+/* for hiding input menu - reason: maximization of chat */
+
+#toggleInputMenu {
+  color: white;
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  cursor: pointer;
+  border: 0;
+  background-color: none;
+}
+
+#chatInputLower.chat-input {
+  border: 0;
+  padding: 8px;
 }
 
 /* Input area styling */
 .chat-input {
-  padding: 10px;
+  padding: 12px 5px 0;
   border-top: 1px solid #ccc;
   display: flex;
   align-items: center;
@@ -159,7 +186,7 @@ body {
 }
 
 .chat-input button {
-  margin-left: 10px;
+  margin: 0 10px;
   padding: 10px 15px;
   border: none;
   background: #fff;

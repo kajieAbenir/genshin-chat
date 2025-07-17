@@ -20,73 +20,33 @@
           <button class="close-button" id="closeButton">&times;</button>
           <h2>Select Receiver</h2>
           <!-- search bar -->
-          <a class="chat-input charlist center"><input></a>
+          <a class="chat-input charlist center"><input /></a>
           <div id="receiver-list" style="height: 150px; overflow-y: scroll">
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
           </div>
           <h2>Select Sender</h2>
           <!-- search bar -->
-          <a class="chat-input charlist center"><input></a>
+          <a class="chat-input charlist center"><input /></a>
           <div id="sender-list" style="height: 150px; overflow-y: scroll">
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
-            <p>
-              sybau bro 
-            </p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
+            <p>sybau bro</p>
           </div>
 
           <!-- Additional content can go here -->
@@ -97,10 +57,16 @@
         <div class="chat-header" id="chat-name">Chat</div>
         <div></div>
 
-        <div class="chat-messages" id="chat-messages">
+        <!-- chat messages -->
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <div class="chat-input" id="toggleInputMenu">
+          <a>Hide</a>
         </div>
 
-        <div class="chat-input">
+        <div class="chat-input" id="chatInputUpper">
+          <!-- tba : list idk -->
+          <button id="inputList">.---</button>
           <input
             type="text"
             id="chat-input"
@@ -111,16 +77,15 @@
           <button id="send" onclick="addConversation()">Send</button>
         </div>
 
-        <div class="chat-input center">
+        <div class="chat-input center" id="chatInputLower">
           <label class="switch">
             <input type="checkbox" id="switch" />
             <span class="slider round"></span>
           </label>
-          <span style="color: white;">Toggle Chat</span>
+          <span style="color: white">Toggle Chat</span>
 
           <label id="settings"> ⚙ </label>
         </div>
-
       </div>
     </div>
 
