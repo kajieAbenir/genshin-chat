@@ -1,0 +1,55 @@
+{
+  "characters": {
+    "mc": {
+      "Aether": ""
+    },
+    "mondstadt": {},
+    "liyue": {},
+    "inazuma": {},
+    "sumeru": {},
+    "fontaine": {},
+    "natlan": {},
+    "snezhnaya": {},
+    "nod krai": {},
+    "celestia": {},
+    "others": {}
+  },
+  "bg_lookup": {
+    "mondstadt": {
+      "01": "",
+      "02": ""
+    },
+    "liyue": {
+      "01": "",
+      "02": ""
+    },
+    "inazuma": {
+      "01": "",
+      "02": ""
+    },
+    "sumeru": {
+      "01": "",
+      "02": ""
+    },
+    "natlan": {
+      "01": "",
+      "02": ""
+    },
+    "snezhnaya": {
+      "01": "",
+      "02": ""
+    },
+    "nod krai": {
+      "01": "",
+      "02": ""
+    },
+    "celestia": {
+      "01": "",
+      "02": ""
+    },
+    "others": {
+      "01": "",
+      "02": ""
+    }
+  }
+}

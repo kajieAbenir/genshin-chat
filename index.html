@@ -74,7 +74,14 @@
             spellcheck="false"
             autocomplete="off"
           />
-          <button id="send" onclick="addConversation()">Send</button>
+          <button
+            id="send"
+            onclick="addConversation()"
+            disabled
+            aria-label="Send Message"
+          >
+            Send
+          </button>
         </div>
 
         <div class="chat-input center" id="chatInputLower">
@@ -84,7 +91,7 @@
           </label>
           <span style="color: white">Toggle Chat</span>
 
-          <label id="settings"> ⚙ </label>
+          <a id="settings"> ⚙ </a>
         </div>
       </div>
     </div>

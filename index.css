@@ -197,6 +197,13 @@ body {
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
 }
 
+.chat-input button:disabled {
+  color: #ccc;
+  background: #666;
+  cursor: not-allowed;
+
+}
+
 .chat-input #settings {
   position: absolute;
   right: 10px;
