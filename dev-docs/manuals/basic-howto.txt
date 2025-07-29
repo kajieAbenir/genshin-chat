@@ -1,0 +1,10 @@
+how to: (for dev review)
+    - configure the Sender and Receiver by clicking "Chat".
+    - select the desired character. you can use the search feature to fasten selection.
+    - click the slider to set between 'receiver' (right) and 'sender' (left).
+    - type message in input. you cannot click send when it is empty.
+    - the show/hide feature shows or hides the whole input section for viewing maximization in case of long conversations.
+    - settings on the bottom right shows:
+        > background change
+        > credits (incl. my github)
+        > 

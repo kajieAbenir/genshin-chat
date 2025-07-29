@@ -5,10 +5,21 @@ const sendBtn = document.getElementById("send");
 const switchCheck = document.getElementById("switch");
 const toggleInputMenu = document.getElementById("toggleInputMenu");
 
-
-
 /* EXECUTABLE FUNCTIONS */
 
+// general console.log function
+// TO-DO : make customMessage optional.
+// SOLUTION : online searching (wa koy internet)
+function logError(customMessage = "", errorObj) {
+  // console.log("Custom message: " + customMessage);
+  if (!customMessage) {
+    console.log("ERROR!!!\n\t", errorObj);
+  } else {
+    console.log(customMessage, errorObj);
+  }
+}
+
+// for input checking
 function hasInputValue() {
   return input.value.trim() === "" ? false : true;
 }
@@ -30,11 +41,15 @@ async function getJSONList() {
       return data;
     } catch (error) {
       retries--;
-      console.log(`Error fetching JSON list, retrying ${retries + 1} times >>`, error.message);
+      logError(
+        `Error fetching JSON list, retrying ${retries + 1} times\n  >>`,
+        error
+      );
+
       await new Promise((resolve) => setTimeout(resolve, 3000));
     }
   }
-  console.log("Failed to fetch JSON list after 3 retries");
+  console.log(">> Failed to fetch character list after 3 retries");
 }
 
 /**
@@ -80,14 +95,19 @@ function addConversation() {
   );
 }
 
-async function showCharList(){
+// shows character list
+async function showCharList(idName) {
   const list = await getJSONList();
-  const characters = list.characters;
+  try {
+    const characters = list.characters;
 
-  // logs character list (for dev only. remove after hahahaha)
-  console.log(characters)
+    // logs character list (for dev only. remove after hahahaha)
+    console.log(characters);
+  } catch (error) {
+    logError(error);
+  }
 
-
+  // const listContainer = document.getElementById(`${idName}`);
 }
 
 function changeBGImage(url) {
@@ -104,7 +124,11 @@ function changeBGImage(url) {
 document.getElementById("chat-input").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
-    addConversation();
+    try {
+      addConversation();
+    } catch (error) {
+      logError("Unable to add message.\n  >> ", error);
+    }
   }
 });
 
@@ -118,7 +142,18 @@ document.getElementById("chat-input").addEventListener("input", function () {
 
 document.getElementById("chat-name").addEventListener("click", function () {
   document.getElementById("floatingWindow").style.display = "flex";
-  showCharList();
+  // call functions to show the characters
+  try {
+    showCharList("receiver-list");
+  } catch (error) {
+    logError("Failed to display receiver list.\n  >> ", error.message);
+  }
+
+  try {
+    showCharList("sender-list");
+  } catch (error) {
+    logError("Failed to display sender list.\n  >> ", error);
+  }
 });
 
 document.getElementById("closeButton").addEventListener("click", function () {
@@ -142,6 +177,22 @@ toggleInputMenu.addEventListener("click", function () {
   console.log(`Menu ${chatInputLowerIsHidden ? "shown" : "hidden"}`);
 });
 
-// TESTING AREA
+// !! FOR STAGING !!
+// ideas for staging
 
-showCharList()
+// selects all elements with .charlist class
+// adds an event listener to each
+document.querySelectorAll(".charlist").forEach(function (el) {
+  el.addEventListener("click", function () {
+    console.log("oten");
+  });
+});
+
+// code for changing zoom/initial scale
+
+// document.getElementById("settings").addEventListener("click", function () {
+//   const currentScale = parseFloat(getComputedStyle(document.body).zoom);
+//   const newScale = currentScale + 0.1;
+//   document.body.style.zoom = newScale;
+//   console.log(`Zoom changed to ${newScale}`);
+// });
