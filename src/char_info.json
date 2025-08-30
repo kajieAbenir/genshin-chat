@@ -1,53 +1,511 @@
 {
   "characters": {
-    "mc": {
-      "Aether": ""
+    "MC": {
+      "Aether": {
+        "hex_1" : "5",
+        "hex_2" : "59"
+      }
     },
-    "mondstadt": {},
-    "liyue": {},
-    "inazuma": {},
-    "sumeru": {},
-    "fontaine": {},
-    "natlan": {},
-    "snezhnaya": {},
-    "nod krai": {},
-    "celestia": {},
-    "others": {}
+    "Mondstadt": {
+      "Diluc" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Jean" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Mona" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Venti" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Klee" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Albedo" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Eula" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Amber" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Barbara" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Bennett" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Fischl" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kaeya" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Lisa" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Noelle" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Razor" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Sucrose" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Diona" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Rosaria" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Mika" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Dahlia" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Liyue": {
+      "Keqing" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Qiqi" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Zhongli" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Ganyu" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xiao" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Hu Tao" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Shenhe" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yelan" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Baizhu" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xianyun" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Beidou" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Chongyun" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Ningguang" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xiangling" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xingqiu" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xinyan" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yanfei" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yun Jin" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yaoyao" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Gaming" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Lan Yan" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Inazuma": {
+      "Kaedehara_Kazuha" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kamisato_Ayaka" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yoimiya" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Raiden_Shogun" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Sangonomiya_Kokomi" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Arataki_Itto" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yae_Miko" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kamisato_Ayato" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Chiori" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Yumemizuki_Mizuki" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Sayu" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kujou_Sara" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Thoma" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Gorou" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kuki_Shinobou" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Heizou" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kirara" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Sumeru": {
+      "Tighnari" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Cyno" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Nilou" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Nahida" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Wanderer" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Alhaitham" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Dehya" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Collei" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Dori" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Candace" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Layla" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Faruzan" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kaveh" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Sethos" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Fontaine": {
+      "Lyney" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Neuvillette" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Wriothesley" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Furina" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Navia" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Clorinde" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Sigewinne" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Emilie" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Escoffier" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Lynette" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Freminet" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Charlotte" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Chevreuse" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Natlan": {
+      "Mualani" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kinich" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Xilonen" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Chasca" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Citlali" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Mavuika" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Varesa" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Kachina" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Ororon" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Iansan" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Ifa" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Snezhnaya": {
+      "Childe": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Arlecchino": {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Nod-Krai": {
+      "Ineffa": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Flins": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Varka": {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Celestia": {},
+    "Khaenriah": {
+      "Dainsleif": {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Others": {
+      "Aloy" : {
+        "hex_1" : "e",
+        "hex_2" : "e5"
+      },
+      "Skirk" : {
+        "hex_1" : "0",
+        "hex_2" : "03"
+      }
+    },
+    "Skins" : {
+      "Fischl Verutililing": {
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    },
+    "Non-Playable" : {
+      "Scaramouche" : {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Signora": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Focalors": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Capitano": {
+        "hex_1" : "",
+        "hex_2" : ""
+      },
+      "Ajax":{
+        "hex_1" : "",
+        "hex_2" : ""
+      }
+    }
   },
   "bg_lookup": {
-    "mondstadt": {
+    "Mondstadt": {
       "01": "",
       "02": ""
     },
-    "liyue": {
+    "Liyue": {
       "01": "",
       "02": ""
     },
-    "inazuma": {
+    "Inazuma": {
       "01": "",
       "02": ""
     },
-    "sumeru": {
+    "Sumeru": {
       "01": "",
       "02": ""
     },
-    "natlan": {
+    "Natlan": {
       "01": "",
       "02": ""
     },
-    "snezhnaya": {
+    "Snezhnaya": {
       "01": "",
       "02": ""
     },
-    "nod krai": {
+    "Nod-krai": {
       "01": "",
       "02": ""
     },
-    "celestia": {
+    "Celestia": {
       "01": "",
       "02": ""
     },
-    "others": {
+    "Others": {
       "01": "",
       "02": ""
     }

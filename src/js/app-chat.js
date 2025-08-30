@@ -36,11 +36,14 @@ async function getJSONList() {
   while (retries > 0) {
     try {
       const res = await fetch("http://127.0.0.1:5500/src/char_info.json");
+
       // parses it into code-friendly JSON
       const data = await res.json();
+
       return data;
     } catch (error) {
       retries--;
+
       logError(
         `Error fetching JSON list, retrying ${retries + 1} times\n  >>`,
         error
@@ -98,6 +101,7 @@ function addConversation() {
 // shows character list
 async function showCharList(idName) {
   const list = await getJSONList();
+  
   try {
     const characters = list.characters;
 
@@ -176,23 +180,3 @@ toggleInputMenu.addEventListener("click", function () {
 
   console.log(`Menu ${chatInputLowerIsHidden ? "shown" : "hidden"}`);
 });
-
-// !! FOR STAGING !!
-// ideas for staging
-
-// selects all elements with .charlist class
-// adds an event listener to each
-document.querySelectorAll(".charlist").forEach(function (el) {
-  el.addEventListener("click", function () {
-    console.log("oten");
-  });
-});
-
-// code for changing zoom/initial scale
-
-// document.getElementById("settings").addEventListener("click", function () {
-//   const currentScale = parseFloat(getComputedStyle(document.body).zoom);
-//   const newScale = currentScale + 0.1;
-//   document.body.style.zoom = newScale;
-//   console.log(`Zoom changed to ${newScale}`);
-// });

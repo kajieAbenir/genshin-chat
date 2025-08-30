@@ -16,7 +16,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -10;
 }
 
 body {
@@ -26,6 +26,33 @@ body {
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
 
   background: #f2f2f2;
+}
+
+/* Loading animation */
+/* copied from portfolio site ehe */
+
+.loading {
+  border: 8px solid #22283e;
+  border-top: 8px solid #00000000; 
+  border-radius: 50%;
+
+  width: 60px;
+  height: 60px;
+
+  animation: spin 1s linear infinite;
+
+  position: fixed;
+  top: 45%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Container for the entire chatbox */
@@ -86,8 +113,6 @@ body {
     rgba(34, 40, 62, 0.47) 85%,
     rgba(34, 40, 62, 0) 100%
   );
-  /* height: calc(100%+ 500px);
-  z-index: -2; */
 }
 
 /* scroll bar for chat */
