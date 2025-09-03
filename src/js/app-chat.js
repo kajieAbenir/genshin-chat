@@ -1,9 +1,21 @@
-/* GLOBAL VARIABLES */
-const container = document.getElementById("chat-messages");
-const input = document.getElementById("chat-input");
-const sendBtn = document.getElementById("send");
-const switchCheck = document.getElementById("switch");
-const toggleInputMenu = document.getElementById("toggleInputMenu");
+import * as apiLoader from './api.js';
+
+/* GLOBAL VARIABLE CLASS */
+class chatGlobalVars {
+
+  // initializing public variables
+  constructor() {
+    this.input = document.getElementById("chat-input");
+    this.sendBtn = document.getElementById("send");
+    this.switchCheck = document.getElementById("switch");
+    this.toggleInputMenu = document.getElementById("toggleInputMenu");
+  }
+}
+
+// const input = document.getElementById("chat-input");
+// const sendBtn = document.getElementById("send");
+// const switchCheck = document.getElementById("switch");
+// const toggleInputMenu = document.getElementById("toggleInputMenu");
 
 /* EXECUTABLE FUNCTIONS */
 
@@ -21,38 +33,7 @@ function logError(customMessage = "", errorObj) {
 
 // for input checking
 function hasInputValue() {
-  return input.value.trim() === "" ? false : true;
-}
-
-/**
- * >> ASYNC FUNCTION <<
- * Gets the JSON list "char_info.json", parses it.
- * Returns the WHOLE parsed JSON stuff.
- * @returns {data}
- */
-async function getJSONList() {
-  // fetches the JSON file
-  let retries = 3;
-  while (retries > 0) {
-    try {
-      const res = await fetch("http://127.0.0.1:5500/src/char_info.json");
-
-      // parses it into code-friendly JSON
-      const data = await res.json();
-
-      return data;
-    } catch (error) {
-      retries--;
-
-      logError(
-        `Error fetching JSON list, retrying ${retries + 1} times\n  >>`,
-        error
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-    }
-  }
-  console.log(">> Failed to fetch character list after 3 retries");
+  return chatGlobalVars.input.value.trim() === "" ? false : true;
 }
 
 /**
@@ -80,6 +61,8 @@ function addConversation() {
   bubbleElement.classList.add("chat-bubble");
   bubbleElement.textContent = input.value;
 
+  const container = document.getElementById("chat-messages");
+
   messageElement.appendChild(bubbleElement);
 
   // append the new chat message element to the chat container
@@ -100,7 +83,7 @@ function addConversation() {
 
 // shows character list
 async function showCharList(idName) {
-  const list = await getJSONList();
+  const list = await apiLoader.getJSONList();
   
   try {
     const characters = list.characters;
@@ -141,7 +124,7 @@ document.getElementById("chat-input").addEventListener("keydown", function (e) {
  * If it is empty, disable the send button. Otherwise, enable it.
  */
 document.getElementById("chat-input").addEventListener("input", function () {
-  sendBtn.disabled = !hasInputValue();
+  chatGlobalVars.sendBtn.disabled = !hasInputValue();
 });
 
 document.getElementById("chat-name").addEventListener("click", function () {
