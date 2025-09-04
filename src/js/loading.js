@@ -20,8 +20,8 @@ window.onload = setTimeout(() => {
 }, 1500);
 
 // then if loaded:
-// appear the container
-// disappear the loading screen
+// - appear the container
+// - disappear the loading screen
 
 apirOrDisapir("container",true)
 apirOrDisapir("loading",false)

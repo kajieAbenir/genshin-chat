@@ -11,41 +11,59 @@
     <div id="loading" class="loading"></div>
 
     <!-- main content -->
-    <div id="container">
+    <div id="container" hidden>
       <div id="background-pic">
         <img src="" />
         <!-- insert bg pic here -->
       </div>
 
       <!-- Floating window - for char list -->
-      <!-- FOR REWORKING. -->
-      <div class="floating-window" id="floatingWindow" style="display: none">
+
+      <!-- floating charlist window - version 2 -->
+      <div class="floating-window hidden" id="floatingWindow">
         <div class="floating-content">
           <button class="close-button" id="closeButton">&times;</button>
-          <h2>Select Receiver</h2>
-          <!-- search bar -->
-          <a class="chat-input charlist center" name="receiver-search"
-            ><input
-          /></a>
-          <div id="receiver-list" style="height: 150px; overflow-y: scroll">
-            <p>receiver</p>
-          </div>
-          <h2>Select Sender</h2>
-          <!-- search bar -->
-          <a class="chat-input charlist center" name="sender-search"
-            ><input
-          /></a>
-          <div id="sender-list" style="height: 150px; overflow-y: scroll">
-            <p>sender</p>
-          </div>
+          
+          <div>
+            <div class="tab-buttons">
+                <div class="tab-button active" data-tab="tab1">Receiver</div>
+                <div class="tab-button" data-tab="tab2">Sender</div>
+            </div>
 
-          <!-- Additional content can go here -->
+            <div class="tab-content-container">
+                <div id="tab1" class="tab-content active">
+                  <a> 
+                    Selected: <a id="receiver-name">XIAOOOO</a>
+                  </a>
+                  <a 
+                    class="chat-input charlist center" 
+                    name="receiver-search">
+                    <input/>
+                  </a>
+                  <div id="receiver-list">
+                    <p>receiver</p>
+                  </div>
+                </div>
+                <div id="tab2" class="tab-content">
+                  <a> 
+                    Selected: <a id="sender-name">XIAOOOO</a>
+                  </a>
+                  <a 
+                    class="chat-input charlist center" 
+                    name="sender-search">
+                    <input/>
+                  </a>
+                  <div id="sender-list">
+                    <p>receiver</p>
+                  </div>
+                </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="chat-container" id="chat-container">
         <div class="chat-header" id="chat-name">Chat</div>
-        <div></div>
 
         <!-- chat messages -->
         <div class="chat-messages" id="chat-messages"></div>
@@ -66,7 +84,6 @@
           />
           <button
             id="send"
-            onclick="addConversation()"
             disabled
             aria-label="Send Message"
           >
@@ -89,7 +106,10 @@
     <!-- scripts -->
     <script src="./src/js/loading.js"></script>
     <script src="./src/js/app-chat.js"></script>
-    <script src="./src/js/app-chat.js"></script>
-    
+
+    <!-- api -->
+    <script src="./src/js/api.js"></script>
+
+    <noscript> Sorry! Your browser does not support JavaScript.</noscript>
   </body>
 </html>

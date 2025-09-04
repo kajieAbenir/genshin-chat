@@ -51,10 +51,11 @@ async function fetchAndDisplayImage(imageUrl) {
   }
 }
 
+// set to genshin wikia image api
 function setGenshinImgUrl(hex1 = "", hex2 = "", charName = "") {
   // return "https://static.wikia.nocookie.net/gensin-impact/images/b/bf/Adventures_in_Blazing_Hue_Icon.png"
 
-  return `https://static.wikia.nocookie.net/gensin-impact/images/${hex1}/${hex2}/`
+  return `https://static.wikia.nocookie.net/gensin-impact/images/${hex1}/${hex2}/${charName}`
 }
 
 // Example usage:
@@ -67,3 +68,25 @@ https://static.wikia.nocookie.net/gensin-impact/images/b/bf/Adventures_in_Blazin
 // kaeya skin
 https://static.wikia.nocookie.net/gensin-impact/images/b/b6/Kaeya_Icon.png
 */
+
+function characterDataLookup(charName = "") {
+  if(!charName) {
+    // error
+    return;
+  }
+
+  let hexData = {
+    hex1: "",
+    hex2: ""
+  };
+
+  // planned steps:
+  /*
+    - fetch json
+    - json lookup with char name
+      - prefer use .contains()
+    - set hex value to hexData
+  */
+
+  return hexData;
+}

@@ -1,0 +1,15 @@
+4-sept-2025 patch notes:
+> re-factored code.
+	- switched from class to global object implementation for grouping of global reference variables.
+	- added tabbed panels in receiver/sender window (including js code).
+	- added reusable functions. 
+		- side note for reusable logging function, though, naa gyuy others na need separate style of logging, it's for general logging format.
+
+> adjusted close button of receiver/sender window. bweset murag "close ads" ang size BWAHAHAHA TToTT)
+> added general classes (e.g. hidden, flex, etc.)
+	- needs a bit more generalization to add to html and js.
+
+issues to fix:
+> .tab-button:hover
+	- color
+	- bg color
