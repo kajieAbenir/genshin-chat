@@ -12,7 +12,8 @@ let ChatMainElements = {
   sendBtn: document.getElementById("send"),
   sendSwitch: document.getElementById("switch"),
   toggleInputMenu: document.getElementById("toggleInputMenu"),
-  chatName: document.getElementById("chat-name")
+  chatName: document.getElementById("chat-name"),
+  settings: document.getElementById("settings")
 };
 
 // this one is for floating window receiver/sender selector
@@ -21,11 +22,21 @@ let ChatNameElements = {
   tabContents: document.querySelectorAll('.tab-content')
 };
 
+let inputSection = {
+  lower: document.getElementById("chatInputLower"),
+  upper: document.getElementById("chatInputUpper")
+}
+
+// grouping all close buttons
+let CloseButtons = {
+  senderReceiver: document.getElementById("closeReceiverSender"),
+  settingsCredits: document.getElementById("closeSettings")
+}
+
 /* HELPER FUNCTIONS */
 
 // general console.log function
 function logError(customMessage = "", errorObj) {
-  // console.log("Custom message: " + customMessage);
   if (!customMessage) {
     console.log("ERROR!!!\n\t", errorObj);
   } else {
@@ -57,9 +68,11 @@ function showElement(id = "", display = "") {
   try {
     const element = document.getElementById(id);
 
-    element.classList.add(display);
-    element.classList.remove("hidden");
+    if(element.classList.contains("hidden")) {
+      element.classList.remove("hidden");
+    }
 
+    element.classList.add(display);
   } catch (error) {
     logError("Cannot show element!", error)
   }
@@ -73,12 +86,48 @@ function changeBGImage(url = "") {
 
 /* ENABLE / DISABLE ELEMENT */
 
-function disableElement(id = "") {
-  document.getElementById(id).disabled = true;
+function disableElement(id) {
+  if(!id) {
+    logError(id)
+  } else if (typeof id === HTMLElement) {
+    id.disabled = true
+    return;
+  } else if (typeof id === String) {
+    document.getElementById(id).disabled = true;
+    return;
+  }
 }
 
-function enableElement(id = "") {
-  document.getElementById(id).disabled = false;
+function enableElement(id) {
+  if(!id) {
+    logError(id)
+  } else if (typeof id === HTMLElement) {
+    id.disabled = false
+    return;
+  } else if (typeof id === String) {
+    document.getElementById(id).disabled = false;
+    return;
+  }
+}
+
+/* ADD/REMOVE 'ACTIVE' CLASS */
+// note: for .tab-buttons class only.
+// receives integer, process as "tabX" e.g. "tab1"
+
+function addActiveViaDataTab(dataTab = 0) {
+  if(!dataTab) {
+    logError("Invalid data-tab. ", dataTab)
+  }
+
+  document.querySelector(`[data-tab="tab${dataTab}"]`).classList.add("active")
+}
+
+function removeActiveViaDataTab(dataTab = 0) {
+  if(!dataTab) {
+    logError("Invalid data-tab. ", dataTab)
+  }
+
+  document.querySelector(`[data-tab="tab${dataTab}"]`).classList.remove("active")
 }
 
 /* MAIN EXECUTABLES */
@@ -91,7 +140,7 @@ function enableElement(id = "") {
 */
 
 // TBA : add the image QwQ)
-
+// after, refactor pud.
 function addConversation() {
 
   // if there's no content in input, return log msg "No msg"
@@ -150,15 +199,49 @@ async function showCharList(idName) {
   // const listContainer = document.getElementById(`${idName}`);
 }
 
+// dev refs: (added 8-sept-2025)
+// usage (src: fb meta ai)
+/*
+  const url = "blablablablablabla"
+  getJSONList(url).then(data => displayData(data, jsonDerulo))
+
+  function displayData(data, jsonDerulo) {
+    const results = []
+
+    data.forEach((item) => {
+      if(matchJSON(item, jsonDerulo)) {
+        results.push(item);
+      }
+    })
+  }
+
+  function matchJSON(data, jsonDerulo) {
+    const searchKeys = Object.keys(jsonDerulo)
+
+    for (const key of jsonDerulo){
+      if(typeof jsonDerulo[key] === 'object') {
+        if(!data[key] || !matchJSON(data[key], jsonDerulo[key])) {
+          return false;
+        }
+      } else if (data[key] !== jsonDerulo[key]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+*/
+
 /* EVENT LISTENERS */
 
 /**
  * When Enter key is pressed in the chat input, trigger the addConversation
  * function and prevent the default action (submitting the form).
  */
-document.getElementById("chat-input").addEventListener("keydown", function (e) {
+ChatMainElements.input.addEventListener("keydown", function (e) {
+  e.preventDefault();
+
   if (e.key === "Enter") {
-    e.preventDefault();
     try {
       addConversation();
     } catch (error) {
@@ -171,18 +254,23 @@ document.getElementById("chat-input").addEventListener("keydown", function (e) {
  * When the chat input is changed, check if the input field is empty or not.
  * If it is empty, disable the send button. Otherwise, enable it.
  */
-document.getElementById("chat-input").addEventListener("input", function () {
-  ChatMainElements.sendBtn.disabled = !hasInputValue();
+ChatMainElements.input.addEventListener("input", function () {
+  if (hasInputValue() === false) {
+    disableElement(this)
+  } else {
+    enableElement(this)
+  }
 });
 
 // Displays sender & receiver list
-document.getElementById("chat-name").addEventListener("click", function () {
-  document.getElementById("floatingWindow").style.display = "flex";
+ChatMainElements.chatName.addEventListener("click", function () {
+  showElement("floatingReceiverSenderWindow","flex");
+
   // call functions to show the characters
   try {
     showCharList("receiver-list");
   } catch (error) {
-    logError("Failed to display receiver list.\n  >> ", error.message);
+    logError("Failed to display receiver list.\n  >> ", error);
   }
 
   try {
@@ -192,16 +280,16 @@ document.getElementById("chat-name").addEventListener("click", function () {
   }
 });
 
-// close button
-document.getElementById("closeButton").addEventListener("click", function () {
-  document.getElementById("floatingWindow").style.display = "none";
+// close button for receiver / sender window
+CloseButtons.senderReceiver.addEventListener("click", function () {
+  hideElement("floatingReceiverSenderWindow","flex")
 });
 
 // for chat input toggle.
-toggleInputMenu.addEventListener("click", function () {
+// TBA : for refactor
+ChatMainElements.toggleInputMenu.addEventListener("click", function () {
   const chatInputLowerIsHidden =
     document.getElementById("chatInputLower").style.display === "none";
-
   // - - - - -
 
   document.getElementById("chatInputLower").style.display =
@@ -209,7 +297,7 @@ toggleInputMenu.addEventListener("click", function () {
   document.getElementById("chatInputUpper").style.display =
     chatInputLowerIsHidden ? "flex" : "none";
 
-  toggleInputMenu.textContent = chatInputLowerIsHidden ? "Hide" : "Show";
+  ChatMainElements.toggleInputMenu.textContent = chatInputLowerIsHidden ? "Hide" : "Show";
 
   console.log(`Menu ${chatInputLowerIsHidden ? "shown" : "hidden"}`);
 });
@@ -219,8 +307,17 @@ ChatMainElements.sendBtn.addEventListener("click", function () {
   addConversation();
 });
 
-// for tabs
+// show settings window
+ChatMainElements.settings.addEventListener("click", function () {
+  showElement("floatingSettingsWindow", "flex")
+})
 
+// close button for settings window
+CloseButtons.settingsCredits.addEventListener("click", function () {
+  hideElement("floatingSettingsWindow","flex")
+});
+
+// for tabs (general)
 ChatNameElements.tabButtons.forEach(button => {
   button.addEventListener('click', () => {
 

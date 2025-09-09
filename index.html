@@ -17,12 +17,10 @@
         <!-- insert bg pic here -->
       </div>
 
-      <!-- Floating window - for char list -->
-
       <!-- floating charlist window - version 2 -->
-      <div class="floating-window hidden" id="floatingWindow">
+      <div class="floating-window hidden" id="floatingReceiverSenderWindow">
         <div class="floating-content">
-          <button class="close-button" id="closeButton">&times;</button>
+          <button class="close-button" id="closeReceiverSender">&times;</button>
           
           <div>
             <div class="tab-buttons">
@@ -57,6 +55,32 @@
                     <p>receiver</p>
                   </div>
                 </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- floating settings window -->
+      <div class="floating-window hidden" id="floatingSettingsWindow">
+        <div class="floating-content">
+          <button class="close-button" id="closeSettings">&times;</button>
+          
+          <div>
+            <div class="tab-buttons">
+                <div class="tab-button active" data-tab="tab3">⚙ Settings</div>
+                <div class="tab-button" data-tab="tab4">📚 Credits</div>
+            </div>
+
+            <div class="tab-content-container">
+              <!-- Settings tab -->
+              <div id="tab3" class="tab-content active">
+                <h2>Settings</h2>
+              </div>
+
+              <!-- Credits tab -->
+              <div id="tab4" class="tab-content">
+                <h2>Credits</h2>
+              </div>
             </div>
           </div>
         </div>
