@@ -171,6 +171,9 @@ body {
 .chat-message.sender .chat-bubble {
   background: #d1c9c1;
   border-top-right-radius: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -340,6 +343,11 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+#toggleChat {
+  color: white;
+
 }
 
 /* for floating window */
