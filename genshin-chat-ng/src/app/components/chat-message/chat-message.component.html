@@ -1,0 +1,8 @@
+<div
+  class="chat-message"
+  [class.sender]="message.isSender"
+  [class.receiver]="!message.isSender"
+>
+  <div class="message-name">{{ message.senderName }}</div>
+  <div class="chat-bubble">{{ message.text }}</div>
+</div>

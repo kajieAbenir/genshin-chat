@@ -1,0 +1,65 @@
+<div class="settings-container">
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'settings'"
+      (click)="setTab('settings')"
+    >
+      ⚙ Settings
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'credits'"
+      (click)="setTab('credits')"
+    >
+      📚 Credits
+    </button>
+    <div class="tab-indicator" [class.right]="activeTab() === 'credits'"></div>
+  </div>
+
+  <!-- Settings Tab -->
+  @if (activeTab() === 'settings') {
+    <div class="tab-panel">
+      <h3 class="panel-title">Chat Settings</h3>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">Clear Chat</span>
+          <span class="setting-desc">Remove all messages from the conversation</span>
+        </div>
+        <button class="action-btn danger" (click)="clearChat()">Clear</button>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">Messages</span>
+          <span class="setting-desc">Total messages in current session</span>
+        </div>
+        <span class="setting-value">{{ chatState.messages().length }}</span>
+      </div>
+    </div>
+  }
+
+  <!-- Credits Tab -->
+  @if (activeTab() === 'credits') {
+    <div class="tab-panel">
+      <h3 class="panel-title">Credits</h3>
+
+      <div class="credit-card">
+        <div class="credit-header">Genshin Chat Simulator</div>
+        <div class="credit-body">
+          <p>A fan-made Genshin Impact chat simulator built with Angular.</p>
+          <p class="credit-note">Genshin Impact is a registered trademark of miHoYo / HoYoverse. This project is not affiliated with or endorsed by miHoYo.</p>
+        </div>
+      </div>
+
+      <div class="credit-card">
+        <div class="credit-header">Font</div>
+        <div class="credit-body">
+          <p>HYWenHei 85W — used under fair use for fan project purposes.</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>
