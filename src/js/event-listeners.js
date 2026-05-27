@@ -1,7 +1,7 @@
-import { ChatMainElements, ChatNameElements } from "./main-script.js";
+import { ChatMainElements, ChatNameElements } from "./chat-elements.js";
 import { hasInputValue, logError } from "./helper-functions.js";
-import { disableElement, enableElement, showElement, hideElement, showCharList } from "./app-style.js";
-import { addConversation } from "./main-script.js";
+import { disableElement, enableElement, showElement, hideElement, addActiveViaDataTab, removeActiveViaDataTab } from "./app-style.js";
+import { addConversation, showCharList } from "./main-script.js";
 import { CloseButtons } from "./chat-elements.js";
 
 
@@ -29,9 +29,9 @@ ChatMainElements.input.addEventListener("keydown", function (e) {
  */
 ChatMainElements.input.addEventListener("input", function () {
   if (hasInputValue() === false) {
-    disableElement(this)
+    disableElement(ChatMainElements.sendBtn);
   } else {
-    enableElement(this)
+    enableElement(ChatMainElements.sendBtn);
   }
 });
 
@@ -39,19 +39,32 @@ ChatMainElements.input.addEventListener("input", function () {
 ChatMainElements.chatName.addEventListener("click", function () {
   showElement("floatingReceiverSenderWindow","flex");
 
-  // call functions to show the characters
+  // Initially populate both lists
   try {
-    showCharList("receiver-list");
+    showCharList(ChatNameElements.receiverListDiv.id, 'receiver');
   } catch (error) {
     logError("Failed to display receiver list.\n  >> ", error);
   }
 
   try {
-    showCharList("sender-list");
+    showCharList(ChatNameElements.senderListDiv.id, 'sender');
   } catch (error) {
     logError("Failed to display sender list.\n  >> ", error);
   }
 });
+
+// Search functionality for receiver list
+ChatNameElements.recvSearchInput.addEventListener('input', function() {
+  const searchTerm = this.value;
+  showCharList(ChatNameElements.receiverListDiv.id, 'receiver', searchTerm);
+});
+
+// Search functionality for sender list
+ChatNameElements.sendSearchInput.addEventListener('input', function() {
+  const searchTerm = this.value;
+  showCharList(ChatNameElements.senderListDiv.id, 'sender', searchTerm);
+  }
+);
 
 // close button for receiver / sender window
 CloseButtons.senderReceiver.addEventListener("click", function () {
@@ -94,18 +107,16 @@ CloseButtons.settingsCredits.addEventListener("click", function () {
 ChatNameElements.tabButtons.forEach(button => {
   button.addEventListener('click', () => {
 
-    // Remove 'active' class from all buttons and content
-    ChatNameElements.tabButtons.forEach(btn => btn.classList.remove('active'));
-    ChatNameElements.tabContents.forEach(content => content.classList.remove('active'));
+    // Remove 'active' class from all buttons
+    ChatNameElements.tabButtons.forEach(btn => removeActiveViaDataTab(btn.dataset.tab));
+    // Remove 'active' class from all content
+    ChatNameElements.tabContents.forEach(content => content.classList.remove('active')); // Assuming content IDs match data-tab
 
     // Add 'active' class to the clicked button
-    button.classList.add('active');
+    addActiveViaDataTab(button.dataset.tab);
 
     // Find the corresponding content and add 'active' class
     const targetId = button.getAttribute('data-tab');
-    const targetContent = document.getElementById(targetId);
-    if (targetContent) {
-      targetContent.classList.add('active');
-    }
+    document.getElementById(targetId)?.classList.add('active');
   });
 });

@@ -1,4 +1,5 @@
 // initialization of get functions
+import { logError } from './helper-functions.js';
 
 /**
  * >> ASYNC FUNCTION <<
@@ -6,12 +7,12 @@
  * Returns the WHOLE parsed JSON stuff.
  * @returns {data}
  */
-async function getJSONList() {
+export async function getJSONList() {
   // fetches the JSON file
   let retries = 3;
   while (retries > 0) {
     try {
-      const res = await fetch("http://127.0.0.1:5500/src/char_info.json");
+      const res = await fetch("./src/char_info.json");
 
       // parses it into code-friendly JSON
       const data = await res.json();

@@ -171,10 +171,6 @@ body {
 .chat-message.sender .chat-bubble {
   background: #d1c9c1;
   border-top-right-radius: 0;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 /* Specific style for receiver bubble */
@@ -184,6 +180,28 @@ body {
   border: none;
   border-top-left-radius: 0;
   /* user-select: none; */
+}
+
+/* Image of chat sender/receiver */
+.chat-image {
+	min-height: 45px;
+	max-height: 45px;
+
+	min-width: 45px;
+	max-width: 45px;
+
+	border-radius: 50%;
+  object-fit: cover; /* Ensures image covers the area without distortion */
+  margin: 0 10px; /* Spacing between image and bubble */
+}
+
+/* Sender image alignment */
+.chat-message.sender .chat-image {
+	order: 2; /* Places image after the bubble */
+}
+/* Receiver image alignment */
+.chat-message.receiver .chat-image {
+	order: 0; /* Places image before the bubble */
 }
 
 /* Image of chat sender/receiver */
@@ -410,6 +428,24 @@ input:checked + .slider:before {
 #sender-list {
   height: 150px; 
   overflow-y: scroll;
+}
+
+.character-list-item {
+  display: block; /* Make each character a block element */
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #3d4655;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.character-list-item:hover, .character-list-item.selected {
+  background-color: #2196f3; /* Highlight on hover and when selected */
 }
 
 /* for tabs, sending and receiving */

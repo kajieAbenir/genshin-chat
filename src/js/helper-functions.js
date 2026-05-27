@@ -1,9 +1,7 @@
-import
-
 /* HELPER FUNCTIONS */
 
 // general console.error function
-function logError(customMessage = "", errorObj) {
+export function logError(customMessage = "", errorObj) {
   if (!customMessage) {
     console.error("ERROR!!!\n\t", errorObj);
   } else {
@@ -13,12 +11,14 @@ function logError(customMessage = "", errorObj) {
 
 // for input checking
 // checks if input is empty
-function hasInputValue() {
-  return ChatMainElements.input.value.trim() === "" ? false : true;
+export function hasInputValue(inputElement) {
+  // Use the passed inputElement or default to ChatMainElements.input if available
+  const ChatMainElements = window.ChatMainElements || {}; // Fallback for testing
+  return ChatMainElements.input && ChatMainElements.input.value.trim() !== "";
 }
 
 // do not use for now.
-function changeBGImage(url = "") {
+export function changeBGImage(url = "") {
   document.getElementById("background-pic").style.backgroundImage =
     `url(${url})`;
 }

@@ -1,8 +1,8 @@
-
+import { logError } from './helper-functions.js';
 
 /* STYLE FUNCTIONS */
 
-function hideElement(id = "", display = "") {
+export function hideElement(id = "", display = "") {
   try {
     const element = document.getElementById(id);
 
@@ -14,7 +14,7 @@ function hideElement(id = "", display = "") {
   }
 }
 
-function showElement(id = "", display = "") {
+export function showElement(id = "", display = "") {
   try {
     const element = document.getElementById(id);
 
@@ -31,7 +31,7 @@ function showElement(id = "", display = "") {
 
 /* ENABLE / DISABLE ELEMENT */
 
-function disableElement(id) {
+export function disableElement(id) {
   if (!id) {
     logError(id);
     return;
@@ -43,11 +43,13 @@ function disableElement(id) {
   else if (typeof id === "string") {
     const el = document.getElementById(id);
     if (el) el.disabled = true;
-    return;
+  } else if (id instanceof HTMLElement) {
+    id.disabled = true;
   }
 }
 
-function enableElement(id) {
+
+export function enableElement(id) {
   if (!id) {
     logError(id);
     return;
@@ -65,18 +67,22 @@ function enableElement(id) {
 // note: for .tab-buttons class only.
 // receives integer, process as "tabX" e.g. "tab1"
 
-function addActiveViaDataTab(dataTab = 0) {
-  if(!dataTab) {
-    logError("Invalid data-tab. ", dataTab)
+export function addActiveViaDataTab(dataTab = 0) {
+  if (!dataTab) {
+    logError("Invalid data-tab provided to addActiveViaDataTab.", dataTab);
+    return;
   }
 
-  document.querySelector(`[data-tab="tab${dataTab}"]`).classList.add("active")
+  const element = document.querySelector(`[data-tab="${dataTab}"]`);
+  if (element) element.classList.add("active");
 }
 
-function removeActiveViaDataTab(dataTab = 0) {
-  if(!dataTab) {
-    logError("Invalid data-tab. ", dataTab)
+export function removeActiveViaDataTab(dataTab = 0) {
+  if (!dataTab) {
+    logError("Invalid data-tab provided to removeActiveViaDataTab.", dataTab);
+    return;
   }
 
-  document.querySelector(`[data-tab="tab${dataTab}"]`).classList.remove("active")
+  const element = document.querySelector(`[data-tab="${dataTab}"]`);
+  if (element) element.classList.remove("active");
 }

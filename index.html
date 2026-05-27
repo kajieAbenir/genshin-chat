@@ -11,48 +11,50 @@
     <div id="loading" class="loading"></div>
 
     <!-- main content -->
-    <div id="container" hidden>
+    <div id="container" style="display: none;">
       <div id="background-pic">
-        <img src="" />
-        <!-- insert bg pic here -->
       </div>
 
       <!-- floating charlist window - version 2 -->
-      <div class="floating-window hidden" id="floatingReceiverSenderWindow">
+      <div class="floating-window hidden" id="floatingReceiverSenderWindow" role="dialog" aria-modal="true" aria-labelledby="tab1-title">
         <div class="floating-content">
-          <button type="button" class="close-button" id="closeReceiverSender">&times;</button>
+          <button type="button" class="close-button" id="closeReceiverSender" aria-label="Close window">&times;</button>
           
           <div>
-            <div class="tab-buttons">
-                <div class="tab-button active" data-tab="tab1">Receiver</div>
-                <div class="tab-button" data-tab="tab2">Sender</div>
+            <div class="tab-buttons" role="tablist">
+                <button class="tab-button active" data-tab="tab1" role="tab" aria-selected="true">Receiver</button>
+                <button class="tab-button" data-tab="tab2" role="tab" aria-selected="false">Sender</button>
             </div>
 
             <div class="tab-content-container">
-                <div id="tab1" class="tab-content active">
-                  <a> 
-                    Selected: <a id="receiver-name">XIAOOOO</a>
-                  </a>
-                  <a 
+                <div id="tab1" class="tab-content active" role="tabpanel">
+                  <div id="tab1-title"> 
+                    Selected: <span id="receiver-name">None</span>
+                  </div>
+                  <div 
                     class="chat-input charlist center" 
                     name="receiver-search">
-                    <input/>
-                  </a>
+                    <label for="recv-search-input" class="hidden">Search Receiver</label>
+                    <input id="recv-search-input" placeholder="Search character..."/>
+                  </div>
+                  <br>
                   <div id="receiver-list">
                     <p>receiver</p>
                   </div>
                 </div>
-                <div id="tab2" class="tab-content">
-                  <a> 
-                    Selected: <a id="sender-name">XIAOOOO</a>
-                  </a>
-                  <a 
+                <div id="tab2" class="tab-content" role="tabpanel">
+                  <div> 
+                    Selected: <span id="sender-name">None</span>
+                  </div>
+                  <div 
                     class="chat-input charlist center" 
                     name="sender-search">
-                    <input/>
-                  </a>
+                    <label for="send-search-input" class="hidden">Search Sender</label>
+                    <input id="send-search-input" placeholder="Search character..."/>
+                  </div>
+                  <br>
                   <div id="sender-list">
-                    <p>receiver</p>
+                    <p>sender</p>
                   </div>
                 </div>
             </div>
@@ -61,14 +63,14 @@
       </div>
 
       <!-- floating settings window -->
-      <div class="floating-window hidden" id="floatingSettingsWindow">
+      <div class="floating-window hidden" id="floatingSettingsWindow" role="dialog" aria-modal="true">
         <div class="floating-content">
-          <button class="close-button" id="closeSettings">&times;</button>
+          <button class="close-button" id="closeSettings" aria-label="Close settings">&times;</button>
           
           <div>
             <div class="tab-buttons">
-                <div class="tab-button active" data-tab="tab3">⚙ Settings</div>
-                <div class="tab-button" data-tab="tab4">📚 Credits</div>
+                <button class="tab-button active" data-tab="tab3">⚙ Settings</button>
+                <button class="tab-button" data-tab="tab4">📚 Credits</button>
             </div>
 
             <div class="tab-content-container">
@@ -93,12 +95,13 @@
         <div class="chat-messages" id="chat-messages"></div>
 
         <div class="chat-input" id="toggleInputMenu">
-          <a>Hide</a>
+          <button type="button" id="toggleInputBtn" style="background:none; color:white; border:none; cursor:pointer;">Hide</button>
         </div>
 
         <div class="chat-input" id="chatInputUpper">
           <!-- tba : list idk -->
           <button id="inputList">.---</button>
+          <label for="chat-input" class="hidden">Message Input</label>
           <input
             type="text"
             id="chat-input"
@@ -110,37 +113,26 @@
             type="button"
             id="send"
             aria-label="Send Message"
+            disabled
           >
             Send
           </button>
         </div>
 
         <div class="chat-input center" id="chatInputLower">
-          <label class="switch">
+          <label class="switch" aria-label="Toggle sender/receiver">
             <input type="checkbox" id="switch" />
             <span class="slider round"></span>
           </label>
           <span id="toggleChat">Toggle Chat</span>
 
-          <a id="settings"> ⚙ </a>
+          <button id="settings" aria-label="Open settings" style="background:none; border:none; cursor:pointer;"> ⚙ </button>
         </div>
       </div>
     </div>
 
     <!-- scripts -->
-    <script type="module" src="./src/js/chat-elements.js"></script>
-    <script src="./src/js/main-script.js"></script>
-
-    <script src="./src/js/loading.js"></script>
-
-    <script src="./src/js/app-style.js"></script>
-    <script src="./src/js/event-listeners.js"></script>
-    <script src="./src/js/helper-functions.js"></script>
-
-    
-
-    <!-- api -->
-    <script src="./src/js/api.js"></script>
+    <script type="module" src="./src/js/main-script.js"></script>
 
     <noscript> Sorry! Your browser does not support JavaScript.</noscript>
   </body>
