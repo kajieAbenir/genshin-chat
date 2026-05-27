@@ -31,3 +31,10 @@ export async function getJSONList() {
   }
   console.log(">> Failed to fetch character list after 3 retries");
 }
+
+// do not test yet - image fetch. to be modified and adjusted (refer to main-script.js)
+
+export function getCharacterIconURL(apiSlug) {
+  if (!apiSlug) return "assets/default-avatar.png";
+  return `https://api.ambr.top/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
+}

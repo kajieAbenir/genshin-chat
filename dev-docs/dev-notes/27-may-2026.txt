@@ -1,0 +1,43 @@
+Hi! It's been a long time.
+
+Time flew so fast that I can't even imagine that I already abandoned this mini-project of mine.
+In fact, I'm starting to think that someone may have already built their own Genshin Chat Sim out there, using fancy frameworks that I can't currently catch up.
+As of this moment, I am using mobile data to use AI as an assistant to my coding project. The following also is summarized by Gemini AI, so thank them for that.
+
+If you liked this project so far, please consider donating via GCash in order for me to sustain my mobile data subscription, and hopefully I can help my parents as well with their debt ;-;
+
+Thank you!
+
+-----
+
+WHAT IS CHANGED - BUILD UPDATE 27-May-2026
+
+Architecture and Portability Improvements 
+> The application logic has been standardized using the ES6 Module system. The entry point is now a single module script in g:\CODING FOLDER\genshin-chat-js\index.html, which improves load order and reliability. 
+> Additionally, the fetching logic in g:\CODING FOLDER\genshin-chat-js\src\js\api.js was converted to use relative paths, ensuring the app works on any hosting platform without needing a specific local dev server URL.
+
+Character Selection and Search 
+> A functional character selection window was implemented. Users can open this by clicking the Chat header. It features a tabbed interface to switch between Receiver and Sender selection. 
+> Additionally,  real-time search filter was added to these lists, allowing users to quickly find characters from the JSON by typing in the search bar.
+
+Dynamic Avatar System 
+> Chat bubbles now support character images. When a message is sent, the application calculates the correct image path based on the selected character name and their region. 
+> The CSS was updated using the order property to place the avatar to the left of receiver messages and to the right of sender messages.
+
+UX and Accessibility Enhancements 
+> The UI was overhauled for better accessibility by replacing generic anchor tags with semantic buttons and labels. 
+> ARIA roles and focus management were added to the floating dialogs. The loading sequence in the Main JS was also fixed to wait for the window load event before transitioning from the spinner to the main container.
+
+-----
+
+Bug Fixes and Stability Several critical runtime issues were resolved:
+
+> Fixed a SyntaxError in "chat-elements.js" caused by duplicate variable declarations.
+> Resolved ReferenceErrors in "event-listeners.js" by properly importing the showCharList function.
+> Fixed a logic error in "app-style.js" that caused tab switching to crash when looking for non-existent IDs.
+> Corrected the Send button behavior to ensure the input field is never accidentally disabled while the user is typing.
+
+General Polish
+> Text selection is now enabled on chat bubbles, allowing users to copy message content.
+> Custom scrollbar styling was improved.
+> Mobile responsiveness was enhanced by moving fixed container widths to percentage-based layouts.
