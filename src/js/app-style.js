@@ -2,27 +2,23 @@ import { logError } from './helper-functions.js';
 
 /* STYLE FUNCTIONS */
 
-export function hideElement(id = "", display = "") {
+export function hideElement(id = "") {
   try {
     const element = document.getElementById(id);
-
-    element.classList.add("hidden");
-    element.classList.remove(display);
-
+    if (element) {
+      element.classList.add("hidden");
+    }
   } catch (error) {
     logError("Cannot hide element!", error)
   }
 }
 
-export function showElement(id = "", display = "") {
+export function showElement(id = "") {
   try {
     const element = document.getElementById(id);
-
-    if(element.classList.contains("hidden")) {
+    if (element) {
       element.classList.remove("hidden");
     }
-
-    element.classList.add(display);
   } catch (error) {
     logError("Cannot show element!", error)
   }

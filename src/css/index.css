@@ -8,7 +8,7 @@
 }
 
 #background-pic {
-  background-image: url("../../src/bg-img/asdf.jpg");
+  background-image: url("../../src/bg-img/default.jpg");
   background-size: cover;
   background-position: center;
   position: fixed;
@@ -58,7 +58,7 @@ body {
 /* Reusable classes */
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .flex {
@@ -92,6 +92,15 @@ body {
   }
 }
 
+#container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
 /* Header styling */
 .chat-header {
   background: #22283e;
@@ -113,16 +122,34 @@ body {
   - need to blur the right part (the 100% part)
   - last gradient line (100%) should NOT be absolute zero
 */
+#chat-messages {
+  flex: 1 1 auto; /* Grow to fill, shrink to fit, basis auto */
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  height:100%;
+}
+
 .chat-messages {
   flex: 1;
-  padding: 2px;
-  overflow-y: scroll;
+  padding: 10px 15px;
+  word-wrap: break-word;
+  font-size: 16px;
   background: linear-gradient(
     90deg,
     rgba(34, 40, 62, 1) 70%,
     rgba(34, 40, 62, 0.47) 85%,
     rgba(34, 40, 62, 0) 100%
   );
+  flex-grow: 1;
+  overflow-y: auto;
+  width: 100%; /* ✅ ensures same width as header */
+  max-width: 100%; /* ✅ override the 70% */
+  height:100%; /* ✅ ensures it fills the remaining vertical space */
 }
 
 /* scroll bar for chat */
@@ -149,14 +176,17 @@ body {
 .chat-message {
   margin: 10px 0;
   display: flex;
-  flex-direction: column;
-
+  flex-direction: row; /* instead of column */
+  align-items: flex-start; /* keeps image and bubble aligned */
   font-size: 15px;
 }
 
 /* Align sender messages to the right */
 .chat-message.sender {
   align-items: flex-end;
+  align-self: flex-end;
+  justify-content: flex-end;
+  color: #000;
 }
 
 /* Chat bubble styling for both sender and receiver */
@@ -184,6 +214,8 @@ body {
 
 /* Image of chat sender/receiver */
 .chat-image {
+  display: flex;
+
 	min-height: 45px;
 	max-height: 45px;
 
@@ -191,6 +223,10 @@ body {
 	max-width: 45px;
 
 	border-radius: 50%;
+  border: 2px solid #d1c9c1;
+
+  background: #f3c19a;
+  
   object-fit: cover; /* Ensures image covers the area without distortion */
   margin: 0 10px; /* Spacing between image and bubble */
 }
@@ -207,19 +243,6 @@ body {
 /* Image of chat sender/receiver */
 /* TBA : add image */
 
-.chat-image {
-	min-height: 45px;
-	max-height: 45px;
-
-	min-width: 45px;
-	max-width: 45px;
-
-	border: 2px solid red;
-	border-radius: 50%;
-
-	display: flex;
-}
-
 /* Sender */
 .chat-image.sender {
 	align-items: flex-end;
@@ -229,24 +252,55 @@ body {
 /* Receiver */
 .chat-image.receiver {
 	align-items: flex-start;
-	align-self: flex-start;
+  align-self: flex-start;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  color: #000;
 }
 
 /* for hiding input menu - reason: maximization of chat */
 
 #toggleInputMenu {
   color: white;
+
   position: absolute;
   bottom: 6px;
   left: 6px;
+
   cursor: pointer;
+
   border: 0;
+
   background-color: none;
+
+  width: 100%;
+
+  display: flex;
+  justify-content: flex-start; /* Aligns to the left side cleanly without covering content */
+
+  padding: 5px 10px;
+  box-sizing: border-box;
 }
 
 #chatInputLower.chat-input {
   border: 0;
   padding: 8px;
+}
+
+#toggleInputBtn {
+  padding: 6px 12px;
+  background-color: #3d4655;
+  color: white;
+  border: 1px solid #525c6c;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  z-index: 10; /* Keeps it layered cleanly without intersecting baseline input fields */
+  transition: background-color 0.2s;
+}
+
+#toggleInputBtn:hover {
+  background-color: #2196f3;
 }
 
 /* Input area styling */
@@ -256,6 +310,9 @@ body {
   display: flex;
   align-items: center;
   background: #22283e;
+  flex-shrink: 0; /* Prevents them from being squished when messages grow */
+  min-height: 35px;
+  justify-content: space-between; /* ✅ spread input + buttons */
 }
 
 .chat-input input {
@@ -294,6 +351,13 @@ body {
   font-size: 26px;
   color: white;
   cursor: pointer;
+
+  background: none;
+  border:none;
+}
+
+#chatInputUpper {
+  margin-top: 5px;
 }
 
 /* for switch */
@@ -378,7 +442,7 @@ input:checked + .slider:before {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-  /*display: flex;*/
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
@@ -394,8 +458,9 @@ input:checked + .slider:before {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  min-width: 70%;
-  max-width: 80%; /* Responsive width */
+  min-width: 400px;
+  width: 50%;
+  max-width: 60%; /* Responsive width */
   max-height: 90%; /* Responsive height */
   position: relative;
   overflow-y: auto; /* Scroll if content exceeds window size */
@@ -424,10 +489,17 @@ input:checked + .slider:before {
   min-height: fit-content;
 }
 
+.charlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
 #receiver-list,
 #sender-list {
-  height: 150px; 
-  overflow-y: scroll;
+  height: 220px;
+  overflow-y: auto;
 }
 
 .character-list-item {
@@ -496,4 +568,31 @@ input:checked + .slider:before {
 
 .tab-content.active {
   display: block;
+}
+
+/* Safely position the toggle layout row */
+div#toggleInputMenu {
+  display: flex !important;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 4px 8px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* Style the button uniquely so it never overlaps text fields */
+#toggleInputBtn {
+  position: relative; /* Removes it from any accidental absolute overlays */
+  background-color: #3d4655;
+  color: #ffffff;
+  border: 1px solid #525c6c;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+#toggleInputBtn:hover {
+  background-color: #2196f3;
 }

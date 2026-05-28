@@ -41,3 +41,34 @@ General Polish
 > Text selection is now enabled on chat bubbles, allowing users to copy message content.
 > Custom scrollbar styling was improved.
 > Mobile responsiveness was enhanced by moving fixed container widths to percentage-based layouts.
+
+-----
+
+WHAT'S NEXT?
+
+> I acknowledge that some parts are unserious... like the "XIAOOOO" lmaoaoao. Will fix it on the next patch.
+> More on main JS fixes.
+> Implement tab switching functionality for Receiver/Sender selection — tab buttons exist but click handlers are missing
+> Add fallback image handling for missing character portrait files
+Replace placeholder background image (asdf.jpg) with actual region-based backgrounds
+> Place anything in Settings/Credits window (nothing is in right now in these parts)
+> Add background image switching based on selected receiver's region
+> Implement chat history persistence (localStorage or export functionality)
+> Add keyboard navigation support for character lists and tab switching
+> Create character list pagination or virtualization for better performance with large lists
+> Remove any global elements, especially the window.ChatNameElements exposure (currently used for debugging)
+> Clean up commented-out code in main-script.js
+> Enhance error messages for better user feedback
+> Add input validation and sanitization for chat messages
+> Optimize character list rendering for smoother interactions
+
+This next patch, hopefully AI-assisted coding will be on good use. I am currently thinking of leveraging local-run AI, Gemma. But with my laptop specifications, the AI seems to run slower than I expected lol.
+
+-----
+
+WILL LIKELY TO ADD
+
+> Add character favorites/pinned characters for quick access
+> Implement message timestamps and chat bubble styling improvements
+> Add drag-and-drop file support for custom character images
+> Create preset conversation templates or quick replies

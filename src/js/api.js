@@ -7,34 +7,38 @@ import { logError } from './helper-functions.js';
  * Returns the WHOLE parsed JSON stuff.
  * @returns {data}
  */
-export async function getJSONList() {
-  // fetches the JSON file
-  let retries = 3;
-  while (retries > 0) {
-    try {
-      const res = await fetch("./src/char_info.json");
 
-      // parses it into code-friendly JSON
-      const data = await res.json();
+let cachedCharListPromise = null; // Cache variable to store the fetched character list
+export function getJSONList() {
+  if (!cachedCharListPromise) {
 
-      return data;
-    } catch (error) {
-      retries--;
+    // Store the execution promise itself 
+    cachedCharListPromise = (async () => {
+      try {
+        const res = await fetch("./src/char_info.json");
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
-      logError(
-        `Error fetching JSON list, retrying ${retries + 1} times\n  >>`,
-        error
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-    }
+        return await res.json();
+        
+      } catch (error) {
+        console.error("Failed to fetch character list:", error);
+        
+        // Reset the promise on failure so future interactions can attempt to retry
+        cachedCharListPromise = null; 
+        
+        // FIX: Return an empty object shape so 'list.characters' safely evaluates to undefined/empty instead of throwing a TypeError 
+        return { characters: {} }; 
+      }
+    })();
   }
-  console.log(">> Failed to fetch character list after 3 retries");
+  
+  return cachedCharListPromise;
 }
-
-// do not test yet - image fetch. to be modified and adjusted (refer to main-script.js)
 
 export function getCharacterIconURL(apiSlug) {
   if (!apiSlug) return "assets/default-avatar.png";
-  return `https://api.ambr.top/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
+  return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
 }

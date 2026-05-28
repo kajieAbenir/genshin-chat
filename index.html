@@ -4,14 +4,14 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./src/css/index.css"/>
-    <title>Genshin Chat Simulator</title>
+    <title>Genshin Chat</title>
   </head>
   <body>
     <!-- loading screen -->
     <div id="loading" class="loading"></div>
 
     <!-- main content -->
-    <div id="container" style="display: none;">
+    <div id="container">
       <div id="background-pic">
       </div>
 
@@ -95,7 +95,9 @@
         <div class="chat-messages" id="chat-messages"></div>
 
         <div class="chat-input" id="toggleInputMenu">
-          <button type="button" id="toggleInputBtn" style="background:none; color:white; border:none; cursor:pointer;">Hide</button>
+          <button type="button" id="toggleInputBtn">
+            Hide
+          </button>
         </div>
 
         <div class="chat-input" id="chatInputUpper">
@@ -126,7 +128,9 @@
           </label>
           <span id="toggleChat">Toggle Chat</span>
 
-          <button id="settings" aria-label="Open settings" style="background:none; border:none; cursor:pointer;"> ⚙ </button>
+          <button id="settings" aria-label="Open settings" type="button"> 
+            ⚙ 
+          </button>
         </div>
       </div>
     </div>

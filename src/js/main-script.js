@@ -1,7 +1,7 @@
 import { ChatMainElements, ChatNameElements } from './chat-elements.js';
 import { logError, hasInputValue } from './helper-functions.js';
 import { disableElement } from './app-style.js';
-import { getJSONList } from './api.js';
+import { getJSONList, getCharacterIconURL } from './api.js';
 import { initLoading } from './loading.js';
 import './event-listeners.js';
 
@@ -53,6 +53,15 @@ export function addConversation() {
   imageElement.src = isSender ? selectedSender.image : selectedReceiver.image;
   imageElement.alt = isSender ? selectedSender.name : selectedReceiver.name;
 
+  // Fallback for missing images, preventing infinite loops and providing visual feedback
+  imageElement.onerror = (event) => {
+    console.warn(`Failed to load image for ${imageElement.alt}. Attempting fallback.`);
+    imageElement.src = './src/char-img/default.png'; // Try fallback
+    imageElement.onerror = null; // Prevent infinite loop if fallback also fails
+    // Optionally, add a class to style the broken image more clearly
+    // imageElement.classList.add('broken-image-placeholder');
+  };
+
   if (isSender) {
     messageElement.appendChild(bubbleElement);
     messageElement.appendChild(imageElement);
@@ -61,27 +70,27 @@ export function addConversation() {
     messageElement.appendChild(bubbleElement);
   }
 
-  /*
-    if (ChatMainElements.sendSwitch.checked) {
-      container.insertBefore(picElement, container.firstChild);
-    } else if (!ChatMainElements.sendSwitch.checked) {
-      container.appendChild(picElement);
-    }
-  */
-
   // append the new chat message element to the chat container
   container.appendChild(messageElement);
 
   // clear the input field
+  if (ChatMainElements.input) {
+    ChatMainElements.input.value = "";
+    // Dispatch an 'input' event manually so your event-listeners.js 
+    // code catches it and safely disables the send button again
+    ChatMainElements.input.dispatchEvent(new Event('input')); 
+  }
+
+  container.scrollTop = container.scrollHeight;
 
   // log the new message
-  console.log(
-    new Date().toLocaleString(),
-    "//",
-    ChatMainElements.sendSwitch.checked ? "Sender" : "Receiver",
-    "\nMessage:",
-    bubbleElement.textContent
-  );
+  // console.log(
+  //   new Date().toLocaleString(),
+  //   "//",
+  //   ChatMainElements.sendSwitch.checked ? "Sender" : "Receiver",
+  //   "\nMessage:",
+  //   bubbleElement.textContent
+  // );
 }
 
 const nationCodes = {
@@ -93,7 +102,7 @@ const nationCodes = {
   "Fontaine": "04",
   "Natlan": "05",
   "Snezhnaya": "06",
-  "Khaenriah": "07",
+  "Khaenri'ah": "07",
   "Others": "08",
   "Skins": "skins",
   "Non-Playable": "non-playable"
@@ -124,24 +133,26 @@ export async function showCharList(listContainerId, type, searchTerm = "") {
   try {
     const characters = list.characters;
     const fragment = document.createDocumentFragment();
+    const lowerSearch = searchTerm.toLowerCase();
 
     for (const region in characters) {
       if (characters.hasOwnProperty(region)) {
         for (const charName in characters[region]) {
           if (characters[region].hasOwnProperty(charName)) {
             // Apply search filter
-            if (searchTerm && !charName.toLowerCase().includes(searchTerm.toLowerCase())) {
+            if (searchTerm && !charName.toLowerCase().includes(lowerSearch)) {
               continue; // Skip if character name doesn't match search term
             }
 
+            const charSlug = characters[region][charName];
             const charElement = document.createElement('button');
             charElement.classList.add('character-list-item');
             charElement.textContent = charName;
-            charElement.dataset.charName = charName;
-            charElement.dataset.region = region;
-            charElement.dataset.type = type;
+            charElement.setAttribute('data-char-name', charName);
+            charElement.setAttribute('data-region', region);
+            charElement.setAttribute('data-type', type);
 
-            charElement.addEventListener('click', () => selectCharacter(charName, region, type));
+            charElement.addEventListener('click', () => selectCharacter(charName, region, type, charSlug));
             fragment.appendChild(charElement);
           }
         }
@@ -161,8 +172,9 @@ export async function showCharList(listContainerId, type, searchTerm = "") {
   }
 }
 
-export function selectCharacter(charName, region, type) {
-  const charImage = generateCharacterImageSrc(charName, region);
+export function selectCharacter(charName, region, type, charSlug) {
+  // Priority: Online API URL from api.js, fallback to local path if slug is missing
+  const charImage = charSlug ? getCharacterIconURL(charSlug) : generateCharacterImageSrc(charName, region);
 
   // Remove 'selected' class from previously selected item in the same list
   const currentSelected = document.querySelector(`.character-list-item.selected[data-type="${type}"]`);
@@ -183,34 +195,26 @@ export function selectCharacter(charName, region, type) {
     selectedSender = { name: charName, image: charImage };
     ChatNameElements.senderNameSpan.textContent = charName;
   }
-  console.log(`${type} selected: ${charName}, Image: ${charImage}`);
+  // console.log(`${type} selected: ${charName}, Image: ${charImage}`);
 }
 
 // Initialize default selections on load
 document.addEventListener('DOMContentLoaded', async () => {
   const list = await getJSONList();
-  const defaultCharName = "XIAOOOO"; // Assuming XIAOOOO is a valid character name in your JSON
-  let defaultReceiverFound = false;
-  let defaultSenderFound = false;
-
+  const defaultCharName = "Aether"; // Assuming Aether is a valid character name in your JSON
+  
+  // Optimized lookup for default character
   for (const region in list.characters) {
-    if (list.characters.hasOwnProperty(region)) {
-      for (const charName in list.characters[region]) {
-        if (charName === defaultCharName) {
-          if (!defaultReceiverFound) {
-            selectedReceiver = { name: defaultCharName, image: generateCharacterImageSrc(defaultCharName, region) };
-            ChatNameElements.receiverNameSpan.textContent = defaultCharName;
-            defaultReceiverFound = true;
-          }
-          if (!defaultSenderFound) {
-            selectedSender = { name: defaultCharName, image: generateCharacterImageSrc(defaultCharName, region) };
-            ChatNameElements.senderNameSpan.textContent = defaultCharName;
-            defaultSenderFound = true;
-          }
-          if (defaultReceiverFound && defaultSenderFound) break;
-        }
-      }
+    const charSlug = list.characters[region][defaultCharName];
+    if (charSlug) {
+      const defaultImg = getCharacterIconURL(charSlug);
+      
+      selectedReceiver = { name: defaultCharName, image: defaultImg };
+      ChatNameElements.receiverNameSpan.textContent = defaultCharName;
+      
+      selectedSender = { name: defaultCharName, image: defaultImg };
+      ChatNameElements.senderNameSpan.textContent = defaultCharName;
+      break;
     }
-    if (defaultReceiverFound && defaultSenderFound) break;
   }
 });

@@ -1,0 +1,32 @@
+📝 Changelog: Build 27-May-2026
+
+✨ What’s New?
+
+> ES6 Module Architecture: Standardized the codebase using ES6 imports/exports. The entry point is now a clean module script, improving load reliability and scope management.
+> Character Selection Portal: Added a floating modal with a tabbed interface to switch between "Sender" and "Receiver" selection.
+> Real-time Search Filter: Implemented a debounced search feature in the character lists, allowing users to filter the JSON data dynamically.
+> Dynamic Avatar System:
+    >> Integrated an automated image path generator based on character name and region.
+    >> Used the CSS order property to automatically flip avatar positions (left for receivers, right for senders).
+> Enhanced UI/UX:
+    >> Replaced generic anchor tags with semantic <button> elements.
+    >> Added custom scrollbar styling for the chat window.
+    >> Improved mobile responsiveness with fluid layouts.
+    >> Enabled text selection on chat bubbles for easier copying.
+
+🛠️ What’s Fixed?
+
+> Syntax & Logic Errors: Resolved duplicate variable declarations in chat-elements.js and fixed ReferenceErrors when calling showCharList.
+> Tab Switching Stability: Corrected a logic error in app-style.js that caused crashes when switching between sender and receiver tabs.
+> Send Button Logic: Fixed the behavior where the Send button would remain disabled even after input was provided.
+> Loading Sequence: Synchronized the initLoading sequence to ensure the UI only displays once the window is fully prepared.
+> Image Fallbacks: Added an onerror handler in main-script.js to provide a default portrait if a character image fails to load.
+
+🚀 What’s Next? (Suggested by Gemini AI)
+
+> Contextual Backgrounds: Implement automatic background image switching based on the selected receiver's region (e.g., Liyue, Mondstadt).
+> Persistence: Add localStorage support to save current conversations so they aren't lost on page refresh.
+> Settings Content: Populate the currently empty Settings/Credits window with actual configuration options and developer links.
+> Performance Optimization: Implement virtualization for the character list to handle a growing roster without lag.
+> Input Sanitization: Add security layers to the chat input to prevent potential script injections.
+> Cleanup: Remove remaining global window object exposures used for debugging and prune commented-out legacy code.
