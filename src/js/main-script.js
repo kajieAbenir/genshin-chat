@@ -68,15 +68,6 @@ export function addConversation() {
   // Clear input
   ChatMainElements.input.value = "";
   disableElement(ChatMainElements.sendBtn);
-  
-  // log the new message
-  console.log(
-    new Date().toLocaleString(),
-    "//",
-    isSender ? "Sender" : "Receiver",
-    "\nMessage:",
-    messageText
-  );
 }
 
 const nationCodes = {
@@ -123,11 +114,15 @@ export async function showCharList(listContainerId, type, searchTerm = "") {
 
     for (const region in characters) {
       if (characters.hasOwnProperty(region)) {
+        const lowerRegion = region.toLowerCase();
+
         for (const charName in characters[region]) {
           if (characters[region].hasOwnProperty(charName)) {
-            // Apply search filter
-            if (searchTerm && !charName.toLowerCase().includes(lowerSearch)) {
-              continue; // Skip if character name doesn't match search term
+            const lowerCharName = charName.toLowerCase();
+
+            // Apply search filter (Matches character name OR region name)
+            if (searchTerm && !lowerCharName.includes(lowerSearch) && !lowerRegion.includes(lowerSearch)) {
+              continue;
             }
 
             const charSlug = characters[region][charName];
@@ -182,6 +177,24 @@ export function selectCharacter(charName, region, type, charSlug) {
     ChatNameElements.senderNameSpan.textContent = charName;
   }
   // console.log(`${type} selected: ${charName}, Image: ${charImage}`);
+}
+
+export function setCustomCharacter(type, name, imageSrc) {
+  const currentSelected = document.querySelector(`.character-list-item.selected[data-type="${type}"]`);
+  if (currentSelected) {
+    currentSelected.classList.remove('selected');
+  }
+
+  const finalName = name || "Custom";
+  const finalImage = imageSrc || "./src/char-img/default.png";
+
+  if (type === 'receiver') {
+    selectedReceiver = { name: finalName, image: finalImage };
+    ChatNameElements.receiverNameSpan.textContent = finalName;
+  } else if (type === 'sender') {
+    selectedSender = { name: finalName, image: finalImage };
+    ChatNameElements.senderNameSpan.textContent = finalName;
+  }
 }
 
 // Initialize default selections on load

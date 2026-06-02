@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="./src/css/index.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <title>Genshin Chat</title>
   </head>
   <body>
@@ -35,7 +36,14 @@
                     class="chat-input charlist center" 
                     name="receiver-search">
                     <label for="recv-search-input" class="hidden">Search Receiver</label>
-                    <input id="recv-search-input" placeholder="Search character..." autocomplete="off"/>
+                    <input id="recv-search-input" placeholder="Search character or region..." autocomplete="off"/>
+                  </div>
+                  <br>
+                  <div class="custom-character-section">
+                    <input type="text" id="custom-receiver-name" placeholder="Custom Name" autocomplete="off"/>
+                    <label for="custom-receiver-img" class="hidden">Custom receiver image</label>
+                    <input type="file" id="custom-receiver-img" accept="image/*" title="Custom receiver image" />
+                    <button id="apply-custom-receiver" type="button">Apply Custom</button>
                   </div>
                   <br>
                   <div id="receiver-list">
@@ -50,7 +58,14 @@
                     class="chat-input charlist center" 
                     name="sender-search">
                     <label for="send-search-input" class="hidden">Search Sender</label>
-                    <input id="send-search-input" placeholder="Search character..." autocomplete="off"/>
+                    <input id="send-search-input" placeholder="Search character or region..." autocomplete="off"/>
+                  </div>
+                  <br>
+                  <div class="custom-character-section">
+                    <input type="text" id="custom-sender-name" placeholder="Custom Name" autocomplete="off"/>
+                    <label for="custom-sender-img" class="hidden">Custom sender image</label>
+                    <input type="file" id="custom-sender-img" accept="image/*" title="Custom sender image" aria-label="Custom sender image" />
+                    <button id="apply-custom-sender" type="button">Apply Custom</button>
                   </div>
                   <br>
                   <div id="sender-list">
@@ -75,8 +90,28 @@
 
             <div id="tab3" class="tab-content active">
               <h2>Settings</h2>
+              
+              <div class="settings-group">
+                <label>App Background</label>
+                <div class="switcher-control">
+                  <button id="prevBgBtn" class="switcher-btn" type="button">&lt;</button>
+                  <span id="currentBgLabel">Default BG</span>
+                  <button id="nextBgBtn" class="switcher-btn" type="button">&gt;</button>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <label>Interface Zoom</label>
+                <div class="switcher-control">
+                  <button id="decreaseFontBtn" class="switcher-btn" type="button">-</button>
+                  <span id="fontScaleLabel">100%</span>
+                  <button id="increaseFontBtn" class="switcher-btn" type="button">+</button>
+                </div>
+              </div>
+
               <div class="settings-options">
                 <button id="clearChatBtn" type="button" class="clear-btn">🗑️ Clear Chat</button>
+                <button id="exportChatBtn" type="button" class="clear-btn export-btn" disabled>📸 Export to Image (Coming Soon)</button>
               </div>
             </div>
 
@@ -100,7 +135,7 @@
                       <strong>Brent Kyrjeh Abenir</strong>
 
                       <p class="credits-role">
-                        ⚔️ <strong>Title:</strong>
+                        ⚔️ <strong>Titles:</strong>
                         Lead Repository Architect, 3-in-1 Coffee Specialist, Professional Deadline Survivor, Go+99 Weekly Registrant, and Grad-Waiting Student of Teyvat.
                       </p>
 
@@ -188,7 +223,7 @@
 
         <div class="chat-input" id="chatInputUpper">
           <!-- tba : list idk -->
-          <button id="inputList" type="button">Sticker</button>
+          <button id="inputList" type="button" disabled>Sticker</button>
           <label for="chat-input" class="hidden">Message Input</label>
           <input
             type="text"

@@ -61,6 +61,17 @@ function createMessageElement(msg) {
     const messageWrapper = document.createElement("div");
     messageWrapper.classList.add("message-wrapper");
     
+    // Message name
+    const messageName = document.createElement("div");
+    messageName.classList.add("message-name");
+    
+    // Create a temporary element to safely decode HTML entities if msg.sender/receiver has them
+    const rawName = msg.isSender ? msg.sender : msg.receiver;
+    messageName.textContent = rawName; // textContent handles escaping natively
+    
+    const bubbleRow = document.createElement("div");
+    bubbleRow.classList.add("bubble-row");
+
     // Build bubble content with edit indicator
     const bubbleContent = document.createElement("div");
     bubbleContent.classList.add("bubble-content");
@@ -78,8 +89,11 @@ function createMessageElement(msg) {
       <button class="control-btn delete-btn" title="Delete" type="button">🗑️</button>
     `;
     
-    messageWrapper.appendChild(bubbleElement);
-    messageWrapper.appendChild(controlsDiv);
+    bubbleRow.appendChild(bubbleElement);
+    bubbleRow.appendChild(controlsDiv);
+    
+    messageWrapper.appendChild(messageName);
+    messageWrapper.appendChild(bubbleRow);
     
     if (msg.isSender) {
       messageElement.appendChild(messageWrapper);
@@ -89,7 +103,7 @@ function createMessageElement(msg) {
       messageElement.appendChild(messageWrapper);
     }
     
-    attachControlListeners(messageWrapper, msg);
+    attachControlListeners(bubbleRow, msg);
   }
 
   return messageElement;

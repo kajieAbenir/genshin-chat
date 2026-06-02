@@ -39,7 +39,7 @@ export function getJSONList() {
 }
 
 export function getCharacterIconURL(apiSlug) {
-  if (!apiSlug) return "assets/default-avatar.png";
+  if (!apiSlug) return "./src/char-img/default.png";
   return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
 }
 

@@ -31,8 +31,11 @@ export function debounce(func, timeout = 300) {
   };
 }
 
-// do not use for now.
+// Change background image directly
 export function changeBGImage(url = "") {
-  document.getElementById("background-pic").style.backgroundImage =
-    `url(${url})`;
+  if (url) {
+    document.getElementById("background-pic").style.backgroundImage = `url('${url}')`;
+  } else {
+    document.getElementById("background-pic").style.backgroundImage = 'none';
+  }
 }

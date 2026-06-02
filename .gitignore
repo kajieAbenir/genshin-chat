@@ -1,4 +1,5 @@
 node_modules
 .vscode
-.temp-staging.js
 .qodo
+test-image-urls.js
+AI-PROMPT-GUARDRAILS.md

@@ -7,8 +7,38 @@
     url("../../src/fonts/zhcn.woff") format("woff");
 }
 
+:root {
+  --ui-scale: 1.0;
+  --active-bg: none;
+  
+  /* Central Theme Colors */
+  --bg-primary: #1e2235;
+  --bg-secondary: #22283e;
+  --bg-tertiary: #3d4655;
+  --text-primary: #eceef5;
+  --text-muted: #8b97b0;
+  --accent-blue: #2196f3;
+  
+  /* Nation Thematic Colors */
+  --color-mondstadt: #4abbbb;  /* Anemo green-blue */
+  --color-liyue: #d8a032;      /* Geo gold */
+  --color-inazuma: #af7cf0;    /* Electro purple */
+  --color-sumeru: #5ab347;     /* Dendro green */
+  --color-fontaine: #2b82f6;   /* Hydro blue */
+  --color-natlan: #f15c3a;     /* Pyro orange-red */
+  --color-snezhnaya: #8ab7e5;  /* Cryo light-blue */
+  --color-nodkrai: #6c5ce7;    /* Deep Indigo/Void */
+  --color-others: #a1a5b5;     /* Default greyish */
+}
+
+html {
+  font-size: calc(16px * var(--ui-scale, 1));
+  cursor: url(), auto;
+}
+
 #background-pic {
-  background-image: url("../../src/bg-img/default.jpg");
+  background-color: var(--bg-primary);
+  background-image: var(--active-bg);
   background-size: cover;
   background-position: center;
   position: fixed;
@@ -497,6 +527,34 @@ input:checked + .slider:before {
   margin-top: 12px;
 }
 
+.custom-character-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.custom-character-section input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #3d4655;
+  color: white;
+}
+
+.custom-character-section button {
+  padding: 8px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 #receiver-list,
 #sender-list {
   height: 220px;
@@ -508,20 +566,70 @@ input:checked + .slider:before {
   width: 100%;
   padding: 10px;
   margin-bottom: 5px;
-  background-color: #3d4655;
+  background-color: var(--bg-tertiary, #3d4655);
   color: white;
   border: none;
+  border-left: 4px solid transparent;
   border-radius: 5px;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s ease, border-left-color 0.2s ease, transform 0.1s ease;
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
 }
 
 .character-list-item:hover, .character-list-item.selected {
-  background-color: #2196f3; /* Highlight on hover and when selected */
+  background-color: var(--accent-blue, #2196f3); /* Default Highlight */
+  border-left-color: white;
 }
 
+/* Region-specific hover colors */
+.character-list-item[data-region="Mondstadt"]:hover,
+.character-list-item[data-region="Mondstadt"].selected {
+  background: linear-gradient(135deg, rgba(74, 187, 187, 0.2), rgba(74, 187, 187, 0.5));
+  border-left-color: var(--color-mondstadt);
+}
+
+.character-list-item[data-region="Liyue"]:hover,
+.character-list-item[data-region="Liyue"].selected {
+  background: linear-gradient(135deg, rgba(216, 160, 50, 0.2), rgba(216, 160, 50, 0.5));
+  border-left-color: var(--color-liyue);
+}
+
+.character-list-item[data-region="Inazuma"]:hover,
+.character-list-item[data-region="Inazuma"].selected {
+  background: linear-gradient(135deg, rgba(175, 124, 240, 0.2), rgba(175, 124, 240, 0.5));
+  border-left-color: var(--color-inazuma);
+}
+
+.character-list-item[data-region="Sumeru"]:hover,
+.character-list-item[data-region="Sumeru"].selected {
+  background: linear-gradient(135deg, rgba(90, 179, 71, 0.2), rgba(90, 179, 71, 0.5));
+  border-left-color: var(--color-sumeru);
+}
+
+.character-list-item[data-region="Fontaine"]:hover,
+.character-list-item[data-region="Fontaine"].selected {
+  background: linear-gradient(135deg, rgba(43, 130, 246, 0.2), rgba(43, 130, 246, 0.5));
+  border-left-color: var(--color-fontaine);
+}
+
+.character-list-item[data-region="Natlan"]:hover,
+.character-list-item[data-region="Natlan"].selected {
+  background: linear-gradient(135deg, rgba(241, 92, 58, 0.2), rgba(241, 92, 58, 0.5));
+  border-left-color: var(--color-natlan);
+}
+
+.character-list-item[data-region="Snezhnaya"]:hover,
+.character-list-item[data-region="Snezhnaya"].selected {
+  background: linear-gradient(135deg, rgba(138, 183, 229, 0.2), rgba(138, 183, 229, 0.5));
+  border-left-color: var(--color-snezhnaya);
+}
+
+.character-list-item[data-region="Nod-Krai"]:hover,
+.character-list-item[data-region="Nod-Krai"].selected {
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(45, 0, 85, 0.6));
+  border-left-color: var(--color-nodkrai);
+}
 /* for tabs, sending and receiving */
 
 .tab-buttons {
@@ -697,13 +805,31 @@ div#toggleInputMenu {
 .message-wrapper {
   position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  max-width: calc(100% - 65px);
+}
+
+.chat-message.sender .message-wrapper {
+  align-items: flex-end;
+}
+
+.message-name {
+  font-size: 0.8em;
+  color: #666;
+  margin: 0 5px;
+}
+
+.bubble-row {
+  display: flex;
   align-items: flex-end;
   gap: 6px;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
-.chat-message.sender .message-wrapper {
+.chat-message.sender .bubble-row {
   justify-content: flex-end;
 }
 
@@ -765,6 +891,59 @@ div#toggleInputMenu {
   }
 }
 
+/* Settings Controls Styles */
+.settings-group {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: var(--bg-tertiary, #3d4655);
+  border-radius: 8px;
+  color: var(--text-primary, #eceef5);
+}
+
+.settings-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+  color: var(--text-muted, #8b97b0);
+  text-transform: uppercase;
+}
+
+.switcher-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-secondary, #22283e);
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.switcher-btn {
+  background-color: var(--bg-tertiary, #3d4655);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.switcher-btn:hover {
+  background-color: var(--accent-blue, #2196f3);
+}
+
+.switcher-btn:active {
+  transform: scale(0.95);
+}
+
+#currentBgLabel, #fontScaleLabel {
+  font-size: 0.9em;
+  text-align: center;
+  flex: 1;
+  -webkit-user-select: none;
+  user-select: none;
+}
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -809,4 +988,12 @@ div#toggleInputMenu {
 
 .clear-btn:active {
   transform: translateY(0);
+}
+
+.clear-btn.export-btn {
+  background: #08e600;
+}
+
+.clear-btn.export-btn:hover {
+  background: #06b900;
 }

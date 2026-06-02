@@ -74,3 +74,12 @@ export const inputSection = {
     return document.getElementById("chatInputUpper");
   }
 };
+
+export const CustomCharElements = {
+  get receiverName() { return document.getElementById("custom-receiver-name"); },
+  get receiverImg() { return document.getElementById("custom-receiver-img"); },
+  get applyReceiver() { return document.getElementById("apply-custom-receiver"); },
+  get senderName() { return document.getElementById("custom-sender-name"); },
+  get senderImg() { return document.getElementById("custom-sender-img"); },
+  get applySender() { return document.getElementById("apply-custom-sender"); }
+};
