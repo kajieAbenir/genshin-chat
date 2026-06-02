@@ -3,6 +3,8 @@ import { hasInputValue, logError, debounce } from "./helper-functions.js";
 import { disableElement, enableElement, showElement, hideElement, addActiveViaDataTab, removeActiveViaDataTab } from "./app-style.js";
 import { addConversation, showCharList } from "./main-script.js";
 import { CloseButtons } from "./chat-elements.js";
+import { clearMessages } from "./message-manager.js";
+import { renderMessages } from "./message-renderer.js";
 
 /* EVENT LISTENERS */
 
@@ -107,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Update the button text directly using 'this' (the button that was clicked)
         this.textContent = currentlyHidden ? "Show" : "Hide";
         
-        console.log(`Menu ${currentlyHidden ? "hidden" : "shown"}`);
       } else {
         console.warn("Could not find chat input rows to toggle.");
       }
@@ -135,22 +136,47 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 11. Tab Swapping Selection Interface
-  if (ChatNameElements.tabButtons) {
-    ChatNameElements.tabButtons.forEach(button => {
+  // 11. Tab Swapping Selection Interface - Receiver/Sender Window
+  if (ChatNameElements.receiverSenderTabButtons) {
+    ChatNameElements.receiverSenderTabButtons.forEach(button => {
       button.addEventListener('click', () => {
-        // Clear active states
-        ChatNameElements.tabButtons.forEach(btn => removeActiveViaDataTab(btn.dataset.tab));
-        
-        if (ChatNameElements.tabContents) {
-          ChatNameElements.tabContents.forEach(content => content.classList.remove('active'));
-        }
+        // Clear active states only within this window
+        ChatNameElements.receiverSenderTabButtons.forEach(btn => removeActiveViaDataTab(btn.dataset.tab));
+        ChatNameElements.receiverSenderTabContents.forEach(content => content.classList.remove('active'));
 
         // Apply active class to selected elements
         addActiveViaDataTab(button.dataset.tab);
         const targetId = button.getAttribute('data-tab');
         document.getElementById(targetId)?.classList.add('active');
       });
+    });
+  }
+
+  // 12. Tab Swapping Selection Interface - Settings/Credits Window
+  if (ChatNameElements.settingsTabButtons) {
+    ChatNameElements.settingsTabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Clear active states only within this window
+        ChatNameElements.settingsTabButtons.forEach(btn => removeActiveViaDataTab(btn.dataset.tab));
+        ChatNameElements.settingsTabContents.forEach(content => content.classList.remove('active'));
+
+        // Apply active class to selected elements
+        addActiveViaDataTab(button.dataset.tab);
+        const targetId = button.getAttribute('data-tab');
+        document.getElementById(targetId)?.classList.add('active');
+      });
+    });
+  }
+
+  // 13. Clear Chat Button
+  const clearChatBtn = document.getElementById('clearChatBtn');
+  if (clearChatBtn) {
+    clearChatBtn.addEventListener('click', function() {
+      if (confirm('Are you sure you want to clear all messages? This cannot be undone.')) {
+        clearMessages();
+        renderMessages();
+        hideElement("floatingSettingsWindow");
+      }
     });
   }
 

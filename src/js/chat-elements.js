@@ -10,6 +10,9 @@ export const ChatMainElements = {
   get sendSwitch() {
     return document.getElementById("switch");
   },
+  get actionModeToggle() {
+    return document.getElementById("actionModeToggle");
+  },
   get toggleInputMenu() {
     return document.getElementById("toggleInputBtn"); // Changed to the button inside toggleInputMenu
   },
@@ -38,8 +41,24 @@ export const ChatNameElements = {
   get senderListDiv() { return document.getElementById("sender-list"); },
   get recvSearchInput() { return document.getElementById("recv-search-input"); },
   get sendSearchInput() { return document.getElementById("send-search-input"); },
-  get tabButtons() { return document.querySelectorAll('.tab-button'); },
-  get tabContents() { return document.querySelectorAll('.tab-content'); }
+  // Scoped tab buttons for receiver/sender window only
+  get receiverSenderTabButtons() {
+    const window = document.getElementById("floatingReceiverSenderWindow");
+    return window ? window.querySelectorAll('.tab-button') : [];
+  },
+  get receiverSenderTabContents() {
+    const window = document.getElementById("floatingReceiverSenderWindow");
+    return window ? window.querySelectorAll('.tab-content') : [];
+  },
+  // Scoped tab buttons for settings/credits window only
+  get settingsTabButtons() {
+    const window = document.getElementById("floatingSettingsWindow");
+    return window ? window.querySelectorAll('.tab-button') : [];
+  },
+  get settingsTabContents() {
+    const window = document.getElementById("floatingSettingsWindow");
+    return window ? window.querySelectorAll('.tab-content') : [];
+  }
 };
 
 export const CloseButtons = {

@@ -174,7 +174,7 @@ body {
 
 /* Each message container */
 .chat-message {
-  margin: 10px 0;
+  margin: 0;
   display: flex;
   flex-direction: row; /* instead of column */
   align-items: flex-start; /* keeps image and bubble aligned */
@@ -191,7 +191,7 @@ body {
 
 /* Chat bubble styling for both sender and receiver */
 .chat-bubble {
-  max-width: 70%;
+  max-width: 90%;
   padding: 10px 15px;
   border-radius: 20px;
   position: relative;
@@ -267,8 +267,6 @@ body {
   bottom: 6px;
   left: 6px;
 
-  cursor: pointer;
-
   border: 0;
 
   background-color: none;
@@ -288,15 +286,17 @@ body {
 }
 
 #toggleInputBtn {
-  padding: 6px 12px;
+  position: relative; /* Removes it from any accidental absolute overlays */
   background-color: #3d4655;
-  color: white;
+  color: #ffffff;
   border: 1px solid #525c6c;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
+  padding: 4px 12px;
+  font-size: 12px;
   z-index: 10; /* Keeps it layered cleanly without intersecting baseline input fields */
   transition: background-color 0.2s;
+  cursor: pointer;
+  margin: 0;
 }
 
 #toggleInputBtn:hover {
@@ -327,7 +327,7 @@ body {
 }
 
 .chat-input button {
-  margin: 0 10px;
+  margin: 0 7px;
   padding: 10px 15px;
   border: none;
   background: #fff;
@@ -459,11 +459,12 @@ input:checked + .slider:before {
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   min-width: 400px;
-  width: 50%;
+  width: 40%;
   max-width: 60%; /* Responsive width */
   max-height: 90%; /* Responsive height */
   position: relative;
   overflow-y: auto; /* Scroll if content exceeds window size */
+  /* overflow: hidden; */
 }
 
 /* Close button styling */
@@ -556,10 +557,12 @@ input:checked + .slider:before {
 }
 
 .tab-content-container {
-  padding: 20px;
-
-  border: 3px solid #2196f3;
+  display: flex;
+  flex-direction: column;
+  
   border-top: none;
+
+  overflow: hidden;
 }
 
 .tab-content {
@@ -567,7 +570,12 @@ input:checked + .slider:before {
 }
 
 .tab-content.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden !important; /* Force block overflow off the tab layer completely */
+  border: none;
+  min-height: 0;
 }
 
 /* Safely position the toggle layout row */
@@ -580,19 +588,225 @@ div#toggleInputMenu {
   box-sizing: border-box;
 }
 
-/* Style the button uniquely so it never overlaps text fields */
-#toggleInputBtn {
-  position: relative; /* Removes it from any accidental absolute overlays */
-  background-color: #3d4655;
-  color: #ffffff;
-  border: 1px solid #525c6c;
-  border-radius: 4px;
-  padding: 4px 12px;
-  font-size: 12px;
-  cursor: pointer;
-  margin-bottom: 4px;
+/* for credits */
+
+/* Container for the credits content inside the tab */
+.credits-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px 10px;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
-#toggleInputBtn:hover {
-  background-color: #2196f3;
+.text-center {
+  text-align: center;
+}
+
+.credits-wrapper h3 {
+  margin-bottom: 5px;
+  color: white; /* Change to match your text colors */
+}
+
+.credits-section {
+  margin-bottom: 20px;
+}
+
+.credits-section h4 {
+  margin-bottom: 8px;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.credits-list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.credits-wrapper ul {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.credits-wrapper li {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  color: #dedede;
+}
+
+.credits-divider {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+/* Optional: Style your links to match a Genshin UI color palette */
+.credits-section a {
+  color: #0076f6; 
+  text-decoration: none;
+}
+
+.credits-section a:hover {
+  text-decoration: underline;
+}
+
+.funny-subtext {
+  display: block;
+  font-size: 0.85rem;
+  color: #9a9a9a; /* Subtle gray so it feels like a cheeky footnote */
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+.credits-role {
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+/* ========== ACTION LINES & MESSAGE CONTROLS ========== */
+
+/* Action Lines */
+.action-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px auto;
+  font-size: 0.9em;
+  color: #666;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+  max-width: 90%;
+}
+
+.action-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-text {
+  font-weight: 500;
+}
+
+#actionModeLabel {
+  color: white;
+}
+
+/* Message Hover Controls */
+.message-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.chat-message.sender .message-wrapper {
+  justify-content: flex-end;
+}
+
+.message-controls {
+  display: none;
+  gap: 4px;
+  animation: fadeIn 0.2s ease-in;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.message-wrapper:hover .message-controls,
+.action-line:hover .message-controls {
+  display: flex;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+}
+
+.edited-tag {
+  font-size: 0.75em;
+  color: #999;
+  margin-left: 4px;
+  font-style: italic;
+}
+
+.bubble-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+  }
+  to { 
+    opacity: 1; 
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-message {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ========== SETTINGS ========== */
+
+.settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px 0;
+}
+
+.clear-btn {
+  padding: 12px 16px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: "HYWenHei 85W", Arial, sans-serif !important;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.clear-btn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+.clear-btn:active {
+  transform: translateY(0);
 }

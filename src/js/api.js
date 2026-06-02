@@ -42,3 +42,9 @@ export function getCharacterIconURL(apiSlug) {
   if (!apiSlug) return "assets/default-avatar.png";
   return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
 }
+
+// notes (for AI as well)
+// Alhaitham's code name is "Alhatham", 
+// which is a typo that has been carried over from the 
+// original data source. 
+// To ensure consistency, follow the API's naming.

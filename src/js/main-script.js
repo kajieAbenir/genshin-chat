@@ -1,13 +1,19 @@
 import { ChatMainElements, ChatNameElements } from './chat-elements.js';
 import { logError, hasInputValue } from './helper-functions.js';
-import { disableElement } from './app-style.js';
+import { disableElement, enableElement } from './app-style.js';
 import { getJSONList, getCharacterIconURL } from './api.js';
 import { initLoading } from './loading.js';
 import './event-listeners.js';
+import { addMessage, initMessages, generateUUID } from './message-manager.js';
+import { renderMessages } from './message-renderer.js';
 
 let selectedReceiver = { name: "None", image: "" }; // Default receiver
 let selectedSender = { name: "None", image: "" };   // Default sender
 /* MAIN EXECUTABLES */
+
+// Initialize messages from localStorage
+initMessages();
+renderMessages();
 
 // Start loading sequence
 initLoading();
@@ -29,68 +35,48 @@ export function addConversation() {
 
   if (!selectedReceiver.name || !selectedSender.name) {
     console.warn("Please select both a sender and a receiver.");
-    // Optionally, provide user feedback in the UI
     return;
   }
 
-  const container = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  const bubbleElement = document.createElement("div");
-  const imageElement = document.createElement('img');
+  let messageText = ChatMainElements.input.value;
+  
+  // Check if action mode is enabled
+  const isAction = ChatMainElements.actionModeToggle.checked;
 
   const isSender = ChatMainElements.sendSwitch.checked;
 
-  // create a new chat message element with the input value
-  messageElement.classList.add(
-    "chat-message",
-    isSender ? "sender" : "receiver"
-  );
-
-  bubbleElement.classList.add("chat-bubble");
-  bubbleElement.textContent = ChatMainElements.input.value;
-
-  imageElement.classList.add('chat-image');
-  imageElement.src = isSender ? selectedSender.image : selectedReceiver.image;
-  imageElement.alt = isSender ? selectedSender.name : selectedReceiver.name;
-
-  // Fallback for missing images, preventing infinite loops and providing visual feedback
-  imageElement.onerror = (event) => {
-    console.warn(`Failed to load image for ${imageElement.alt}. Attempting fallback.`);
-    imageElement.src = './src/char-img/default.png'; // Try fallback
-    imageElement.onerror = null; // Prevent infinite loop if fallback also fails
-    // Optionally, add a class to style the broken image more clearly
-    // imageElement.classList.add('broken-image-placeholder');
+  // Create message object
+  const messageObj = {
+    id: generateUUID(),
+    type: isAction ? 'action' : 'text',
+    sender: selectedSender.name,
+    senderImage: selectedSender.image,
+    receiver: selectedReceiver.name,
+    receiverImage: selectedReceiver.image,
+    isSender: isSender,
+    text: messageText,
+    createdAt: new Date().toISOString(),
+    editedAt: null
   };
 
-  if (isSender) {
-    messageElement.appendChild(bubbleElement);
-    messageElement.appendChild(imageElement);
-  } else {
-    messageElement.appendChild(imageElement);
-    messageElement.appendChild(bubbleElement);
-  }
+  // Add to storage
+  addMessage(messageObj);
 
-  // append the new chat message element to the chat container
-  container.appendChild(messageElement);
+  // Render all messages
+  renderMessages();
 
-  // clear the input field
-  if (ChatMainElements.input) {
-    ChatMainElements.input.value = "";
-    // Dispatch an 'input' event manually so your event-listeners.js 
-    // code catches it and safely disables the send button again
-    ChatMainElements.input.dispatchEvent(new Event('input')); 
-  }
-
-  container.scrollTop = container.scrollHeight;
-
+  // Clear input
+  ChatMainElements.input.value = "";
+  disableElement(ChatMainElements.sendBtn);
+  
   // log the new message
-  // console.log(
-  //   new Date().toLocaleString(),
-  //   "//",
-  //   ChatMainElements.sendSwitch.checked ? "Sender" : "Receiver",
-  //   "\nMessage:",
-  //   bubbleElement.textContent
-  // );
+  console.log(
+    new Date().toLocaleString(),
+    "//",
+    isSender ? "Sender" : "Receiver",
+    "\nMessage:",
+    messageText
+  );
 }
 
 const nationCodes = {

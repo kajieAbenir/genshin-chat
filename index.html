@@ -20,10 +20,10 @@
         <div class="floating-content">
           <button type="button" class="close-button" id="closeReceiverSender" aria-label="Close window">&times;</button>
           
-          <div>
+          <div class="tab-content-container">
             <div class="tab-buttons" role="tablist">
-                <button class="tab-button active" data-tab="tab1" role="tab" aria-selected="true">Receiver</button>
-                <button class="tab-button" data-tab="tab2" role="tab" aria-selected="false">Sender</button>
+                <button class="tab-button active" data-tab="tab1" role="tab" aria-selected="true" type="button">Receiver</button>
+                <button class="tab-button" data-tab="tab2" role="tab" aria-selected="false" type="button">Sender</button>
             </div>
 
             <div class="tab-content-container">
@@ -35,7 +35,7 @@
                     class="chat-input charlist center" 
                     name="receiver-search">
                     <label for="recv-search-input" class="hidden">Search Receiver</label>
-                    <input id="recv-search-input" placeholder="Search character..."/>
+                    <input id="recv-search-input" placeholder="Search character..." autocomplete="off"/>
                   </div>
                   <br>
                   <div id="receiver-list">
@@ -50,7 +50,7 @@
                     class="chat-input charlist center" 
                     name="sender-search">
                     <label for="send-search-input" class="hidden">Search Sender</label>
-                    <input id="send-search-input" placeholder="Search character..."/>
+                    <input id="send-search-input" placeholder="Search character..." autocomplete="off"/>
                   </div>
                   <br>
                   <div id="sender-list">
@@ -65,23 +65,109 @@
       <!-- floating settings window -->
       <div class="floating-window hidden" id="floatingSettingsWindow" role="dialog" aria-modal="true">
         <div class="floating-content">
-          <button class="close-button" id="closeSettings" aria-label="Close settings">&times;</button>
+          <button type="button" class="close-button" id="closeSettings" aria-label="Close settings">&times;</button>
           
-          <div>
+          <div class="tab-content-container">
             <div class="tab-buttons">
-                <button class="tab-button active" data-tab="tab3">⚙ Settings</button>
-                <button class="tab-button" data-tab="tab4">📚 Credits</button>
+                <button class="tab-button active" data-tab="tab3" type="button">⚙ Settings</button>
+                <button class="tab-button" data-tab="tab4" type="button">📚 Credits</button>
             </div>
 
-            <div class="tab-content-container">
-              <!-- Settings tab -->
-              <div id="tab3" class="tab-content active">
-                <h2>Settings</h2>
+            <div id="tab3" class="tab-content active">
+              <h2>Settings</h2>
+              <div class="settings-options">
+                <button id="clearChatBtn" type="button" class="clear-btn">🗑️ Clear Chat</button>
               </div>
+            </div>
 
-              <!-- Credits tab -->
-              <div id="tab4" class="tab-content">
-                <h2>Credits</h2>
+            <div id="tab4" class="tab-content">
+              <h2>Credits</h2>
+              
+              <div class="credits-wrapper">
+                <section class="credits-section text-center">
+                  <h3>Genshin Chat</h3>
+                  <p class="version-tag"><strong>Version:</strong> 0.6.7 pre-release</p>
+                  <p class="date-tag"><strong>Release Date:</strong> LMAO WHEN</p>
+                </section>
+
+                <hr class="credits-divider">
+
+                <section class="credits-section">
+                  <h4>Authors & Maintainers</h4>
+
+                  <ul class="credits-list">
+                    <li>
+                      <strong>Brent Kyrjeh Abenir</strong>
+
+                      <p class="credits-role">
+                        ⚔️ <strong>Title:</strong>
+                        Lead Repository Architect, 3-in-1 Coffee Specialist, Professional Deadline Survivor, Go+99 Weekly Registrant, and Grad-Waiting Student of Teyvat.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Vision:</strong> ❄ Cryo
+                        Project progress is periodically Frozen. This effect cannot be cleansed, probably.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation I — Scope Creep</strong><br>
+                        For every 1 stack of <i>Feature Bug</i> removed, gains 2 stacks of <i>Feature Request</i>. This effect ignores all known project planning methodologies.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation II — Notice of Disconnection</strong><br>
+                        When <i>Mobile Data</i> falls below 500MB, immediately enters the <i>Coding state</i>. StackOverflow, YouTube, and LoFi Radio become unavailable, but code generation efficiency is increased through unknown means.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation III — Coffee Impact</strong><br>
+                        Increases Coffee Consumption by 200%. Side effects are considered a separate issue and will be addressed in a future patch (it will not).
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation IV — Mamaya Na</strong><br>
+                        When fewer than 72 hours remain before a self-imposed deadline, each day of prior inactivity grants +50% Coding SPD.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation V — Push! Push! Push!</strong><br>
+                        After successfully pushing a feature to the repository, gains 1 stack of "It Actually Works!", increasing "Motivation" by 5%. Max 3 stacks.
+                      </p>
+
+                      <p class="funny-subtext">
+                        <strong>Constellation VI — Kaya Mo Na 'Yan!</strong><br>
+                        Upon using ultimate, the AI assistant deals +200% more code diffs to the project, and applies +35% Cryo PEN.
+                      </p>
+
+                      <p>
+                        <a href="https://github.com/kajieAbenir"
+                          target="_blank"
+                          rel="noopener">
+                          github.com/kajieAbenir
+                        </a>
+                      </p>
+                    </li>
+                  </ul>
+                </section>
+
+                <section class="credits-section">
+                  <h4>Assets & Resources</h4>
+                  <ul class="credits-list">
+                    <li>Genshin Impact asset properties, icons, and character designs belong to <strong>© HoYoverse</strong>.</li>
+                    <li>Assets database: <a href="https://genshinimpactresources.tumblr.com/" target="_blank" rel="noopener">GenshinImpactResources</a></li>
+                    <!-- <li><strong>Sticker Resources:</strong> Curated via HoYoLAB, Emoji.gg, and Stickers.gg.</li> -->
+                    <!-- STICKERS COMING SOON! pls note ;-; -->
+                    <li><strong>UI/UX Planning:</strong> Designed with Photoshop and MS Paint.</li>
+                  </ul>
+                </section>
+
+                <section class="credits-section">
+                  <h4>Built With</h4>
+                  <ul class="credits-list">
+                    <li>Pure Native HTML5, CSS, and JavaScript</li>
+                    <li>AI-Assisted with Claude Haiku & Google Gemini</li>
+                  </ul>
+                </section>
               </div>
             </div>
           </div>
@@ -89,7 +175,7 @@
       </div>
 
       <div class="chat-container" id="chat-container">
-        <div class="chat-header" id="chat-name">Chat</div>
+        <div class="chat-header" id="chat-name">Chat Options</div>
 
         <!-- chat messages -->
         <div class="chat-messages" id="chat-messages"></div>
@@ -102,7 +188,7 @@
 
         <div class="chat-input" id="chatInputUpper">
           <!-- tba : list idk -->
-          <button id="inputList">.---</button>
+          <button id="inputList" type="button">Sticker</button>
           <label for="chat-input" class="hidden">Message Input</label>
           <input
             type="text"
@@ -127,6 +213,12 @@
             <span class="slider round"></span>
           </label>
           <span id="toggleChat">Toggle Chat</span>
+
+          <label class="switch" aria-label="Toggle action mode">
+            <input type="checkbox" id="actionModeToggle" />
+            <span class="slider round"></span>
+          </label>
+          <span id="actionModeLabel">Action</span>
 
           <button id="settings" aria-label="Open settings" type="button"> 
             ⚙ 
