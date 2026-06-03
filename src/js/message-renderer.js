@@ -26,17 +26,21 @@ function createMessageElement(msg) {
 
   if (msg.type === 'action') {
     // Action line rendering
-    const actionLine = document.createElement("div");
-    actionLine.classList.add("action-line");
-    actionLine.innerHTML = `
-      <div class="action-content">
-        <span class="action-text">${escapeHtml(msg.text)}</span>
-      </div>
-      <div class="message-controls">
-        <button class="control-btn edit-btn" title="Edit" type="button">✏️</button>
-        <button class="control-btn delete-btn" title="Delete" type="button">🗑️</button>
-      </div>
-    `;
+    const actionContent = document.createElement("div");
+    actionContent.classList.add("action-content");
+    const actionText = document.createElement("span");
+    actionText.classList.add("action-text");
+    actionText.textContent = msg.text; // Safe
+    actionContent.appendChild(actionText);
+
+    const controls = document.createElement("div");
+    controls.classList.add("message-controls");
+    // Create buttons with createElement instead of innerHTML
+
+    // For bubble content:
+    const textSpan = document.createElement("span");
+    textSpan.textContent = msg.text; // Safe
+    bubbleContent.appendChild(textSpan);
     
     // Attach event listeners
     attachControlListeners(actionLine, msg);

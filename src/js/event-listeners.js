@@ -215,12 +215,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function validateImageFile(file) {
+    const MAX_SIZE = 200 * 1024; // 200KB
+    const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      alert('Please upload a valid image (PNG, JPEG, or WebP)');
+      return false;
+    }
+    if (file.size > MAX_SIZE) {
+      alert('Image must be smaller than 200KB');
+      return false;
+    }
+    return true;
+  }
+
   // 15. Custom Character Uploads
   if (CustomCharElements.applyReceiver) {
     CustomCharElements.applyReceiver.addEventListener('click', () => {
       const name = CustomCharElements.receiverName.value;
       const file = CustomCharElements.receiverImg.files[0];
-      if (file) {
+      if (file && validateImageFile(file))  {
         const reader = new FileReader();
         reader.onload = (e) => setCustomCharacter('receiver', name, e.target.result);
         reader.readAsDataURL(file);

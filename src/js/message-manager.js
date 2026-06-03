@@ -2,9 +2,19 @@
 let messagesArray = [];
 
 export function initMessages() {
-  // Load from localStorage on startup
   const saved = localStorage.getItem('gc_messages');
-  messagesArray = saved ? JSON.parse(saved) : [];
+  if (!saved) return [];
+  
+  try {
+    const parsed = JSON.parse(saved);
+    messagesArray = Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error('Failed to parse messages from localStorage:', error);
+    // Backup corrupted data
+    localStorage.setItem('gc_messages_backup', saved);
+    localStorage.removeItem('gc_messages');
+    messagesArray = [];
+  }
   return messagesArray;
 }
 

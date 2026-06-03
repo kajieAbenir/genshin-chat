@@ -33,8 +33,9 @@ export function addConversation() {
     return;
   }
 
-  if (!selectedReceiver.name || !selectedSender.name) {
-    console.warn("Please select both a sender and a receiver.");
+  if (!selectedReceiver.name || !selectedSender.name || 
+      selectedReceiver.name === "None" || selectedSender.name === "None") {
+    alert("Please select both a sender and a receiver.");
     return;
   }
 
@@ -99,6 +100,11 @@ function generateCharacterImageSrc(characterName, region) {
 // shows character list
 export async function showCharList(listContainerId, type, searchTerm = "") {
   const list = await getJSONList();
+  if (!list || !list.characters || typeof list.characters !== 'object') {
+    console.error('Invalid character data loaded');
+    return;
+  }
+
   const container = document.getElementById(listContainerId);
   if (!container) {
     logError(`Container with ID ${listContainerId} not found.`);
