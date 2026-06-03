@@ -16,7 +16,7 @@ Access the app here at [gi-chat.pages.dev](https://gi-chat.pages.dev)
 
 This is version **v1.0.0**. This version marks the **official** release for this app!
 
-Please see the [changelog here](dev-docs/dev-notes/2026-06jun-03.md) on what was changed since last version.
+*Please see the [changelog here](dev-docs/dev-notes/2026-06jun-03.md) on what was changed since last version.*
 
 ---
 
