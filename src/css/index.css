@@ -31,9 +31,13 @@
   --color-others: #a1a5b5;     /* Default greyish */
 }
 
+* {
+  cursor: url(../../assets/UI_Img_Cursor.png), auto !important;
+}
+
 html {
   font-size: calc(16px * var(--ui-scale, 1));
-  cursor: url(), auto;
+  cursor: url(../../assets/UI_Img_Cursor.png), auto;
 }
 
 #background-pic {
@@ -52,7 +56,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-
+  cursor: url(../../assets/UI_Img_Cursor.png), auto;
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
 
   background: #f2f2f2;
