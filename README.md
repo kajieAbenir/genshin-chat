@@ -8,7 +8,15 @@ Create meme-worthy conversations between your favorite characters using the Gens
 
 ## 🌐 Live App
 
-Deployment coming soon.
+Access the app here at [gi-chat.pages.dev](https://gi-chat.pages.dev)
+
+---
+
+### Version & Changes
+
+This is version **v1.0.0**. This version marks the **official** release for this app!
+
+Please see the [changelog here](dev-docs/dev-notes/2026-06jun-03.md) on what was changed since last version.
 
 ---
 
