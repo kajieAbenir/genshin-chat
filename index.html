@@ -91,22 +91,40 @@
 
             <div id="tab3" class="tab-content active">
               <h2>Settings</h2>
-              
-              <div class="settings-group">
-                <label>App Background</label>
-                <div class="switcher-control">
-                  <button id="prevBgBtn" class="switcher-btn" type="button">&lt;</button>
-                  <span id="currentBgLabel">Default BG</span>
-                  <button id="nextBgBtn" class="switcher-btn" type="button">&gt;</button>
+              <div class="credits-wrapper">
+                <div class="settings-group">
+                  <label>App Background</label>
+                  <div class="switcher-control">
+                    <button id="prevBgBtn" class="switcher-btn" type="button">&lt;</button>
+                    <span id="currentBgLabel">Default BG</span>
+                    <button id="nextBgBtn" class="switcher-btn" type="button">&gt;</button>
+                  </div>
                 </div>
-              </div>
 
-              <div class="settings-group">
-                <label>Interface Zoom</label>
-                <div class="switcher-control">
-                  <button id="decreaseFontBtn" class="switcher-btn" type="button">-</button>
-                  <span id="fontScaleLabel">100%</span>
-                  <button id="increaseFontBtn" class="switcher-btn" type="button">+</button>
+                <div class="settings-group">
+                  <label>Interface Zoom</label>
+                  <div class="switcher-control">
+                    <button id="decreaseFontBtn" class="switcher-btn" type="button">-</button>
+                    <span id="fontScaleLabel">100%</span>
+                    <button id="increaseFontBtn" class="switcher-btn" type="button">+</button>
+                  </div>
+                </div>
+
+                <div class="settings-group">
+                  <label>Custom Background</label>
+                  <input type="file" id="custom-bg-upload" accept="image/*" title="Upload custom background image" />
+                  <button id="clear-custom-bg" type="button" class="clear-btn">Remove Custom BG</button>
+                </div>
+
+                <div class="settings-group">
+                  <label>Saved Chats</label>
+                  <div class="save-chat-container">
+                    <input type="text" id="save-chat-name" placeholder="Chat name..." class="save-chat-input" autocomplete="off" />
+                    <button id="save-chat-btn" type="button" class="clear-btn save-chat-btn-inline">Save</button>
+                  </div>
+                  <div id="saved-chats-list" class="saved-chats-list-container">
+                    <!-- Saved chats will populate here -->
+                  </div>
                 </div>
               </div>
 
@@ -220,6 +238,19 @@
           <button type="button" id="toggleInputBtn">
             Hide
           </button>
+
+          <!-- Grouped controls moved here to prevent layout overlap and interception -->
+          <label class="switch" aria-label="Toggle sender/receiver">
+            <input type="checkbox" id="switch" />
+            <span class="slider round"></span>
+          </label>
+          <span id="toggleChat">Toggle Chat</span>
+
+          <div class="message-type-group" id="msgTypeGroup">
+            <label class="radio-label"><input type="radio" name="msgType" value="text" checked> Message</label>
+            <label class="radio-label"><input type="radio" name="msgType" value="action"> Action</label>
+            <label class="radio-label"><input type="radio" name="msgType" value="timestamp"> Timestamp</label>
+          </div>
         </div>
 
         <div class="chat-input" id="chatInputUpper">
@@ -244,18 +275,6 @@
         </div>
 
         <div class="chat-input center" id="chatInputLower">
-          <label class="switch" aria-label="Toggle sender/receiver">
-            <input type="checkbox" id="switch" />
-            <span class="slider round"></span>
-          </label>
-          <span id="toggleChat">Toggle Chat</span>
-
-          <label class="switch" aria-label="Toggle action mode">
-            <input type="checkbox" id="actionModeToggle" />
-            <span class="slider round"></span>
-          </label>
-          <span id="actionModeLabel">Action</span>
-
           <button id="settings" aria-label="Open settings" type="button"> 
             ⚙ 
           </button>

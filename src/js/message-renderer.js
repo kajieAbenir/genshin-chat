@@ -1,6 +1,5 @@
-import { deleteMessage, editMessage, getMessages } from './message-manager.js';
-import { disableElement, enableElement } from './app-style.js';
-import { ChatMainElements } from './chat-elements.js';
+import { deleteMessage, editMessage, getMessages, moveMessageUp, moveMessageDown, switchMessageSender, updateMessageCharacter } from './message-manager.js';
+import { selectedSender, selectedReceiver } from './main-script.js';
 
 export function renderMessages() {
   const container = document.getElementById("chat-messages");
@@ -21,33 +20,35 @@ export function renderMessages() {
 
 function createMessageElement(msg) {
   const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", msg.isSender ? "sender" : "receiver");
+  messageElement.classList.add("chat-message");
   messageElement.setAttribute('data-message-id', msg.id);
 
   if (msg.type === 'action') {
-    // Action line rendering
+    messageElement.classList.add('action-line');
+    
     const actionContent = document.createElement("div");
     actionContent.classList.add("action-content");
     const actionText = document.createElement("span");
     actionText.classList.add("action-text");
-    actionText.textContent = msg.text; // Safe
+    actionText.textContent = msg.text; 
     actionContent.appendChild(actionText);
 
-    const controls = document.createElement("div");
-    controls.classList.add("message-controls");
-    // Create buttons with createElement instead of innerHTML
+    messageElement.appendChild(actionContent);
+    attachActionMenu(messageElement, msg);
+    
+  } else if (msg.type === 'timestamp') {
+    messageElement.classList.add('timestamp-line');
+    
+    const timeText = document.createElement("span");
+    timeText.textContent = msg.text;
+    messageElement.appendChild(timeText);
 
-    // For bubble content:
-    const textSpan = document.createElement("span");
-    textSpan.textContent = msg.text; // Safe
-    bubbleContent.appendChild(textSpan);
-    
-    // Attach event listeners
-    attachControlListeners(actionLine, msg);
-    messageElement.appendChild(actionLine);
-    
+    attachActionMenu(messageElement, msg);
+
   } else {
-    // Regular text message rendering
+    // Regular text message
+    messageElement.classList.add(msg.isSender ? "sender" : "receiver");
+    
     const bubbleElement = document.createElement("div");
     bubbleElement.classList.add("chat-bubble");
     
@@ -61,40 +62,25 @@ function createMessageElement(msg) {
       imageElement.onerror = null;
     };
 
-    // Message wrapper for hover controls
     const messageWrapper = document.createElement("div");
     messageWrapper.classList.add("message-wrapper");
     
-    // Message name
     const messageName = document.createElement("div");
     messageName.classList.add("message-name");
-    
-    // Create a temporary element to safely decode HTML entities if msg.sender/receiver has them
-    const rawName = msg.isSender ? msg.sender : msg.receiver;
-    messageName.textContent = rawName; // textContent handles escaping natively
+    messageName.textContent = msg.isSender ? msg.sender : msg.receiver; 
     
     const bubbleRow = document.createElement("div");
     bubbleRow.classList.add("bubble-row");
 
-    // Build bubble content with edit indicator
     const bubbleContent = document.createElement("div");
     bubbleContent.classList.add("bubble-content");
-    bubbleContent.innerHTML = `
-      <span>${escapeHtml(msg.text)}</span>
-    `;
+    
+    const textSpan = document.createElement("span");
+    textSpan.textContent = msg.text;
+    bubbleContent.appendChild(textSpan);
     
     bubbleElement.appendChild(bubbleContent);
-    
-    // Controls menu
-    const controlsDiv = document.createElement("div");
-    controlsDiv.classList.add("message-controls");
-    controlsDiv.innerHTML = `
-      <button class="control-btn edit-btn" title="Edit" type="button">✏️</button>
-      <button class="control-btn delete-btn" title="Delete" type="button">🗑️</button>
-    `;
-    
     bubbleRow.appendChild(bubbleElement);
-    bubbleRow.appendChild(controlsDiv);
     
     messageWrapper.appendChild(messageName);
     messageWrapper.appendChild(bubbleRow);
@@ -107,35 +93,90 @@ function createMessageElement(msg) {
       messageElement.appendChild(messageWrapper);
     }
     
-    attachControlListeners(bubbleRow, msg);
+    attachActionMenu(messageElement, msg);
   }
 
   return messageElement;
 }
 
-function attachControlListeners(element, msg) {
-  const editBtn = element.querySelector('.edit-btn');
-  const deleteBtn = element.querySelector('.delete-btn');
+function attachActionMenu(element, msg) {
+  // Create an action menu container
+  const actionMenu = document.createElement("div");
+  actionMenu.classList.add("action-menu", "hidden");
+  
+  // Style it slightly directly via CSS class if possible, but structure here:
+  actionMenu.innerHTML = `
+    <button class="action-btn change-char-btn" type="button" title="Change Character">👥</button>
+    <button class="action-btn up-btn" type="button" title="Move Up">⬆️</button>
+    <button class="action-btn down-btn" type="button" title="Move Down">⬇️</button>
+    <button class="action-btn switch-btn" type="button" title="Switch Sender/Receiver">🔄</button>
+    <button class="action-btn edit-btn" type="button" title="Edit text">✏️</button>
+    <button class="action-btn delete-btn" type="button" title="Delete">🗑️</button>
+  `;
 
-  if (deleteBtn) {
-    deleteBtn.addEventListener('click', () => {
-      const preview = msg.text.substring(0, 30) + (msg.text.length > 30 ? '...' : '');
-      if (confirm(`Delete message "${preview}"?`)) {
-        deleteMessage(msg.id);
-        renderMessages();
-      }
+  element.appendChild(actionMenu);
+
+  // Toggle menu on click
+  element.addEventListener('click', (e) => {
+    // Prevent toggling if a button inside the menu was clicked
+    if (e.target.closest('.action-btn')) return;
+    
+    // Hide other open menus
+    document.querySelectorAll('.action-menu:not(.hidden)').forEach(menu => {
+      if (menu !== actionMenu) menu.classList.add('hidden');
     });
+
+    actionMenu.classList.toggle('hidden');
+  });
+
+  // Attach button events
+  const btnChar = actionMenu.querySelector('.change-char-btn');
+  const btnUp = actionMenu.querySelector('.up-btn');
+  const btnDown = actionMenu.querySelector('.down-btn');
+  const btnSwitch = actionMenu.querySelector('.switch-btn');
+  const btnEdit = actionMenu.querySelector('.edit-btn');
+  const btnDelete = actionMenu.querySelector('.delete-btn');
+
+  if (msg.type !== 'text') {
+    btnChar.classList.add('hidden');
+    btnSwitch.classList.add('hidden');
   }
 
-  if (editBtn) {
-    editBtn.addEventListener('click', () => {
-      const newText = prompt('Edit message:', msg.text);
-      if (newText !== null && newText.trim()) {
-        editMessage(msg.id, newText.trim());
-        renderMessages();
-      }
-    });
-  }
+  btnChar.addEventListener('click', () => {
+    const newChar = msg.isSender ? selectedSender : selectedReceiver;
+    if (confirm(`Change character for this message to ${newChar.name}?`)) {
+      updateMessageCharacter(msg.id, msg.isSender, newChar.name, newChar.image);
+      renderMessages();
+    }
+  });
+
+  btnUp.addEventListener('click', () => {
+    moveMessageUp(msg.id);
+    renderMessages();
+  });
+
+  btnDown.addEventListener('click', () => {
+    moveMessageDown(msg.id);
+    renderMessages();
+  });
+
+  btnSwitch.addEventListener('click', () => {
+    switchMessageSender(msg.id);
+    renderMessages();
+  });
+
+  btnEdit.addEventListener('click', () => {
+    const newText = prompt('Edit message:', msg.text);
+    if (newText !== null && newText.trim()) {
+      editMessage(msg.id, newText.trim());
+      renderMessages();
+    }
+  });
+
+  btnDelete.addEventListener('click', () => {
+    deleteMessage(msg.id);
+    renderMessages();
+  });
 }
 
 function escapeHtml(text) {

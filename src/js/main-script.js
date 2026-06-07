@@ -7,8 +7,8 @@ import './event-listeners.js';
 import { addMessage, initMessages, generateUUID } from './message-manager.js';
 import { renderMessages } from './message-renderer.js';
 
-let selectedReceiver = { name: "None", image: "" }; // Default receiver
-let selectedSender = { name: "None", image: "" };   // Default sender
+export let selectedReceiver = { name: "None", image: "" }; // Default receiver
+export let selectedSender = { name: "None", image: "" };   // Default sender
 /* MAIN EXECUTABLES */
 
 // Initialize messages from localStorage
@@ -41,15 +41,16 @@ export function addConversation() {
 
   let messageText = ChatMainElements.input.value;
   
-  // Check if action mode is enabled
-  const isAction = ChatMainElements.actionModeToggle.checked;
+  // Get message type
+  const msgTypeEl = ChatMainElements.msgTypeChecked;
+  const msgType = msgTypeEl ? msgTypeEl.value : 'text';
 
   const isSender = ChatMainElements.sendSwitch.checked;
 
   // Create message object
   const messageObj = {
     id: generateUUID(),
-    type: isAction ? 'action' : 'text',
+    type: msgType,
     sender: selectedSender.name,
     senderImage: selectedSender.image,
     receiver: selectedReceiver.name,

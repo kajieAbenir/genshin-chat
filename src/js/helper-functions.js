@@ -31,11 +31,11 @@ export function debounce(func, timeout = 300) {
   };
 }
 
-// Change background image directly
+// Change background image via CSS custom property (Constraint 4: no inline styles)
 export function changeBGImage(url = "") {
   if (url) {
-    document.getElementById("background-pic").style.backgroundImage = `url('${url}')`;
+    document.documentElement.style.setProperty('--active-bg', `url('${url}')`);
   } else {
-    document.getElementById("background-pic").style.backgroundImage = 'none';
+    document.documentElement.style.setProperty('--active-bg', 'none');
   }
 }

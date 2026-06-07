@@ -10,8 +10,8 @@ export const ChatMainElements = {
   get sendSwitch() {
     return document.getElementById("switch");
   },
-  get actionModeToggle() {
-    return document.getElementById("actionModeToggle");
+  get msgTypeChecked() {
+    return document.querySelector('input[name="msgType"]:checked');
   },
   get toggleInputMenu() {
     return document.getElementById("toggleInputBtn"); // Changed to the button inside toggleInputMenu
@@ -82,4 +82,30 @@ export const CustomCharElements = {
   get senderName() { return document.getElementById("custom-sender-name"); },
   get senderImg() { return document.getElementById("custom-sender-img"); },
   get applySender() { return document.getElementById("apply-custom-sender"); }
+};
+
+export const SettingsElements = {
+  get clearChatBtn() { return document.getElementById('clearChatBtn'); },
+  get exportChatBtn() { return document.getElementById('exportChatBtn'); },
+  get customBgUpload() { return document.getElementById('custom-bg-upload'); },
+  get clearCustomBgBtn() { return document.getElementById('clear-custom-bg'); }
+};
+
+export const BackgroundElements = {
+  get bgPicElement() { return document.getElementById('background-pic'); },
+  get currentBgLabel() { return document.getElementById('currentBgLabel'); },
+  get prevBgBtn() { return document.getElementById('prevBgBtn'); },
+  get nextBgBtn() { return document.getElementById('nextBgBtn'); }
+};
+
+export const UIScalingElements = {
+  get decreaseFontBtn() { return document.getElementById('decreaseFontBtn'); },
+  get increaseFontBtn() { return document.getElementById('increaseFontBtn'); },
+  get fontScaleLabel() { return document.getElementById('fontScaleLabel'); }
+};
+
+export const ChatSavingElements = {
+  get saveChatBtn() { return document.getElementById('save-chat-btn'); },
+  get saveChatNameInput() { return document.getElementById('save-chat-name'); },
+  get savedChatsList() { return document.getElementById('saved-chats-list'); }
 };

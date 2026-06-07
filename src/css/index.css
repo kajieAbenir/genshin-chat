@@ -58,8 +58,32 @@ body {
   padding: 0;
   cursor: url(../../assets/cursor-small.png), auto;
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
+  background: transparent;
 
-  background: #f2f2f2;
+  --sb-track-color: #1e2235 !important;
+  --sb-thumb-color: #d1c9c1 !important;
+  --sb-size: 10px !important;
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 10px;
+  border: 1px solid #1e2235;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
 
 /* Loading animation */
@@ -298,17 +322,17 @@ body {
   color: white;
 
   position: absolute;
-  bottom: 6px;
+  bottom: 10px;
   left: 6px;
 
   border: 0;
-
-  background-color: none;
-
-  width: 100%;
+  background: transparent;
+  width: fit-content;
+  gap: 15px;
 
   display: flex;
   justify-content: flex-start; /* Aligns to the left side cleanly without covering content */
+  align-items: center;
 
   padding: 5px 10px;
   box-sizing: border-box;
@@ -453,12 +477,45 @@ input:checked + .slider:before {
   transform: translateX(18px);
 }
 
+.switch.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .slider.round {
   border-radius: 34px;
 }
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+/* Radio button styles for Message / Action / Timestamp */
+.message-type-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 15px;
+  color: white;
+  font-size: 0.9em;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.timestamp-line {
+  width: 100%;
+  text-align: center;
+  color: #8b97b0;
+  font-size: 0.85em;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #toggleChat {
@@ -690,11 +747,35 @@ input:checked + .slider:before {
   min-height: 0;
 }
 
+/* Saved Chats Section Styles (Moved from Inline) */
+.save-chat-container {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.save-chat-input {
+  flex: 1;
+  padding: 5px;
+}
+
+.save-chat-btn-inline {
+  margin: 0 !important;
+}
+
+.saved-chats-list-container {
+  max-height: 100px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 5px;
+}
+
 /* Safely position the toggle layout row */
 div#toggleInputMenu {
   display: flex !important;
   justify-content: flex-start;
-  width: 100%;
+  width: fit-content;
   padding: 4px 8px;
   background: transparent;
   box-sizing: border-box;
@@ -783,7 +864,6 @@ div#toggleInputMenu {
   justify-content: space-between;
   margin: 8px auto;
   font-size: 0.9em;
-  color: #666;
   text-align: center;
   animation: fadeIn 0.3s ease-in;
   max-width: 90%;
@@ -799,6 +879,10 @@ div#toggleInputMenu {
 
 .action-text {
   font-weight: 500;
+  background-color: #406419;
+  color: white;
+  padding: 2px 12px;
+  border: none;
 }
 
 #actionModeLabel {
@@ -837,39 +921,53 @@ div#toggleInputMenu {
   justify-content: flex-end;
 }
 
-.message-controls {
-  display: none;
+.action-menu {
+  display: flex;
   gap: 4px;
   animation: fadeIn 0.2s ease-in;
   background: rgba(0, 0, 0, 0.7);
-  padding: 4px;
-  border-radius: 4px;
+  padding: 6px;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+  width: fit-content;
+  align-self: center;
 }
 
-.message-wrapper:hover .message-controls,
-.action-line:hover .message-controls {
-  display: flex;
+.action-menu.hidden {
+  display: none !important;
 }
 
-.control-btn {
-  background: none;
-  border: none;
-  font-size: 1em;
+.chat-message.sender .action-menu {
+  align-self: flex-end;
+}
+
+.chat-message.receiver .action-menu {
+  align-self: flex-start;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.1em;
   cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
   transition: background-color 0.2s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.control-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+.action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
-.control-btn:active {
+.action-btn:active {
   transform: scale(0.95);
 }
 
@@ -1000,4 +1098,35 @@ div#toggleInputMenu {
 
 .clear-btn.export-btn:hover {
   background: #06b900;
+}
+
+/* Utilities added for strict constraint adherence */
+.export-mode {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+.saved-chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.saved-chat-name {
+  cursor: pointer;
+  flex: 1;
+}
+
+.saved-chat-del {
+  color: #ff4a4a;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.saved-chats-empty {
+  color: #999;
+  font-size: 14px;
 }

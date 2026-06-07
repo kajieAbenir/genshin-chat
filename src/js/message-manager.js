@@ -43,6 +43,48 @@ function saveMessages() {
   localStorage.setItem('gc_messages', JSON.stringify(messagesArray));
 }
 
+export function moveMessageUp(messageId) {
+  const index = messagesArray.findIndex(msg => msg.id === messageId);
+  if (index > 0) {
+    const temp = messagesArray[index - 1];
+    messagesArray[index - 1] = messagesArray[index];
+    messagesArray[index] = temp;
+    saveMessages();
+  }
+}
+
+export function moveMessageDown(messageId) {
+  const index = messagesArray.findIndex(msg => msg.id === messageId);
+  if (index >= 0 && index < messagesArray.length - 1) {
+    const temp = messagesArray[index + 1];
+    messagesArray[index + 1] = messagesArray[index];
+    messagesArray[index] = temp;
+    saveMessages();
+  }
+}
+
+export function switchMessageSender(messageId) {
+  const msg = messagesArray.find(msg => msg.id === messageId);
+  if (msg) {
+    msg.isSender = !msg.isSender;
+    saveMessages();
+  }
+}
+
+export function updateMessageCharacter(messageId, isSenderTarget, newName, newImage) {
+  const msg = messagesArray.find(msg => msg.id === messageId);
+  if (msg) {
+    if (isSenderTarget) {
+      msg.sender = newName;
+      msg.senderImage = newImage;
+    } else {
+      msg.receiver = newName;
+      msg.receiverImage = newImage;
+    }
+    saveMessages();
+  }
+}
+
 export function getMessages() {
   return messagesArray;
 }
@@ -54,4 +96,45 @@ export function clearMessages() {
 
 export function generateUUID() {
   return 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+}
+
+// --- SAVED CHATS ---
+export function saveCurrentChat(chatName) {
+  const savedChats = getSavedChats();
+  savedChats[chatName] = {
+    date: new Date().toISOString(),
+    messages: JSON.parse(JSON.stringify(messagesArray)) // Deep copy
+  };
+  localStorage.setItem('gc_saved_chats', JSON.stringify(savedChats));
+}
+
+export function loadChat(chatName) {
+  const savedChats = getSavedChats();
+  if (savedChats[chatName]) {
+    messagesArray = savedChats[chatName].messages || [];
+    saveMessages();
+    return true;
+  }
+  return false;
+}
+
+export function deleteSavedChat(chatName) {
+  const savedChats = getSavedChats();
+  if (savedChats[chatName]) {
+    delete savedChats[chatName];
+    localStorage.setItem('gc_saved_chats', JSON.stringify(savedChats));
+  }
+}
+
+export function getSavedChats() {
+  const data = localStorage.getItem('gc_saved_chats');
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.error("Failed to parse saved chats");
+      return {};
+    }
+  }
+  return {};
 }
