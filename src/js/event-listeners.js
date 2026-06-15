@@ -2,12 +2,52 @@ import { ChatMainElements, ChatNameElements, inputSection, CustomCharElements, C
 import { hasInputValue, logError, debounce } from "./helper-functions.js";
 import { disableElement, enableElement, showElement, hideElement, addActiveViaDataTab, removeActiveViaDataTab } from "./app-style.js";
 import { addConversation, showCharList, setCustomCharacter } from "./main-script.js";
-import { clearMessages, saveCurrentChat, loadChat, deleteSavedChat, getSavedChats } from "./message-manager.js";
+import { clearMessages, saveCurrentChat, loadChat, deleteSavedChat, getSavedChats, editMessage, getMessages, loadTutorialChat, markTutorialSeen } from "./message-manager.js";
 import { renderMessages } from "./message-renderer.js";
+import { onStateChange, getReceiver, getSender } from "./app-state.js";
 
 /* EVENT LISTENERS */
 
 document.addEventListener("DOMContentLoaded", () => {
+  const CHAT_TITLE_STORAGE_KEY = 'gc_active_chat_title';
+  const CHAT_TITLE_DEFAULT = 'Click to add chat title';
+
+  function getChatTitleEl() {
+    return document.getElementById('chat-title-text');
+  }
+
+  function setChatTitle(title) {
+    const chatTitleText = getChatTitleEl();
+    const saveChatInput = ChatSavingElements.saveChatNameInput;
+    const normalizedTitle = title ? title.trim() : '';
+
+    if (!chatTitleText) return;
+
+    if (!normalizedTitle || normalizedTitle === CHAT_TITLE_DEFAULT) {
+      chatTitleText.textContent = CHAT_TITLE_DEFAULT;
+      if (saveChatInput) {
+        saveChatInput.value = '';
+      }
+      localStorage.removeItem(CHAT_TITLE_STORAGE_KEY);
+      return;
+    }
+
+    chatTitleText.textContent = normalizedTitle;
+    if (saveChatInput) {
+      saveChatInput.value = normalizedTitle;
+    }
+    localStorage.setItem(CHAT_TITLE_STORAGE_KEY, normalizedTitle);
+  }
+
+  function syncChatTitleFromStorage() {
+    setChatTitle(localStorage.getItem(CHAT_TITLE_STORAGE_KEY) || CHAT_TITLE_DEFAULT);
+  }
+
+  function syncSavedChatTitle(chatName) {
+    if (chatName) {
+      setChatTitle(chatName);
+    }
+  }
 
   // 1. Enter Key Listener
   if (ChatMainElements.input) {
@@ -34,37 +74,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 3. Open Character Selection Floating Window
-  if (ChatMainElements.chatName) {
-    ChatMainElements.chatName.addEventListener("click", function () {
-      showElement("floatingReceiverSenderWindow", "flex");
+  // 3. Chat Title Editing (replaces old "Chat Options" click-to-open-selector)
+  const chatTitleText = getChatTitleEl();
+  if (chatTitleText) {
+    syncChatTitleFromStorage();
 
-      if (ChatNameElements.receiverSenderTabButtons && ChatNameElements.receiverSenderTabContents) {
-        ChatNameElements.receiverSenderTabButtons.forEach(btn => removeActiveViaDataTab(btn.dataset.tab));
-        ChatNameElements.receiverSenderTabContents.forEach(content => content.classList.remove('active'));
-        
-        const defaultBtn = Array.from(ChatNameElements.receiverSenderTabButtons).find(btn => btn.dataset.tab === 'tab1');
-        if (defaultBtn) {
-          addActiveViaDataTab('tab1');
-          document.getElementById('tab1')?.classList.add('active');
-        }
+    chatTitleText.addEventListener('input', () => {
+      const saveChatInput = ChatSavingElements.saveChatNameInput;
+      if (saveChatInput) {
+        const liveTitle = chatTitleText.textContent.trim();
+        saveChatInput.value = liveTitle && liveTitle !== CHAT_TITLE_DEFAULT ? liveTitle : '';
       }
+    });
 
-      if (ChatNameElements.receiverListDiv) {
-        try {
-          showCharList(ChatNameElements.receiverListDiv.id, 'receiver');
-        } catch (error) {
-          logError("Failed to display receiver list.\n  >> ", error);
-        }
-      }
+    chatTitleText.addEventListener('focusout', () => {
+      setChatTitle(chatTitleText.textContent);
+    });
 
-      if (ChatNameElements.senderListDiv) {
-        try {
-          showCharList(ChatNameElements.senderListDiv.id, 'sender');
-        } catch (error) {
-          logError("Failed to display sender list.\n  >> ", error);
-        }
+    chatTitleText.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        chatTitleText.blur();
       }
+    });
+
+    // Select all text on focus for easy replacement
+    chatTitleText.addEventListener('focus', () => {
+      const sel = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(chatTitleText);
+      sel.removeAllRanges();
+      sel.addRange(range);
     });
   }
 
@@ -189,6 +229,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (SettingsElements.loadTutorialBtn) {
+    SettingsElements.loadTutorialBtn.addEventListener('click', async function() {
+      if (!confirm('Load the tutorial chat? This will replace your current conversation.')) {
+        return;
+      }
+
+      const loaded = await loadTutorialChat();
+      if (loaded) {
+        markTutorialSeen();
+        renderMessages();
+        hideElement("floatingSettingsWindow");
+      } else {
+        alert('Unable to load the tutorial chat right now.');
+      }
+    });
+  }
+
   // 14. Export Chat Button
   if (SettingsElements.exportChatBtn) {
     SettingsElements.exportChatBtn.addEventListener('click', function() {
@@ -220,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function validateImageFile(file) {
-    const MAX_SIZE = 200 * 1024; // 200KB
+    const MAX_SIZE = 2048 * 1024; // 2 MB limit
     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     
     if (!ALLOWED_TYPES.includes(file.type)) {
@@ -228,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return false;
     }
     if (file.size > MAX_SIZE) {
-      alert('Image must be smaller than 200KB');
+      alert('Image must be smaller than 2.00 MB');
       return false;
     }
     return true;
@@ -393,6 +450,7 @@ document.addEventListener("DOMContentLoaded", () => {
       textSpan.addEventListener('click', () => {
         if (confirm(`Load chat "${name}"? Current unsaved progress will be lost.`)) {
           loadChat(name);
+          syncSavedChatTitle(name);
           renderMessages();
           hideElement("floatingSettingsWindow");
         }
@@ -419,6 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const name = ChatSavingElements.saveChatNameInput.value.trim();
       if (name) {
         saveCurrentChat(name);
+        syncSavedChatTitle(name);
         ChatSavingElements.saveChatNameInput.value = '';
         renderSavedChats();
       } else {
@@ -432,6 +491,193 @@ document.addEventListener("DOMContentLoaded", () => {
         renderSavedChats();
       });
     }
+  }
+
+  // 15. Input Character Selector & Avatar Reactivity
+  function updateInputAvatar() {
+    const avatarImg = document.getElementById("inputCharAvatar");
+    const selectorBtn = document.getElementById("inputCharSelector");
+    if (!avatarImg || !selectorBtn) return;
+
+    const isSender = ChatMainElements.sendSwitch && ChatMainElements.sendSwitch.checked;
+    const activeChar = isSender ? getSender() : getReceiver();
+    
+    avatarImg.src = activeChar.image || './src/char-img/default.png';
+    avatarImg.alt = activeChar.name || 'Active Character';
+    
+    avatarImg.onerror = () => {
+      avatarImg.src = './src/char-img/default.png';
+      avatarImg.onerror = null;
+    };
+
+    // Set custom styles/classes on wrapper button for frame styling
+    if (isSender) {
+      selectorBtn.classList.add('is-sender');
+      selectorBtn.classList.remove('is-receiver');
+    } else {
+      selectorBtn.classList.add('is-receiver');
+      selectorBtn.classList.remove('is-sender');
+    }
+  }
+
+  // Initialize avatar on load
+  updateInputAvatar();
+
+  // Listen to character selection state changes reactively
+  onStateChange(updateInputAvatar);
+
+  // Listen to switch toggles
+  if (ChatMainElements.sendSwitch) {
+    ChatMainElements.sendSwitch.addEventListener('change', updateInputAvatar);
+  }
+
+  // 16. Click Input Selector opens character selection modal
+  const inputCharSelector = document.getElementById('inputCharSelector');
+  if (inputCharSelector) {
+    inputCharSelector.addEventListener('click', () => {
+      showElement("floatingReceiverSenderWindow", "flex");
+      
+      // Focus correct tab in character selector modal based on current switch state
+      const isSender = ChatMainElements.sendSwitch && ChatMainElements.sendSwitch.checked;
+      const tabToActivate = isSender ? 'tab2' : 'tab1';
+      
+      if (ChatNameElements.receiverSenderTabButtons && ChatNameElements.receiverSenderTabContents) {
+        ChatNameElements.receiverSenderTabButtons.forEach(btn => {
+          const match = btn.dataset.tab === tabToActivate;
+          btn.classList.toggle('active', match);
+          btn.setAttribute('aria-selected', match ? 'true' : 'false');
+        });
+        ChatNameElements.receiverSenderTabContents.forEach(content => {
+          content.classList.toggle('active', content.id === tabToActivate);
+        });
+      }
+
+      // Load character lists into the modal (moved from old #chat-name handler)
+      if (ChatNameElements.receiverListDiv) {
+        try {
+          showCharList(ChatNameElements.receiverListDiv.id, 'receiver');
+        } catch (error) {
+          logError("Failed to display receiver list.\n  >> ", error);
+        }
+      }
+      if (ChatNameElements.senderListDiv) {
+        try {
+          showCharList(ChatNameElements.senderListDiv.id, 'sender');
+        } catch (error) {
+          logError("Failed to display sender list.\n  >> ", error);
+        }
+      }
+    });
+  }
+
+  // 16b. Sticker/Emoji button – placeholder alert
+  const emojiBtn = document.getElementById('inputList');
+  if (emojiBtn) {
+    emojiBtn.addEventListener('click', () => {
+      alert('Sticker and emoji picker coming soon!');
+    });
+  }
+
+  // 17. Hide character selector and sender/receiver switch for non-message types
+  // Also update placeholder text based on message type
+  const msgTypeRadios = document.querySelectorAll('input[name="msgType"]');
+  const updateContextualInputs = () => {
+    const checkedEl = ChatMainElements.msgTypeChecked;
+    const msgType = checkedEl ? checkedEl.value : 'text';
+    const isText = msgType === 'text';
+    
+    const switchContainer = ChatMainElements.sendSwitch ? ChatMainElements.sendSwitch.closest('.switch') : null;
+    const toggleChatLabel = document.getElementById('toggleChat');
+    const charSelector = document.getElementById('inputCharSelector');
+    
+    if (isText) {
+      switchContainer?.classList.remove('hidden');
+      toggleChatLabel?.classList.remove('hidden');
+      charSelector?.classList.remove('hidden');
+    } else {
+      switchContainer?.classList.add('hidden');
+      toggleChatLabel?.classList.add('hidden');
+      charSelector?.classList.add('hidden');
+      if (ChatMainElements.sendSwitch) {
+        ChatMainElements.sendSwitch.checked = false;
+      }
+    }
+
+    // Dynamic placeholder based on message type
+    if (ChatMainElements.input) {
+      if (msgType === 'action') {
+        ChatMainElements.input.placeholder = 'Type the action message...';
+      } else if (msgType === 'timestamp') {
+        ChatMainElements.input.placeholder = 'Enter time...';
+      } else {
+        ChatMainElements.input.placeholder = 'Type your message...';
+      }
+    }
+  };
+
+  msgTypeRadios.forEach(radio => {
+    radio.addEventListener('change', updateContextualInputs);
+  });
+
+  // Set initial visibility
+  updateContextualInputs();
+
+  // 18. Direct Inline Editing on Bubble/Action/Timestamp Spans
+  const chatMessagesContainer = document.getElementById('chat-messages');
+  if (chatMessagesContainer) {
+    // Focusout event triggers when target loses focus (bubbles unlike blur)
+    chatMessagesContainer.addEventListener('focusout', (e) => {
+      const target = e.target;
+      if (target && target.hasAttribute('contenteditable') && target.dataset.editableType === 'message') {
+        const msgId = target.getAttribute('data-id');
+        const newText = target.textContent.trim();
+        const originalMsg = getMessages().find(m => m.id === msgId);
+        
+        if (originalMsg) {
+          if (newText === '') {
+            // Restore original text if cleared
+            target.textContent = originalMsg.text;
+          } else if (newText !== originalMsg.text) {
+            // Update message text
+            editMessage(msgId, newText);
+            renderMessages();
+          }
+        }
+      }
+    });
+
+    chatMessagesContainer.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!target || !target.hasAttribute('contenteditable')) return;
+      if (target.dataset.editableType !== 'message') return;
+      e.stopPropagation();
+      document.querySelectorAll('.action-menu:not(.hidden)').forEach(menu => menu.classList.add('hidden'));
+    });
+
+    chatMessagesContainer.addEventListener('keydown', (e) => {
+      const target = e.target;
+      if (target && target.hasAttribute('contenteditable') && target.dataset.editableType === 'message') {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // prevent newline insertion
+          target.blur(); // trigger save
+        }
+      }
+    });
+
+    chatMessagesContainer.addEventListener('paste', (e) => {
+      const target = e.target;
+      if (target && target.hasAttribute('contenteditable') && target.dataset.editableType === 'message') {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        // Safely insert text at cursor position or replace selected text
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(text));
+        // Force update cursor to end of inserted text
+        selection.collapseToEnd();
+      }
+    });
   }
 
 }); // Clean exit point of DOMContentLoaded block

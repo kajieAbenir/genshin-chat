@@ -15,7 +15,7 @@ export function getJSONList() {
     // Store the execution promise itself 
     cachedCharListPromise = (async () => {
       try {
-        const res = await fetch("./src/char_info.json");
+        const res = await fetch("./src/data/char_info.json");
         
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -40,11 +40,10 @@ export function getJSONList() {
 
 export function getCharacterIconURL(apiSlug) {
   if (!apiSlug) return "./src/char-img/default.png";
-  return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${apiSlug}.png`;
+  const slugMap = {
+    Aether: "PlayerBoy",
+    Lumine: "PlayerGirl"
+  };
+  const resolvedSlug = slugMap[apiSlug] || apiSlug;
+  return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${resolvedSlug}.png`;
 }
-
-// notes (for AI as well)
-// Alhaitham's code name is "Alhatham", 
-// which is a typo that has been carried over from the 
-// original data source. 
-// To ensure consistency, follow the API's naming.

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "msg-0-tutorial-1",
+    "type": "timestamp",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "- 06/15/2026, 8:32PM -",
+    "createdAt": "2026-06-15T00:00:00.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-1",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "Welcome to Genshin Chat - by gamers, for gamers. This is an example chat, you can clear and load this anytime in the settings.",
+    "createdAt": "2026-06-15T00:00:01.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-2",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "Click on the character beside the input box to change character. To switch between receiver and sender, simply click \"Toggle Chat\". The character's image border will indicate as well.",
+    "createdAt": "2026-06-15T00:00:02.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-3",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "The chats you make are auto-saved for your next visit. Chat title is optional. To save your favorite chats, go to [Settings] > [Saved Chats]. Input the chat title, then hit [Save]",
+    "createdAt": "2026-06-15T00:00:03.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-4",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "Custom characters and background can be inserted as well. Just go to the character selection window and to the settings, respectively.",
+    "createdAt": "2026-06-15T00:00:04.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-5",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "To edit a message, click the message bubble. To edit position and change character, select that sender's icon. The action icons should be self-explanatory.",
+    "createdAt": "2026-06-15T00:00:05.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-6",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "That's it. If there's something \"bugging\" you in this web app, please consider pulling up an Issue in the Github repository. The developer will talk to you in a timely manner.",
+    "createdAt": "2026-06-15T00:00:06.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-7",
+    "type": "text",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "Goodbye for now.",
+    "createdAt": "2026-06-15T00:00:07.000Z",
+    "editedAt": null
+  },
+  {
+    "id": "msg-0-tutorial-8",
+    "type": "action",
+    "sender": "Aether",
+    "senderImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_PlayerBoy.png",
+    "receiver": "Diluc",
+    "receiverImage": "https://gi.yatta.moe/assets/UI/UI_AvatarIcon_Diluc.png",
+    "isSender": false,
+    "text": "Diluc left the chat.",
+    "createdAt": "2026-06-15T00:00:08.000Z",
+    "editedAt": null
+  }
+]

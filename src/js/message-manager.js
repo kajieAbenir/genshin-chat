@@ -1,8 +1,36 @@
 // Message storage and management
 let messagesArray = [];
+const MESSAGES_STORAGE_KEY = 'gc_messages';
+const SAVED_CHATS_STORAGE_KEY = 'gc_saved_chats';
+const TUTORIAL_SEEN_STORAGE_KEY = 'gc_tutorial_seen';
+
+function isValidMessageObject(message) {
+  return message
+    && typeof message === 'object'
+    && typeof message.id === 'string'
+    && typeof message.type === 'string'
+    && typeof message.sender === 'string'
+    && typeof message.receiver === 'string'
+    && typeof message.text === 'string'
+    && typeof message.isSender === 'boolean'
+    && typeof message.createdAt === 'string'
+    && Object.prototype.hasOwnProperty.call(message, 'editedAt');
+}
+
+function isValidMessageArray(messages) {
+  return Array.isArray(messages) && messages.every(isValidMessageObject);
+}
+
+function setMessages(nextMessages, shouldPersist = true) {
+  messagesArray = Array.isArray(nextMessages) ? nextMessages : [];
+  if (shouldPersist) {
+    saveMessages();
+  }
+  return messagesArray;
+}
 
 export function initMessages() {
-  const saved = localStorage.getItem('gc_messages');
+  const saved = localStorage.getItem(MESSAGES_STORAGE_KEY);
   if (!saved) return [];
   
   try {
@@ -12,7 +40,7 @@ export function initMessages() {
     console.error('Failed to parse messages from localStorage:', error);
     // Backup corrupted data
     localStorage.setItem('gc_messages_backup', saved);
-    localStorage.removeItem('gc_messages');
+    localStorage.removeItem(MESSAGES_STORAGE_KEY);
     messagesArray = [];
   }
   return messagesArray;
@@ -40,7 +68,7 @@ export function editMessage(messageId, newText) {
 }
 
 function saveMessages() {
-  localStorage.setItem('gc_messages', JSON.stringify(messagesArray));
+  localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messagesArray));
 }
 
 export function moveMessageUp(messageId) {
@@ -105,14 +133,13 @@ export function saveCurrentChat(chatName) {
     date: new Date().toISOString(),
     messages: JSON.parse(JSON.stringify(messagesArray)) // Deep copy
   };
-  localStorage.setItem('gc_saved_chats', JSON.stringify(savedChats));
+  localStorage.setItem(SAVED_CHATS_STORAGE_KEY, JSON.stringify(savedChats));
 }
 
 export function loadChat(chatName) {
   const savedChats = getSavedChats();
   if (savedChats[chatName]) {
-    messagesArray = savedChats[chatName].messages || [];
-    saveMessages();
+    setMessages(savedChats[chatName].messages || [], true);
     return true;
   }
   return false;
@@ -122,12 +149,12 @@ export function deleteSavedChat(chatName) {
   const savedChats = getSavedChats();
   if (savedChats[chatName]) {
     delete savedChats[chatName];
-    localStorage.setItem('gc_saved_chats', JSON.stringify(savedChats));
+    localStorage.setItem(SAVED_CHATS_STORAGE_KEY, JSON.stringify(savedChats));
   }
 }
 
 export function getSavedChats() {
-  const data = localStorage.getItem('gc_saved_chats');
+  const data = localStorage.getItem(SAVED_CHATS_STORAGE_KEY);
   if (data) {
     try {
       return JSON.parse(data);
@@ -137,4 +164,47 @@ export function getSavedChats() {
     }
   }
   return {};
+}
+
+export function replaceMessages(nextMessages) {
+  if (!Array.isArray(nextMessages)) {
+    return false;
+  }
+  setMessages(nextMessages, true);
+  return true;
+}
+
+export function getTutorialSeenFlag() {
+  return localStorage.getItem(TUTORIAL_SEEN_STORAGE_KEY) === 'true';
+}
+
+export function markTutorialSeen() {
+  localStorage.setItem(TUTORIAL_SEEN_STORAGE_KEY, 'true');
+}
+
+export function shouldAutoLoadTutorial() {
+  if (getTutorialSeenFlag()) return false;
+  const hasCurrentMessages = Array.isArray(messagesArray) && messagesArray.length > 0;
+  const hasSavedChats = Object.keys(getSavedChats()).length > 0;
+  return !hasCurrentMessages && !hasSavedChats;
+}
+
+export async function loadTutorialChat() {
+  try {
+    const response = await fetch('./src/data/tutorial-chat.json', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load tutorial chat (${response.status})`);
+    }
+
+    const parsed = await response.json();
+    if (!isValidMessageArray(parsed)) {
+      throw new Error('Tutorial chat JSON does not match the expected message format');
+    }
+
+    setMessages(parsed, true);
+    return true;
+  } catch (error) {
+    console.error('Failed to load tutorial chat:', error);
+    return false;
+  }
 }

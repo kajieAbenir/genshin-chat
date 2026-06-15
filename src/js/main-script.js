@@ -4,19 +4,30 @@ import { disableElement, enableElement } from './app-style.js';
 import { getJSONList, getCharacterIconURL } from './api.js';
 import { initLoading } from './loading.js';
 import './event-listeners.js';
-import { addMessage, initMessages, generateUUID } from './message-manager.js';
+import { addMessage, initMessages, generateUUID, loadTutorialChat, shouldAutoLoadTutorial, markTutorialSeen } from './message-manager.js';
 import { renderMessages } from './message-renderer.js';
+import { getReceiver, getSender, setReceiver, setSender, initState } from './app-state.js';
 
-export let selectedReceiver = { name: "None", image: "" }; // Default receiver
-export let selectedSender = { name: "None", image: "" };   // Default sender
+// Removed global exports of selectedReceiver and selectedSender
+// State is now managed via app-state module
 /* MAIN EXECUTABLES */
 
-// Initialize messages from localStorage
-initMessages();
-renderMessages();
+async function initializeApp() {
+  // Initialize messages from localStorage first so we can decide whether to show the tutorial.
+  initMessages();
 
-// Start loading sequence
-initLoading();
+  if (shouldAutoLoadTutorial()) {
+    const loaded = await loadTutorialChat();
+    if (loaded) {
+      markTutorialSeen();
+    }
+  }
+
+  renderMessages();
+  initLoading();
+}
+
+initializeApp();
 
 /**
  * Adds a new chat bubble to the chat container based on the input value.
@@ -33,8 +44,10 @@ export function addConversation() {
     return;
   }
 
-  if (!selectedReceiver.name || !selectedSender.name || 
-      selectedReceiver.name === "None" || selectedSender.name === "None") {
+  const receiver = getReceiver();
+  const sender = getSender();
+  if (!receiver.name || !sender.name || 
+      receiver.name === "None" || sender.name === "None") {
     alert("Please select both a sender and a receiver.");
     return;
   }
@@ -45,16 +58,23 @@ export function addConversation() {
   const msgTypeEl = ChatMainElements.msgTypeChecked;
   const msgType = msgTypeEl ? msgTypeEl.value : 'text';
 
-  const isSender = ChatMainElements.sendSwitch.checked;
+  // If message type is 'timestamp', set text to "-lorem ipsum-"
+  if (msgType === 'timestamp') {
+    messageText = `- ${messageText} -`;
+  }
+
+  const isSender = ChatMainElements.sendSwitch.checked; // This line should remain after messageText is potentially updated
 
   // Create message object
+  const receiverState = getReceiver();
+  const senderState = getSender();
   const messageObj = {
     id: generateUUID(),
     type: msgType,
-    sender: selectedSender.name,
-    senderImage: selectedSender.image,
-    receiver: selectedReceiver.name,
-    receiverImage: selectedReceiver.image,
+    sender: senderState.name,
+    senderImage: senderState.image,
+    receiver: receiverState.name,
+    receiverImage: receiverState.image,
     isSender: isSender,
     text: messageText,
     createdAt: new Date().toISOString(),
@@ -150,9 +170,11 @@ export async function showCharList(listContainerId, type, searchTerm = "") {
 
     // Update initial selected names
     if (type === 'receiver') {
-      ChatNameElements.receiverNameSpan.textContent = selectedReceiver.name;
+      const recv = getReceiver();
+      ChatNameElements.receiverNameSpan.textContent = recv.name;
     } else if (type === 'sender') {
-      ChatNameElements.senderNameSpan.textContent = selectedSender.name;
+      const snd = getSender();
+      ChatNameElements.senderNameSpan.textContent = snd.name;
     }
 
   } catch (error) {
@@ -177,10 +199,10 @@ export function selectCharacter(charName, region, type, charSlug) {
   }
 
   if (type === 'receiver') {
-    selectedReceiver = { name: charName, image: charImage };
+    setReceiver({ name: charName, image: charImage });
     ChatNameElements.receiverNameSpan.textContent = charName;
   } else if (type === 'sender') {
-    selectedSender = { name: charName, image: charImage };
+    setSender({ name: charName, image: charImage });
     ChatNameElements.senderNameSpan.textContent = charName;
   }
   // console.log(`${type} selected: ${charName}, Image: ${charImage}`);
@@ -196,10 +218,10 @@ export function setCustomCharacter(type, name, imageSrc) {
   const finalImage = imageSrc || "./src/char-img/default.png";
 
   if (type === 'receiver') {
-    selectedReceiver = { name: finalName, image: finalImage };
+    setReceiver({ name: finalName, image: finalImage });
     ChatNameElements.receiverNameSpan.textContent = finalName;
   } else if (type === 'sender') {
-    selectedSender = { name: finalName, image: finalImage };
+    setSender({ name: finalName, image: finalImage });
     ChatNameElements.senderNameSpan.textContent = finalName;
   }
 }
@@ -207,20 +229,11 @@ export function setCustomCharacter(type, name, imageSrc) {
 // Initialize default selections on load
 document.addEventListener('DOMContentLoaded', async () => {
   const list = await getJSONList();
-  const defaultCharName = "Aether"; // Assuming Aether is a valid character name in your JSON
-  
-  // Optimized lookup for default character
-  for (const region in list.characters) {
-    const charSlug = list.characters[region][defaultCharName];
-    if (charSlug) {
-      const defaultImg = getCharacterIconURL(charSlug);
-      
-      selectedReceiver = { name: defaultCharName, image: defaultImg };
-      ChatNameElements.receiverNameSpan.textContent = defaultCharName;
-      
-      selectedSender = { name: defaultCharName, image: defaultImg };
-      ChatNameElements.senderNameSpan.textContent = defaultCharName;
-      break;
-    }
-  }
+  // Initialize state with default character using app-state module
+  initState("Aether", getCharacterIconURL);
+  // Update UI spans after state init
+  const recv = getReceiver();
+  const snd = getSender();
+  ChatNameElements.receiverNameSpan.textContent = recv.name;
+  ChatNameElements.senderNameSpan.textContent = snd.name;
 });

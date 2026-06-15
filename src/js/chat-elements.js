@@ -86,6 +86,7 @@ export const CustomCharElements = {
 
 export const SettingsElements = {
   get clearChatBtn() { return document.getElementById('clearChatBtn'); },
+  get loadTutorialBtn() { return document.getElementById('loadTutorialBtn'); },
   get exportChatBtn() { return document.getElementById('exportChatBtn'); },
   get customBgUpload() { return document.getElementById('custom-bg-upload'); },
   get clearCustomBgBtn() { return document.getElementById('clear-custom-bg'); }

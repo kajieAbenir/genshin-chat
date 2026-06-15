@@ -28,6 +28,24 @@
   --color-natlan: #f15c3a;     /* Pyro orange-red */
   --color-snezhnaya: #8ab7e5;  /* Cryo light-blue */
   --color-nodkrai: #6c5ce7;    /* Deep Indigo/Void */
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* General UI Colors */
+  --border-light: #ccc;
+  --border-medium: #ddd;
+  --color-gray-600: #666;
+  --color-gray-300: #e6e6e6;
+  --overlay-dark: rgba(0, 0, 0, 0.5);
+  --text-light-gray: #bbb;
+  --text-subtle: #9a9a9a;
+  --link-default: #0076f6;
+
+  /* Specific Element Colors */
+  --chat-bubble-sender-bg: #d1c9c1;
+  --chat-avatar-sender-border: #f3c19a;
+  --chat-avatar-receiver-border: #a3b3cc;
+  --action-bg-success: #406419;
   --color-others: #a1a5b5;     /* Default greyish */
 }
 
@@ -36,8 +54,12 @@
 }
 
 html {
-  font-size: calc(16px * var(--ui-scale, 1));
+  font-size: 16px;
   cursor: url(../../assets/cursor-small.png), auto;
+}
+
+body {
+  zoom: var(--ui-scale, 1);
 }
 
 #background-pic {
@@ -90,7 +112,7 @@ body::-webkit-scrollbar-thumb {
 /* copied from portfolio site ehe */
 
 .loading {
-  border: 8px solid #22283e;
+  border: 8px solid var(--bg-secondary);
   border-top: 8px solid #00000000; 
   border-radius: 50%;
 
@@ -129,7 +151,8 @@ body::-webkit-scrollbar-thumb {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 600px;
+  width: min(70vw, 1200px);
+  max-width: 70vw;
   border: none;
   background: none;
   display: flex;
@@ -143,6 +166,7 @@ body::-webkit-scrollbar-thumb {
     top: 0;
     bottom: 0;
     width: 100%;
+    max-width: 100%;
     border: none;
     background: none;
     display: flex;
@@ -154,23 +178,50 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 70vw;
   overflow: hidden;
   position: relative;
+}
+
+@media (max-width: 700px) {
+  #container {
+    width: 100vw;
+  }
 }
 
 /* Header styling */
 .chat-header {
   background: #22283e;
-  color: #fff;
+  border-bottom: solid 2px var(--bg-tertiary);
   padding: 20px;
   text-align: center;
   font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.chat-header:hover {
-  cursor: pointer;
-  text-decoration: underline;
+#chat-title-text {
+  outline: none;
+  cursor: text;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: "HYWenHei 85W", Arial, sans-serif !important;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* */
+  color: var(--color-white);
+}
+
+#chat-title-text:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#chat-title-text:focus { /* */
+  background-color: rgba(255, 255, 255, 0.15); /* */
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Messages area uses flex-grow */
@@ -222,7 +273,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--color-gray-600);
   border-radius: 20px;
 }
 
@@ -237,6 +288,7 @@ body::-webkit-scrollbar-thumb {
   flex-direction: row; /* instead of column */
   align-items: flex-start; /* keeps image and bubble aligned */
   font-size: 15px;
+  position: relative;
 }
 
 /* Align sender messages to the right */
@@ -244,7 +296,8 @@ body::-webkit-scrollbar-thumb {
   align-items: flex-end;
   align-self: flex-end;
   justify-content: flex-end;
-  color: #000;
+  color: var(--color-black);
+  max-width: calc(80% - 65px);
 }
 
 /* Chat bubble styling for both sender and receiver */
@@ -257,14 +310,14 @@ body::-webkit-scrollbar-thumb {
 
 /* Specific style for sender bubble */
 .chat-message.sender .chat-bubble {
-  background: #d1c9c1;
+  background: var(--chat-bubble-sender-bg);
   border-top-right-radius: 0;
 }
 
 /* Specific style for receiver bubble */
 .chat-message.receiver .chat-bubble {
-  background: #3d4655;
-  color: white;
+  background: var(--bg-tertiary);
+  color: var(--color-white);
   border: none;
   border-top-left-radius: 0;
   /* user-select: none; */
@@ -282,7 +335,7 @@ body::-webkit-scrollbar-thumb {
 
 	border-radius: 50%;
   border: 2px solid #d1c9c1;
-
+  
   background: #f3c19a;
   
   object-fit: cover; /* Ensures image covers the area without distortion */
@@ -306,7 +359,7 @@ body::-webkit-scrollbar-thumb {
 	align-items: flex-end;
 	align-self: flex-end;
 }
-
+/* */
 /* Receiver */
 .chat-image.receiver {
 	align-items: flex-start;
@@ -314,51 +367,127 @@ body::-webkit-scrollbar-thumb {
   justify-content: flex-start;
   background-color: #ffffff;
   color: #000;
-}
+} /* */
 
-/* for hiding input menu - reason: maximization of chat */
-
+/* Floating Hide/Show button — overlaps bottom of chat-messages, above chatInputUpper */
 #toggleInputMenu {
-  color: white;
-
-  position: absolute;
-  bottom: 10px;
-  left: 6px;
-
-  border: 0;
-  background: transparent;
-  width: fit-content;
-  gap: 15px;
-
+  position: relative;
+  height: 0;            /* takes no vertical space in flex column */
+  overflow: visible;
+  z-index: 200;
   display: flex;
-  justify-content: flex-start; /* Aligns to the left side cleanly without covering content */
-  align-items: center;
-
-  padding: 5px 10px;
+  justify-content: flex-end;
+  padding: 0 8px;
+  background: transparent;
+  pointer-events: none;
   box-sizing: border-box;
 }
 
-#chatInputLower.chat-input {
-  border: 0;
-  padding: 8px;
-}
-
+#toggleInputMenu button,
 #toggleInputBtn {
-  position: relative; /* Removes it from any accidental absolute overlays */
-  background-color: #3d4655;
-  color: #ffffff;
-  border: 1px solid #525c6c;
-  border-radius: 4px;
-  padding: 4px 12px;
-  font-size: 12px;
-  z-index: 10; /* Keeps it layered cleanly without intersecting baseline input fields */
+  pointer-events: all;
+  position: relative;
+  bottom: 40px;         
+  background-color: var(--bg-tertiary);
+  color: var(--color-white);
+  border: 1px solid white;
+  /* border-radius: 999px; */
+  /* padding: 5px 9px; */
+  font-size: 13px;
+  min-height: 35px;
+  min-width: 70px;
   transition: background-color 0.2s;
   cursor: pointer;
   margin: 0;
+  width: auto;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
+#toggleInputMenu button:hover,
 #toggleInputBtn:hover {
-  background-color: #2196f3;
+  background-color: var(--accent-blue);
+}
+
+/* Character Avatar Selector in input bar */
+#inputCharSelector {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  margin: 0 7px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#inputCharAvatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  background-color: var(--chat-avatar-sender-border);
+  transition: border-radius 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Custom frame shapes depending on active sender/receiver */
+#inputCharSelector.is-sender #inputCharAvatar {
+  border: 2px solid var(--chat-avatar-sender-border); /* sender gold border */
+  border-radius: 50% 50% 0 50%; /* points to the message input */
+  background-color: var(--chat-avatar-sender-border) !important; /* gold background */
+}
+
+#inputCharSelector.is-receiver #inputCharAvatar {
+  border: 2px solid var(--chat-avatar-receiver-border); /* receiver blue-gray border */
+  border-radius: 50% 50% 50% 0; /* points to the message input */
+  background-color: var(--chat-avatar-receiver-border) !important; /* blue-gray background */
+}
+
+/* Contenteditable text highlighting and focus styling */
+.chat-message [contenteditable="true"],
+.action-line [contenteditable="true"],
+.timestamp-line [contenteditable="true"] {
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.chat-message [contenteditable="true"]:hover,
+.action-line [contenteditable="true"]:hover,
+.timestamp-line [contenteditable="true"]:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Specific hover background for text bubbles since they have different background colors */
+.chat-message.receiver [contenteditable="true"]:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.chat-message [contenteditable="true"]:focus,
+.action-line [contenteditable="true"]:focus,
+.timestamp-line [contenteditable="true"]:focus {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
+  cursor: text;
+}
+
+.chat-message.receiver [contenteditable="true"]:focus {
+  background-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* #chatInputLower overrides .chat-input and .center class conflicts */
+#chatInputLower {
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding: 4px 8px;
+  border: none;
 }
 
 /* Input area styling */
@@ -366,7 +495,7 @@ body::-webkit-scrollbar-thumb {
   padding: 12px 5px 0;
   border-top: 1px solid #ccc;
   display: flex;
-  align-items: center;
+  align-items: center; /* */
   background: #22283e;
   flex-shrink: 0; /* Prevents them from being squished when messages grow */
   min-height: 35px;
@@ -376,7 +505,7 @@ body::-webkit-scrollbar-thumb {
 .chat-input input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-light);
   font-size: 15px;
   border-radius: 20px;
   outline: none;
@@ -387,35 +516,46 @@ body::-webkit-scrollbar-thumb {
 .chat-input button {
   margin: 0 7px;
   padding: 10px 15px;
-  border: none;
-  background: #fff;
-  color: #3d4655;
+  border: none; /* */
+  background: var(--color-white);
+  color: var(--bg-tertiary);
   border-radius: 20px;
   cursor: pointer;
 
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
 }
 
-.chat-input button:disabled {
-  color: #ccc;
-  background: #666;
+.chat-input button:disabled { /* */
+  color: var(--border-light);
+  background: var(--color-gray-600);
   cursor: not-allowed;
 
 }
 
-.chat-input #settings {
-  position: absolute;
-  right: 10px;
-  font-size: 26px;
-  color: white;
-  cursor: pointer;
+.chat-input button:not(#inputCharSelector):not(:disabled):hover {
+  background: var(--color-gray-300);
+  transition: background-color 0.2s ease;
+}
 
+.chat-input button:not(#inputCharSelector):not(:disabled):active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+.chat-input #settings {
+  margin-left: auto; /* push to the right end of flex row */
+  font-size: 22px; /* */
+  color: var(--color-white);
+  cursor: pointer;
   background: none;
-  border:none;
+  border: none;
+  padding: 4px 6px;
+  flex-shrink: 0;
 }
 
 #chatInputUpper {
-  margin-top: 5px;
+  margin-top: 0;
+  padding-top: 6px;
 }
 
 /* for switch */
@@ -446,25 +586,25 @@ body::-webkit-scrollbar-thumb {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--border-light);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: ""; /* */
   height: 14px;
   width: 14px;
   left: 4px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--color-white);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--accent-blue);
 }
 
 input:focus + .slider {
@@ -496,7 +636,7 @@ input:checked + .slider:before {
   align-items: center;
   gap: 12px;
   margin-left: 15px;
-  color: white;
+  color: var(--color-white);
   font-size: 0.9em;
 }
 
@@ -510,7 +650,7 @@ input:checked + .slider:before {
 .timestamp-line {
   width: 100%;
   text-align: center;
-  color: #8b97b0;
+  color: var(--text-muted);
   font-size: 0.85em;
   margin: 10px 0;
   display: flex;
@@ -519,7 +659,7 @@ input:checked + .slider:before {
 }
 
 #toggleChat {
-  color: white;
+  color: var(--color-white);
 
 }
 
@@ -531,8 +671,8 @@ input:checked + .slider:before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  height: 100%; /* */
+  background: var(--overlay-dark); /* Semi-transparent black */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -544,8 +684,8 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
 
-  background: #22283e;
-  color: white;
+  background: var(--bg-secondary);
+  color: var(--color-white);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -566,14 +706,14 @@ input:checked + .slider:before {
   padding: 0;
   margin: 0;
   background: none;
-  border: none;
+  border: none; /* */
   font-size: 28px;
   color: #bbb;
   cursor: pointer;
 }
 
 .close-button:hover {
-  color: white;
+  color: var(--color-white);
 }
 
 .chat-input .charlist input {
@@ -600,16 +740,16 @@ input:checked + .slider:before {
 
 .custom-character-section input[type="text"] {
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-light);
   border-radius: 4px;
-  background: #3d4655;
-  color: white;
+  background: var(--bg-tertiary);
+  color: var(--color-white);
 }
 
 .custom-character-section button {
-  padding: 8px;
-  background: #2196f3;
-  color: white;
+  padding: 8px; /* */
+  background: var(--accent-blue);
+  color: var(--color-white);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -627,11 +767,11 @@ input:checked + .slider:before {
   width: 100%;
   padding: 10px;
   margin-bottom: 5px;
-  background-color: var(--bg-tertiary, #3d4655);
-  color: white;
-  border: none;
+  background-color: var(--bg-tertiary);
+  color: var(--color-white);
+  border: none; /* */
   border-left: 4px solid transparent;
-  border-radius: 5px;
+  border-radius: 5px; /* */
   text-align: left;
   cursor: pointer;
   transition: background 0.2s ease, border-left-color 0.2s ease, transform 0.1s ease;
@@ -639,8 +779,8 @@ input:checked + .slider:before {
 }
 
 .character-list-item:hover, .character-list-item.selected {
-  background-color: var(--accent-blue, #2196f3); /* Default Highlight */
-  border-left-color: white;
+  background-color: var(--accent-blue); /* Default Highlight */
+  border-left-color: var(--color-white);
 }
 
 /* Region-specific hover colors */
@@ -702,14 +842,14 @@ input:checked + .slider:before {
   padding: 15px 0;
   text-align: center;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: bold; /* */
   font-family: "HYWenHei 85W" !important;
-  color: #000000;
+  color: var(--color-black);
 
   transition: background-color 0.3s ease, color 0.3s ease;
 
-  border-bottom: 3px solid #2196f3;
-}
+  border-bottom: 3px solid var(--accent-blue);
+} /* */
 
 /* need to fix color */
 .tab-button:hover {
@@ -718,7 +858,7 @@ input:checked + .slider:before {
 }
 
 .tab-button.active {
-  background-color: #2196f3;
+  background-color: var(--accent-blue);
   color: #000000;
 
   border: 3px solid #2196f3;
@@ -771,15 +911,8 @@ input:checked + .slider:before {
   padding: 5px;
 }
 
-/* Safely position the toggle layout row */
-div#toggleInputMenu {
-  display: flex !important;
-  justify-content: flex-start;
-  width: fit-content;
-  padding: 4px 8px;
-  background: transparent;
-  box-sizing: border-box;
-}
+/* */
+
 
 /* for credits */
 
@@ -792,26 +925,26 @@ div#toggleInputMenu {
   min-height: 0;
 }
 
-.text-center {
+.text-center { /* */
   text-align: center;
 }
 
 .credits-wrapper h3 {
   margin-bottom: 5px;
-  color: white; /* Change to match your text colors */
+  color: var(--color-white);
 }
 
 .credits-section {
   margin-bottom: 20px;
-}
+} /* */
 
 .credits-section h4 {
   margin-bottom: 8px;
-  color: white;
+  color: var(--color-white);;
   font-size: 1.1rem;
 }
 
-.credits-list {
+.credits-list { /* */
   padding-left: 20px;
   margin: 0;
 }
@@ -824,18 +957,18 @@ div#toggleInputMenu {
 .credits-wrapper li {
   margin-bottom: 12px;
   line-height: 1.5;
-  color: #dedede;
+  color: var(--text-primary); /* Assuming a slightly lighter text for lists */
 }
 
 .credits-divider {
   border: 0;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--border-medium);
   margin: 15px 0;
 }
 
 /* Optional: Style your links to match a Genshin UI color palette */
 .credits-section a {
-  color: #0076f6; 
+  color: var(--link-default); 
   text-decoration: none;
 }
 
@@ -845,8 +978,8 @@ div#toggleInputMenu {
 
 .funny-subtext {
   display: block;
-  font-size: 0.85rem;
-  color: #9a9a9a; /* Subtle gray so it feels like a cheeky footnote */
+  font-size: 0.85rem; /* */
+  color: var(--text-subtle); /* Subtle gray so it feels like a cheeky footnote */
   margin-top: 3px;
   margin-bottom: 5px;
 }
@@ -879,14 +1012,14 @@ div#toggleInputMenu {
 
 .action-text {
   font-weight: 500;
-  background-color: #406419;
-  color: white;
+  background-color: var(--action-bg-success);
+  color: var(--color-white);
   padding: 2px 12px;
   border: none;
 }
-
+/* */
 #actionModeLabel {
-  color: white;
+  color: var(--color-white);
 }
 
 /* Message Hover Controls */
@@ -896,7 +1029,7 @@ div#toggleInputMenu {
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  max-width: calc(100% - 65px);
+  max-width: calc(80% - 65px);
 }
 
 .chat-message.sender .message-wrapper {
@@ -905,7 +1038,7 @@ div#toggleInputMenu {
 
 .message-name {
   font-size: 0.8em;
-  color: #666;
+  color: var(--color-gray-600);
   margin: 0 5px;
 }
 
@@ -926,14 +1059,15 @@ div#toggleInputMenu {
   gap: 4px;
   animation: fadeIn 0.2s ease-in;
   background: rgba(0, 0, 0, 0.7);
-  padding: 6px;
+  padding: 6px; /* */
   border-radius: 8px;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 5px;
   width: fit-content;
-  align-self: center;
+  position: absolute;
+  top: calc(100% + 6px);
+  z-index: 25;
 }
 
 .action-menu.hidden {
@@ -941,17 +1075,19 @@ div#toggleInputMenu {
 }
 
 .chat-message.sender .action-menu {
-  align-self: flex-end;
+  right: 0;
+  left: auto;
 }
 
 .chat-message.receiver .action-menu {
-  align-self: flex-start;
+  left: 0;
+  right: auto;
 }
 
 .action-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  color: var(--color-white);
   font-size: 1.1em;
   cursor: pointer;
   padding: 6px 10px;
@@ -998,7 +1134,7 @@ div#toggleInputMenu {
   margin-bottom: 20px;
   padding: 10px;
   background-color: var(--bg-tertiary, #3d4655);
-  border-radius: 8px;
+  border-radius: 8px; /* */
   color: var(--text-primary, #eceef5);
 }
 
@@ -1016,15 +1152,15 @@ div#toggleInputMenu {
   align-items: center;
   justify-content: space-between;
   background-color: var(--bg-secondary, #22283e);
-  border-radius: 6px;
+  border-radius: 6px; /* */
   padding: 5px;
 }
 
 .switcher-btn {
   background-color: var(--bg-tertiary, #3d4655);
-  color: white;
+  color: var(--color-white);
   border: none;
-  padding: 8px 15px;
+  padding: 8px 15px; /* */
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
@@ -1032,7 +1168,7 @@ div#toggleInputMenu {
 }
 
 .switcher-btn:hover {
-  background-color: var(--accent-blue, #2196f3);
+  background-color: var(--accent-blue);
 }
 
 .switcher-btn:active {
@@ -1072,32 +1208,40 @@ div#toggleInputMenu {
 
 .clear-btn {
   padding: 12px 16px;
-  background: #e74c3c;
-  color: white;
-  border: none;
+  background: var(--button-danger-bg);
+  color: var(--color-white);
+  border: none; /* */
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   font-family: "HYWenHei 85W", Arial, sans-serif !important;
   transition: background-color 0.3s ease, transform 0.2s ease;
-}
+} /* */
 
 .clear-btn:hover {
-  background: #c0392b;
+  background: var(--button-danger-hover-bg);
   transform: translateY(-2px);
 }
 
 .clear-btn:active {
   transform: translateY(0);
 }
-
-.clear-btn.export-btn {
-  background: #08e600;
+/* */
+.clear-btn.green-btn {
+  background: var(--button-success-bg);
 }
 
-.clear-btn.export-btn:hover {
-  background: #06b900;
+.clear-btn.green-btn:hover {
+  background: var(--button-success-hover-bg);
+}
+
+.clear-btn.yellow-btn {
+  background: var(--button-warning-bg);
+}
+
+.clear-btn.yellow-btn:hover {
+  background: var(--button-warning-hover-bg);
 }
 
 /* Utilities added for strict constraint adherence */
@@ -1111,7 +1255,7 @@ div#toggleInputMenu {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1); /* */
 }
 
 .saved-chat-name {
@@ -1120,7 +1264,7 @@ div#toggleInputMenu {
 }
 
 .saved-chat-del {
-  color: #ff4a4a;
+  color: var(--button-danger-bg); /* Using danger color for delete */
   background: none;
   border: none;
   cursor: pointer;
@@ -1129,4 +1273,4 @@ div#toggleInputMenu {
 .saved-chats-empty {
   color: #999;
   font-size: 14px;
-}
+} /* */
