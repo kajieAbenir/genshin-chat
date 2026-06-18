@@ -47,6 +47,12 @@
   --chat-avatar-receiver-border: #a3b3cc;
   --action-bg-success: #406419;
   --color-others: #a1a5b5;     /* Default greyish */
+  --button-danger-bg: #a54242;
+  --button-danger-hover-bg: #8f3535;
+  --button-success-bg: #3b6f3b;
+  --button-success-hover-bg: #2f5b2f;
+  --button-warning-bg: #9a6a1f;
+  --button-warning-hover-bg: #815713;
 }
 
 *, *::before, *::after {
@@ -502,6 +508,22 @@ body::-webkit-scrollbar-thumb {
   justify-content: space-between; /* ✅ spread input + buttons */
 }
 
+.type-action {
+  background: rgba(59, 111, 59, 0.92) !important;
+  color: white !important;
+}
+
+.type-timestamp {
+  background: rgba(154, 106, 31, 0.92) !important;
+  color: white !important;
+}
+
+/* Adjust placeholder for readability on dark colored inputs */
+.type-action::placeholder,
+.type-timestamp::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
 .chat-input input {
   flex: 1;
   padding: 10px;
@@ -638,6 +660,18 @@ input:checked + .slider:before {
   margin-left: 15px;
   color: var(--color-white);
   font-size: 0.9em;
+}
+
+.message-type-group input[type="radio"] {
+  accent-color: var(--accent-blue);
+}
+
+.chat-input.type-action .message-type-group input[type="radio"] {
+  accent-color: #8fe38f;
+}
+
+.chat-input.type-timestamp .message-type-group input[type="radio"] {
+  accent-color: #ffd36f;
 }
 
 .radio-label {
@@ -845,6 +879,7 @@ input:checked + .slider:before {
   font-weight: bold; /* */
   font-family: "HYWenHei 85W" !important;
   color: var(--color-black);
+  background-color: var(--color-white);
 
   transition: background-color 0.3s ease, color 0.3s ease;
 

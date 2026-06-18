@@ -590,6 +590,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleChatLabel = document.getElementById('toggleChat');
     const charSelector = document.getElementById('inputCharSelector');
     
+    // Update background color of the input field itself (#chat-input) based on type
+    const inputField = ChatMainElements.input;
+    if (inputField) {
+      inputField.classList.remove('type-message', 'type-action', 'type-timestamp');
+      if (msgType === 'text') inputField.classList.add('type-message');
+      else if (msgType === 'action') inputField.classList.add('type-action');
+      else if (msgType === 'timestamp') inputField.classList.add('type-timestamp');
+    }
+
     if (isText) {
       switchContainer?.classList.remove('hidden');
       toggleChatLabel?.classList.remove('hidden');
