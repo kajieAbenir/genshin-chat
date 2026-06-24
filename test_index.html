@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Export-to-Image Tests — test_index.html</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Helvetica,Arial; padding:16px}
+    .result.pass{color:green}
+    .result.fail{color:red}
+    pre{background:#f4f4f4;padding:8px;border-radius:4px;overflow:auto}
+    iframe{width:100%;height:700px;border:1px solid #ccc}
+    .controls{margin:12px 0}
+    button{padding:8px 12px}
+  </style>
+</head>
+<body>
+  <h2>Export-to-Image Tests</h2>
+  <p>Important: serve these files with a local static server (http://localhost:...) so iframe is same-origin.</p>
+
+  <div class="controls">
+    <button id="runTestsBtn">Run Tests</button>
+    <span id="status"></span>
+  </div>
+
+  <div id="results"></div>
+
+  <h3>Application iframe (index.html)</h3>
+  <iframe id="appFrame" src="index.html" title="app"></iframe>
+
+  <script>
+    function appendResult(name, pass, details){
+      const r = document.createElement('div');
+      r.className = 'result ' + (pass ? 'pass' : 'fail');
+      r.innerHTML = `<strong>${pass ? 'PASS' : 'FAIL'}</strong> — ${name}` + (details ? `<pre>${details}</pre>` : '');
+      document.getElementById('results').appendChild(r);
+      console.log(`${pass ? 'PASS' : 'FAIL'}: ${name}`, details || '');
+    }
+
+    async function waitFor(conditionFn, timeout = 5000, interval = 50){
+      const start = Date.now();
+      while (true){
+        try { if (await conditionFn()) return true; } catch(e) {}
+        if (Date.now() - start > timeout) return false;
+        await new Promise(r => setTimeout(r, interval));
+      }
+    }
+
+    document.getElementById('runTestsBtn').addEventListener('click', async () => {
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('status').textContent = 'Running...';
+
+      const iframe = document.getElementById('appFrame');
+
+      const loaded = await waitFor(() => {
+        return iframe.contentDocument && iframe.contentDocument.readyState === 'complete';
+      }, 8000);
+      if (!loaded){
+        appendResult('Iframe loaded', false, 'Timed out waiting for iframe to finish loading. Serve via http(s) to avoid cross-origin issues.');
+        document.getElementById('status').textContent = 'Done';
+        return;
+      }
+      appendResult('Iframe loaded', true);
+
+      const doc = iframe.contentDocument;
+      const win = iframe.contentWindow;
+
+      const hasHtml2Canvas = !!win.html2canvas;
+      appendResult('html2canvas available in iframe', hasHtml2Canvas, hasHtml2Canvas ? 'OK' : 'html2canvas not found. index.html includes CDN script; ensure network access.');
+
+      const exportBtn = doc.getElementById('exportChatBtn');
+      if (!exportBtn){
+        appendResult('Find export button (#exportChatBtn)', false, 'Button not present in iframe document.');
+        document.getElementById('status').textContent = 'Done';
+        return;
+      }
+      appendResult('Find export button (#exportChatBtn)', true);
+
+      try {
+        const chatMessages = doc.getElementById('chat-messages');
+        if (chatMessages){
+          chatMessages.innerHTML = '';
+          const makeMsg = (who, text) => {
+            const div = doc.createElement('div');
+            div.className = 'message-sample';
+            div.style.padding = '8px';
+            div.style.margin = '6px';
+            div.style.background = who === 'sender' ? '#e6f7ff' : '#fff7e6';
+            div.textContent = who + ': ' + text;
+            return div;
+          };
+          chatMessages.appendChild(makeMsg('sender','Hello! This is a test message.'));
+          chatMessages.appendChild(makeMsg('receiver','Hi — reply message with emoji 😊.'));
+          const imgWrap = doc.createElement('div');
+          imgWrap.style.margin = '6px';
+          const img = doc.createElement('img');
+          img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><rect fill="#cde" width="100%" height="100%"/><text x="10" y="40" font-size="20" fill="#222">sample img</text></svg>');
+          img.style.maxWidth = '200px';
+          imgWrap.appendChild(img);
+          chatMessages.appendChild(imgWrap);
+          appendResult('Populate sample chat content', true);
+        } else {
+          appendResult('Populate sample chat content', false, '#chat-messages not found in iframe.');
+        }
+      } catch(e){
+        appendResult('Populate sample chat content', false, String(e));
+      }
+
+      try {
+        if (exportBtn.dataset.testHandlerAttached !== '1'){
+          const targetEl = doc.getElementById('container') || doc.body;
+          const handler = async (ev) => {
+            try {
+              if (!win.html2canvas) {
+                const evt = new CustomEvent('export-complete', { detail: { success: false, reason: 'html2canvas-missing' }});
+                doc.dispatchEvent(evt);
+                return;
+              }
+              const canvas = await win.html2canvas(targetEl, {useCORS: true, backgroundColor: null});
+              const dataUrl = canvas.toDataURL('image/png');
+              try { win.open(dataUrl, '_blank'); } catch(e){}
+              const evt = new CustomEvent('export-complete', { detail: { success: true, dataUrlLength: dataUrl.length }});
+              doc.dispatchEvent(evt);
+            } catch (err) {
+              const evt = new CustomEvent('export-complete', { detail: { success: false, reason: String(err) }});
+              doc.dispatchEvent(evt);
+            }
+          };
+          exportBtn.addEventListener('click', handler);
+          exportBtn.dataset.testHandlerAttached = '1';
+        }
+        appendResult('Attach export handler (test harness)', true);
+      } catch(e){
+        appendResult('Attach export handler (test harness)', false, String(e));
+      }
+
+      let exportEventDetail = null;
+      const onExport = (e) => { exportEventDetail = e.detail; };
+      doc.addEventListener('export-complete', onExport);
+
+      try {
+        exportBtn.click();
+        appendResult('Trigger export button click', true);
+      } catch(e){
+        appendResult('Trigger export button click', false, String(e));
+      }
+
+      const got = await waitFor(() => exportEventDetail !== null, 10000);
+      if (!got){
+        appendResult('Export completes within timeout', false, 'No export-complete event fired. Check console in iframe for errors and ensure html2canvas loaded and CORS is satisfied.');
+        document.getElementById('status').textContent = 'Done';
+        return;
+      }
+
+      if (exportEventDetail && exportEventDetail.success){
+        const details = `dataUrlLength=${exportEventDetail.dataUrlLength}`;
+        appendResult('Export produced image data', true, details);
+      } else {
+        appendResult('Export produced image data', false, JSON.stringify(exportEventDetail));
+      }
+
+      doc.removeEventListener('export-complete', onExport);
+      document.getElementById('status').textContent = 'Done';
+    });
+  </script>
+</body>
+</html>

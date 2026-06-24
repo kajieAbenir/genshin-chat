@@ -1,24 +1,27 @@
 # Genshin Chat
 
-Make your next banger post here with Genshin Chat!
+Make your next banger post here with **Genshin Chat**!
 
-Create meme-worthy conversations between your favorite characters using the Genshin Impact chat interface we all are familiar with. Perfect for roleplays, interactions, or forcing another Cyno joke onto Tighnari. *(pls let him rest already ;-;)*
+Create meme-worthy conversations between your favorite characters using the Genshin Impact chat interface we all are familiar with. Perfect for roleplays, interactions, fake drama, or forcing another Cyno joke onto Tighnari. *(pls let him rest already ;-;)*
 
----
 
 ## 🌐 Live App
 
 Access the app here at [gi-chat.pages.dev](https://gi-chat.pages.dev)
 
----
 
 ### Version & Changes
 
-This is version **v1.0.0**. This version marks the **official** release for this app!
+This is version **v1.1.0**.
 
-*Please see the [changelog here](dev-docs/dev-notes/2026-06jun-03.md) on what was changed since last version.*
+*Please see the [changelog here](release-notes/v1-0-0_release-notes.md) on what was changed since last version.*
 
----
+
+## ⚠ Disclaimer
+
+Genshin Chat is a fan-made project and is not affiliated with or endorsed by HoYoverse.
+
+Genshin Impact and all related trademarks, assets, and characters belong to their respective owners.
 
 ## 📸 Screenshots
 
@@ -29,7 +32,9 @@ This is version **v1.0.0**. This version marks the **official** release for this
 ![Action Message](assets/screenshots/action-message.PNG)
 
 ### Edit Message
+Directly edit in the bubble by simply tapping the message.
 ![Edit Message](assets/screenshots/edit-message.PNG)
+![After Edit Message](assets/screenshots/edit-message-after.PNG)
 
 ### Character Search Feature
 Character-specific search
@@ -38,42 +43,82 @@ Character-specific search
 Region-specific search (first letters of the region already works)
 ![Region Specific Search](assets/screenshots/region-specific.PNG)
 
-#### Custom Character
+### Custom Character
 ![Acheron?](assets/screenshots/custom-character.PNG)
 
-#### Settings
+### Settings
 ![Settings](assets/screenshots/settings-pane.PNG)
-
----
 
 ## ⚙ Features
 
-- **Character Selection**: Choose from an extensive database of Genshin Impact characters as senders and receivers
-- **Custom Characters**: Add your own characters! Maybe you'll make Acheron lost in Teyvat...
-- **Conversation Features**: 
-  - Regular messages
-  - Action messages (e.g. "Xiao left the group")
-  - Editable and deletable lines! Hover over to a message and press pencil (edit) or trashbin (delete).
-- **Background Switcher**: Select different backgrounds from Genshin Impact regions
-- **Regional Theme Colors**: Character selections are color-coded  by region.
-- **Persistent Storage**: Your conversations are locally saved automatically.
-- **Responsive Design**: Works on desktop and mobile devices.
+### Character Selection
 
----
+- Pick a sender and receiver from the **playable roster** of Genshin Impact characters
+- Search characters by <u>name</u> or <u>region</u> — even typing the first few letters of a region works
+- Custom sender/receiver support if you want to bring in someone who isn't on the list *(yes, even Acheron)*
+  - Character icon upload support **up to 2MB**
+- Character selector shows a region-themed background to indicate nationality.
 
-## ❓ How to Use
+### Message Types
 
-1. **Select Receiver and Sender**: Click "Receiver"/"Sender" tab and choose a character, or enter a custom name and image.
-2. **Type Your Message**: Enter text in the message input box
-3. **Toggle Options**
-  - **Action Message**: For special roleplay-style messages (e.g. "Xiao left the group")
-  - **Sender/Receiver Switch**: Change who's sending the next message.
-4. **Send Message**: Press Enter or click the send button
-5. **Clear Conversation**: Start fresh whenever you want with the clear button
+Three message types to cover every situation:
+
+- `Message` — your standard chat bubble, left or right
+- `Action` — for roleplay-style system messages *(e.g. "Xiao has left the group", "Ei burned her kitchen")*
+- `Time` — timestamp-style dividers *(e.g. "- 6:07 AM -")* to split your conversations into chapters
+
+### Image Messages
+
+- Upload an image directly into the chat as a message
+- Supports image messages **up to 5MB**
+- Renders inside the chat thread
+
+### Chat Editing
+
+If you have an "oopsie" moment while editing, no worries. You have full control.
+
+- **Edit** — tap any bubble to edit it inline, right there
+- **Move** — reorder messages up or down the thread
+- **Switch** — flip who sent the message between sender and receiver
+- **Change Character** — reassign which character is tied to that specific message
+- **Delete** — remove messages you don't want anymore
+
+### Background & Appearance
+
+- **9 preset Genshin-style backgrounds** to set the scene:
+  - Domain, Mondstadt, Liyue, Inazuma, Sumeru, Sumeru Desert, Fontaine, Natlan, Nod-Krai
+- Upload a **custom background image** of your own (up to 2MB)
+- Adjust **UI text zoom** from 70% to 150% — readable on any screen
+- All appearance settings persist between sessions
+
+### Export to Image
+
+- Export the full chat as a screenshot-style **PNG** — title, background, and all
+- Uses *html2canvas* under the hood for a clean, full-fidelity capture
+- Ready to post, share, or save in your gallery
+
+### Saving & Sessions
+
+- Chats are **automatically saved** to your local browser to pick up where you left off
+- **Name and manually save** multiple chats to switch between them anytime if you want to load them anytime
+- **Load and delete** saved chats from the settings panel
+- A **tutorial/example chat** loads automatically on first visit so you know what you're doing
+
+
+## How To Use
+
+1. Choose a sender and receiver from the character list.
+2. Type your chat title if you want one *(tap the title text to edit it)*.
+3. Pick a message type:
+   - `Message`
+   - `Action`
+   - `Time`
+4. Type your text, or drop in an image when you're feeling extra.
+5. Press `Send` or hit `Enter`.
+6. Edit the message thread to fix wording, swap positions, switch senders, or just fix your own crimes.
+7. Export the final chat to image when you're done.
 
 All your conversations are automatically saved to your browser, so you can pick up where you left off anytime.
-
----
 
 ## 💻 Tech Stack
 
@@ -82,36 +127,25 @@ Built entirely using:
 - **CSS3** - Modern styling with theme variables
 - **Vanilla JavaScript** - No BS, just JS
 - **LocalStorage API** - For persistent conversation storage
+- **html2canvas** - For seamless chat exporting experience
 
 This means Genshin Chat is designed to be lightweight and faster than Genshin's loading screen!
-
----
 
 ## ✨ Why You'll Love It
 
 - **Massive Character Roster**: Up-to-date roster of Genshin Impact *playable* characters. (I have to emphasize that part).
-- **Complete Customization**: Perfect if you want to make Acheron lost to Teyvat...
+- **Chat Customization**: Perfect if you want to make Acheron lost to Teyvat...
 - **Familiar Wondrous Aesthetics**
   - The chat UI closely resembles the in-game interface.
-  - When selecting a character, its background will display the region's resemblance (e.g. Hu Tao's name will highlight dark gold because she's from Liyue)
-- **Easy to Share**: Just take a screenshot, and share it to your friends!
-- **Automatic Saving**: Your conversations are saved between sessions—they're never lost
-- **Action Messages**: Create special roleplay moments like "Xiao left the group" or "Ei burned her kitchen"
-- **Instant Fun**: No sign-ups, no ads. A pure passion project for fun and for the community.
-
----
+  - When selecting a character, its background will display the region's resemblance.
+- **Easy to Share**: Just press "Export to Image", and you're ready to share the next banger joke.
+- **Automatic Saving**: Your conversations are saved between sessions, so they're never lost.
+- **Action Messages**: Create special roleplay moments like *"Xiao left the group"* or *"Ei burned her kitchen"*
+- **Instant Fun**: No sign-ups, no ads. This is a pure passion project for fun and for the community.
 
 ## 🌐 Compatibility
 
-Works on all modern browsers, including phones & tablets. Straightforward as your gacha win streak 😬 (oops)
-
----
-
-## ⚠ Disclaimer
-
-Genshin Chat is a fan-made project and is not affiliated with or endorsed by HoYoverse.
-
-Genshin Impact and all related trademarks, assets, and characters belong to their respective owners.
+Works on all modern browsers, including phones and tablets. Straightforward as your gacha win streak 😬
 
 ## 📝 Notes
 
@@ -120,7 +154,9 @@ Genshin Impact and all related trademarks, assets, and characters belong to thei
 - **Lightweight**: Built with pure vanilla code for a fast, responsive experience.
 
 ### 🌧 On character selections...
-I acknowledge the following characters below that appeared in the game are not available as of this moment due to its unavailability of their corresponding **official** sprites. In the meantime, you can insert a custom image of them to portray as if they were available. Thanks!
+
+I acknowledge the following characters below that appeared in the game are not available as of this moment due to their missing **official** sprites. In the meantime, you can always use a custom image and pretend nothing happened. Thanks!
+
 - **Khaenri'ah**
   - Dainsleif
 - **Inazuma**
@@ -129,23 +165,31 @@ I acknowledge the following characters below that appeared in the game are not a
 - **Natlan**
   - Capitano
 
-### 🤔 Future Considerations?
-- **Export image**: Currently unavailable. I'm currently testing it how to make it better.
-- **Stickers**: As of this moment, we'll leave that button disabled. I'm still figuring out how and where should I import the whole 30+ SETS of Genshin chat stickers TwT)
+The following character/s is/are *temporarily* available, since we don't have sprites yet until this character is officially released.
 
----
+- **Sandrone** - July 1, 2026
+
+### 🤔 Future Considerations?
+
+- **Stickers**: Curated sticker packs are in testing right now. More chaos will arrive later.
 
 ## 📄 License
 
 This project is licensed under the MIT License.
-Please see the LICENSE file for details.
+Please see the `LICENSE` file for details.
 
-### 💭 Contribution
+## 💭 Contribution
 
 Found a bug or have a suggestion?
 
-Feel free to open an issue or submit a pull request. 
+Feel free to open an issue or submit a pull request.
 Feedback and suggestions are always welcome!
+
+## 📢 Promotions
+
+I am also promoting via the Facebook group "Angel's Share Bar and Resto"!
+
+![ASBR Screenshot](assets/screenshots/asbr-promo-post.png)
 
 ---
 

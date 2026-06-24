@@ -115,10 +115,7 @@
       "Iansan": "Iansan",
       "Ifa": "Ifa"
     },
-    "Snezhnaya": {
-      "Tartaglia": "Tartaglia",
-      "Columbina": "Columbina"
-    },
+    
     "Nod-Krai": {
       "Ineffa": "Ineffa",
       "Flins": "Flins",
@@ -131,11 +128,22 @@
       "Illuga": "Illuga",
       "Aino": "Aino",
       "Jahoda": "Jahoda",
-      "Zibai": "Zibai"
+      "Zibai": "Zibai",
+      "Gretel": "Gretel"
+    },
+    "Snezhnaya": {
+      "Tartaglia": "Tartaglia",
+      "Columbina": "Columbina",
+      "Sandrone": "Sandrone",
+      "Vodyanitsa": "Vodyanitsa",
+      "The Tsaritsa": "Tsaritsa"
     },
     "Celestia": {},
     "Khaenri'ah": {
       "Dainsleif": "Dainsleif"
+    },
+    "Hexenzirkel" : {
+      "Alice" : "Alice"
     },
     "Others": {
       "Aloy": "Aloy",

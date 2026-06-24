@@ -132,7 +132,7 @@
               <div class="settings-options">
                 <button id="loadTutorialBtn" type="button" class="clear-btn yellow-btn">Load Example Chat</button>
                 <button id="clearChatBtn" type="button" class="clear-btn">🗑️ Clear Chat</button>
-                <button id="exportChatBtn" type="button" class="clear-btn green-btn" disabled>📸 Export to Image (Coming Soon)</button>
+                <button id="exportChatBtn" type="button" class="clear-btn green-btn">📸 Export to Image</button>
               </div>
             </div>
 
@@ -142,8 +142,8 @@
               <div class="credits-wrapper">
                 <section class="credits-section text-center">
                   <h3>Genshin Chat</h3>
-                  <p class="version-tag"><strong>Version:</strong> 1.0.0</p>
-                  <p class="date-tag"><strong>Release Date:</strong> Hey June</p>
+                  <p class="version-tag"><strong>Version:</strong> 1.1.0</p>
+                  <p class="date-tag"><strong>Release Date:</strong> June 24, 2026</p>
                 </section>
 
                 <hr class="credits-divider">
@@ -243,7 +243,7 @@
         <!-- chat messages -->
         <div class="chat-messages" id="chat-messages"></div>
 
-        <div id="toggleInputMenu">
+        <div id="toggleInputMenu" class="hidden">
           <button type="button" id="toggleInputBtn">
             Hide
           </button>
@@ -264,7 +264,12 @@
             spellcheck="false"
             autocomplete="off"
           />
-          <button id="inputList" type="button">😊</button>
+          <button id="messageImageBtn" type="button" aria-label="Add image message">🖼️</button>
+          <input type="file" id="message-image-upload" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" />
+          <label for="message-image-upload" class="hidden">Insert Image as Message</label>
+          <!-- DISABLED FOR NOW -->
+          <button disabled id="inputList" type="button" aria-label="Open stickers">😊</button>
+          <div id="stickerPicker" class="sticker-picker hidden" aria-label="Sticker picker"></div>
           <button
             type="button"
             id="send"

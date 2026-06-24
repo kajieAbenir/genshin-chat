@@ -2,9 +2,10 @@ import { ChatMainElements, ChatNameElements, inputSection, CustomCharElements, C
 import { hasInputValue, logError, debounce } from "./helper-functions.js";
 import { disableElement, enableElement, showElement, hideElement, addActiveViaDataTab, removeActiveViaDataTab } from "./app-style.js";
 import { addConversation, showCharList, setCustomCharacter } from "./main-script.js";
-import { clearMessages, saveCurrentChat, loadChat, deleteSavedChat, getSavedChats, editMessage, getMessages, loadTutorialChat, markTutorialSeen } from "./message-manager.js";
+import { clearMessages, saveCurrentChat, loadChat, deleteSavedChat, getSavedChats, editMessage, getMessages, loadTutorialChat, markTutorialSeen, addMessage, generateUUID } from "./message-manager.js";
 import { renderMessages } from "./message-renderer.js";
 import { onStateChange, getReceiver, getSender } from "./app-state.js";
+import { getStickerDefs, getStickerById, makeStickerSvgDataUrl } from "./sticker-data.js";
 
 /* EVENT LISTENERS */
 
@@ -49,6 +50,127 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function buildStickerPicker() {
+    const picker = document.getElementById('stickerPicker');
+    if (!picker || picker.dataset.ready === 'true') return picker;
+
+    const stickers = getStickerDefs();
+    picker.innerHTML = `
+      <div class="sticker-picker-header">
+        <button type="button" class="sticker-nav-btn" data-dir="prev" aria-label="Previous stickers">‹</button>
+        <div class="sticker-strip"></div>
+        <button type="button" class="sticker-nav-btn" data-dir="next" aria-label="Next stickers">›</button>
+      </div>
+      <div class="sticker-grid"></div>
+      <div class="sticker-picker-footer">
+        <button type="button" class="sticker-custom-btn">Custom Sticker</button>
+      </div>
+    `;
+
+    const strip = picker.querySelector('.sticker-strip');
+    const grid = picker.querySelector('.sticker-grid');
+    const renderStrip = (startIndex = 0) => {
+      if (!strip) return;
+      strip.innerHTML = '';
+      const featuredSet = [];
+      for (let i = 0; i < 3; i += 1) {
+        featuredSet.push(stickers[(startIndex + i) % stickers.length]);
+      }
+
+      featuredSet.forEach(sticker => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'sticker-strip-item';
+        btn.dataset.stickerId = sticker.id;
+        btn.title = sticker.label;
+        const img = document.createElement('img');
+        img.src = makeStickerSvgDataUrl(sticker);
+        img.alt = sticker.label;
+        btn.appendChild(img);
+        strip.appendChild(btn);
+      });
+      picker.dataset.featureStart = String(startIndex);
+    };
+
+    renderStrip(0);
+
+    stickers.forEach(sticker => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'sticker-option';
+      btn.dataset.stickerId = sticker.id;
+      btn.title = sticker.label;
+      const img = document.createElement('img');
+      img.src = makeStickerSvgDataUrl(sticker);
+      img.alt = sticker.label;
+      btn.appendChild(img);
+      grid?.appendChild(btn);
+    });
+
+    picker.dataset.ready = 'true';
+    return picker;
+  }
+
+  function closeStickerPicker() {
+    const picker = document.getElementById('stickerPicker');
+    picker?.classList.add('hidden');
+  }
+
+  function toggleStickerPicker() {
+    const picker = buildStickerPicker();
+    if (!picker) return;
+    picker.classList.toggle('hidden');
+  }
+
+  function getCurrentMessageSenderPair() {
+    const receiverState = getReceiver();
+    const senderState = getSender();
+    const isSender = ChatMainElements.sendSwitch?.checked || false;
+    return { receiverState, senderState, isSender };
+  }
+
+  function addStickerMessage(stickerId, imageData = null, label = null) {
+    const { receiverState, senderState, isSender } = getCurrentMessageSenderPair();
+    const sticker = stickerId === 'custom'
+      ? { id: 'custom', label: label || 'Custom Sticker' }
+      : getStickerById(stickerId);
+    addMessage({
+      id: generateUUID(),
+      type: 'sticker',
+      sender: senderState.name,
+      senderImage: senderState.image,
+      receiver: receiverState.name,
+      receiverImage: receiverState.image,
+      isSender,
+      text: '',
+      imageData: imageData,
+      stickerId: sticker.id,
+      createdAt: new Date().toISOString(),
+      editedAt: null
+    });
+    renderMessages();
+    closeStickerPicker();
+  }
+
+  function addImageMessage(dataUrl) {
+    const { receiverState, senderState, isSender } = getCurrentMessageSenderPair();
+    addMessage({
+      id: generateUUID(),
+      type: 'image',
+      sender: senderState.name,
+      senderImage: senderState.image,
+      receiver: receiverState.name,
+      receiverImage: receiverState.image,
+      isSender,
+      text: '',
+      imageData: dataUrl,
+      stickerId: null,
+      createdAt: new Date().toISOString(),
+      editedAt: null
+    });
+    renderMessages();
+  }
+
   // 1. Enter Key Listener
   if (ChatMainElements.input) {
     ChatMainElements.input.addEventListener("keydown", function (e) {
@@ -66,6 +188,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // 2. Chat Input Change Listener
   if (ChatMainElements.input) {
     ChatMainElements.input.addEventListener("input", function () {
+      const checkedEl = ChatMainElements.msgTypeChecked;
+      const msgType = checkedEl ? checkedEl.value : 'text';
       if (hasInputValue() === false) {
         disableElement(ChatMainElements.sendBtn);
       } else {
@@ -248,36 +372,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 14. Export Chat Button
   if (SettingsElements.exportChatBtn) {
-    SettingsElements.exportChatBtn.addEventListener('click', function() {
-      const chatMessages = document.getElementById('chat-messages');
-      if (chatMessages && window.html2canvas) {
-        // Hide scrollbar and expand height to capture full chat
-        chatMessages.classList.add('export-mode');
-
-        html2canvas(chatMessages, {
-          backgroundColor: '#22283e',
-          useCORS: true,
-          scale: 2 // High-res export
-        }).then(canvas => {
-          // Restore styles
-          chatMessages.classList.remove('export-mode');
-
-          const link = document.createElement('a');
-          link.download = 'genshin-chat-export.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        }).catch(err => {
-          console.error('Error exporting chat:', err);
-          chatMessages.classList.remove('export-mode');
-        });
-      } else {
+    SettingsElements.exportChatBtn.addEventListener('click', async function() {
+      const exportTarget = document.getElementById('container');
+      if (!exportTarget || !window.html2canvas) {
         alert("Error: html2canvas is not loaded.");
+        return;
+      }
+
+      const activeBg = getComputedStyle(document.documentElement).getPropertyValue('--active-bg').trim();
+
+      try {
+        if (document.fonts?.ready) {
+          await document.fonts.ready;
+        }
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+        const canvas = await html2canvas(exportTarget, {
+          backgroundColor: '#1e2235',
+          useCORS: true,
+          scale: 2,
+          onclone: (clonedDoc) => {
+            const clonedContainer = clonedDoc.getElementById('container');
+            if (!clonedContainer) return;
+            clonedContainer.classList.add('export-mode');
+            clonedDoc.documentElement.style.setProperty('--active-bg', activeBg || 'none');
+            clonedDoc.body.style.background = 'transparent';
+          }
+        });
+
+        const link = document.createElement('a');
+        link.download = 'genshin-chat-export.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error('Error exporting chat:', err);
+        alert('Error exporting chat image. Check the console for details.');
       }
     });
   }
 
-  function validateImageFile(file) {
-    const MAX_SIZE = 2048 * 1024; // 2 MB limit
+  function validateCharacterOrBackgroundImage(file) {
+    const MAX_SIZE = 2048 * 1024;
     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     
     if (!ALLOWED_TYPES.includes(file.type)) {
@@ -291,12 +426,27 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
+  function validateMessageImageFile(file) {
+    const MAX_SIZE = 5 * 1024 * 1024;
+    const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      alert('Please upload a valid message image (PNG, JPEG, or WebP)');
+      return false;
+    }
+    if (file.size > MAX_SIZE) {
+      alert('Message images must be smaller than 5.00 MB');
+      return false;
+    }
+    return true;
+  }
+
   // 15. Custom Character Uploads
   if (CustomCharElements.applyReceiver) {
     CustomCharElements.applyReceiver.addEventListener('click', () => {
       const name = CustomCharElements.receiverName.value;
       const file = CustomCharElements.receiverImg.files[0];
-      if (file && validateImageFile(file))  {
+      if (file && validateCharacterOrBackgroundImage(file))  {
         const reader = new FileReader();
         reader.onload = (e) => setCustomCharacter('receiver', name, e.target.result);
         reader.readAsDataURL(file);
@@ -311,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
     CustomCharElements.applySender.addEventListener('click', () => {
       const name = CustomCharElements.senderName.value;
       const file = CustomCharElements.senderImg.files[0];
-      if (file) {
+      if (file && validateCharacterOrBackgroundImage(file)) {
         const reader = new FileReader();
         reader.onload = (e) => setCustomCharacter('sender', name, e.target.result);
         reader.readAsDataURL(file);
@@ -367,7 +517,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateUiScale() {
     // Clamp between 0.7 and 1.5
     currentUiScale = Math.max(0.7, Math.min(1.5, currentUiScale));
-    document.documentElement.style.setProperty('--ui-scale', currentUiScale.toString());
+    document.documentElement.style.setProperty('--text-scale', currentUiScale.toString());
     if (UIScalingElements.fontScaleLabel) {
       UIScalingElements.fontScaleLabel.textContent = Math.round(currentUiScale * 100) + "%";
     }
@@ -405,7 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (SettingsElements.customBgUpload) {
     SettingsElements.customBgUpload.addEventListener('change', function() {
       const file = this.files[0];
-      if (file && validateImageFile(file)) {
+      if (file && validateCharacterOrBackgroundImage(file)) {
         const reader = new FileReader();
         reader.onload = function(e) {
           const dataUrl = e.target.result;
@@ -570,13 +720,98 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 16b. Sticker/Emoji button – placeholder alert
+  // 16b. Sticker picker
   const emojiBtn = document.getElementById('inputList');
   if (emojiBtn) {
-    emojiBtn.addEventListener('click', () => {
-      alert('Sticker and emoji picker coming soon!');
+    buildStickerPicker();
+    emojiBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleStickerPicker();
     });
   }
+
+  const messageImageBtn = document.getElementById('messageImageBtn');
+  const messageImageInput = document.getElementById('message-image-upload');
+  if (messageImageBtn && messageImageInput) {
+    messageImageBtn.addEventListener('click', () => {
+      messageImageInput.value = '';
+      messageImageInput.click();
+    });
+
+    messageImageInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      if (!validateMessageImageFile(file)) {
+        this.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        addImageMessage(e.target.result);
+        disableElement(ChatMainElements.sendBtn);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+    const stickerPicker = document.getElementById('stickerPicker');
+  if (stickerPicker) {
+    stickerPicker.addEventListener('click', (e) => {
+      const customBtn = e.target.closest('.sticker-custom-btn');
+      const stripBtn = e.target.closest('.sticker-strip-item');
+      const btn = e.target.closest('.sticker-option');
+      const navBtn = e.target.closest('.sticker-nav-btn');
+
+      if (customBtn) {
+        return;
+      }
+
+      if (stripBtn) {
+        addStickerMessage(stripBtn.dataset.stickerId);
+        return;
+      }
+
+      if (btn) {
+        addStickerMessage(btn.dataset.stickerId);
+        return;
+      }
+
+      if (navBtn) {
+        const currentStart = parseInt(stickerPicker.dataset.featureStart || '0', 10);
+        const delta = navBtn.dataset.dir === 'prev' ? -1 : 1;
+        const stickers = getStickerDefs();
+        const nextStart = (currentStart + delta + stickers.length) % stickers.length;
+        stickerPicker.dataset.featureStart = String(nextStart);
+        const strip = stickerPicker.querySelector('.sticker-strip');
+        if (strip) {
+          strip.innerHTML = '';
+          for (let i = 0; i < 3; i += 1) {
+            const sticker = stickers[(nextStart + i) % stickers.length];
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'sticker-strip-item';
+            btn.dataset.stickerId = sticker.id;
+            btn.title = sticker.label;
+            const img = document.createElement('img');
+            img.src = makeStickerSvgDataUrl(sticker);
+            img.alt = sticker.label;
+            btn.appendChild(img);
+            strip.appendChild(btn);
+          }
+        }
+        return;
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const picker = document.getElementById('stickerPicker');
+    if (!picker) return;
+    if (picker.classList.contains('hidden')) return;
+    if (picker.contains(e.target) || e.target === emojiBtn) return;
+    closeStickerPicker();
+  });
 
   // 17. Hide character selector and sender/receiver switch for non-message types
   // Also update placeholder text based on message type
@@ -584,11 +819,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateContextualInputs = () => {
     const checkedEl = ChatMainElements.msgTypeChecked;
     const msgType = checkedEl ? checkedEl.value : 'text';
-    const isText = msgType === 'text';
+    const showSenderControls = msgType === 'text';
     
     const switchContainer = ChatMainElements.sendSwitch ? ChatMainElements.sendSwitch.closest('.switch') : null;
     const toggleChatLabel = document.getElementById('toggleChat');
     const charSelector = document.getElementById('inputCharSelector');
+    const emojiButton = document.getElementById('inputList');
+    const messageImageButton = document.getElementById('messageImageBtn');
+    const stickerPicker = document.getElementById('stickerPicker');
     
     // Update background color of the input field itself (#chat-input) based on type
     const inputField = ChatMainElements.input;
@@ -599,7 +837,13 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (msgType === 'timestamp') inputField.classList.add('type-timestamp');
     }
 
-    if (isText) {
+    emojiButton?.classList.toggle('hidden', msgType !== 'text');
+    messageImageButton?.classList.toggle('hidden', msgType !== 'text');
+    if (msgType !== 'text') {
+      stickerPicker?.classList.add('hidden');
+    }
+
+    if (showSenderControls) {
       switchContainer?.classList.remove('hidden');
       toggleChatLabel?.classList.remove('hidden');
       charSelector?.classList.remove('hidden');
@@ -610,6 +854,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ChatMainElements.sendSwitch) {
         ChatMainElements.sendSwitch.checked = false;
       }
+    }
+
+    if (ChatMainElements.sendBtn) {
+      ChatMainElements.sendBtn.disabled = !hasInputValue();
     }
 
     // Dynamic placeholder based on message type

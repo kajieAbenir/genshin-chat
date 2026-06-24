@@ -77,6 +77,8 @@ export function addConversation() {
     receiverImage: receiverState.image,
     isSender: isSender,
     text: messageText,
+    imageData: null,
+    stickerId: null,
     createdAt: new Date().toISOString(),
     editedAt: null
   };

@@ -2,7 +2,6 @@ node_modules
 .vscode
 .qodo
 .continue
-test-image-urls.js
+.agents
 AI-PROMPT-RULES.md
-TEST-CHECKLIST.md
-7-jun-2026-next_steps.md
+test_index.html

@@ -22,11 +22,22 @@ function isValidMessageArray(messages) {
 }
 
 function setMessages(nextMessages, shouldPersist = true) {
-  messagesArray = Array.isArray(nextMessages) ? nextMessages : [];
+  messagesArray = Array.isArray(nextMessages) ? nextMessages.map(normalizeMessageObject) : [];
   if (shouldPersist) {
     saveMessages();
   }
   return messagesArray;
+}
+
+function normalizeMessageObject(message) {
+  if (!message || typeof message !== 'object') {
+    return message;
+  }
+  return {
+    imageData: null,
+    stickerId: null,
+    ...message
+  };
 }
 
 export function initMessages() {
@@ -35,7 +46,7 @@ export function initMessages() {
   
   try {
     const parsed = JSON.parse(saved);
-    messagesArray = Array.isArray(parsed) ? parsed : [];
+    messagesArray = Array.isArray(parsed) ? parsed.map(normalizeMessageObject) : [];
   } catch (error) {
     console.error('Failed to parse messages from localStorage:', error);
     // Backup corrupted data
@@ -48,7 +59,7 @@ export function initMessages() {
 
 export function addMessage(messageObj) {
   // messageObj: { type, sender, receiver, text/action, createdAt }
-  messagesArray.push(messageObj);
+  messagesArray.push(normalizeMessageObject(messageObj));
   saveMessages();
   return messageObj;
 }

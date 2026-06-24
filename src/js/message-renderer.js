@@ -1,9 +1,13 @@
 import { deleteMessage, editMessage, getMessages, moveMessageUp, moveMessageDown, switchMessageSender, updateMessageCharacter } from './message-manager.js';
 import { getReceiver, getSender } from './app-state.js';
+import { getStickerById, makeStickerSvgDataUrl } from './sticker-data.js';
 
 export function renderMessages() {
   const container = document.getElementById("chat-messages");
   if (!container) return;
+  const previousScrollTop = container.scrollTop;
+  const previousScrollHeight = container.scrollHeight;
+  const isNearBottom = previousScrollHeight - previousScrollTop - container.clientHeight < 80;
 
   container.innerHTML = '';
 
@@ -13,7 +17,13 @@ export function renderMessages() {
     container.appendChild(messageElement);
   });
 
-  container.scrollTop = container.scrollHeight;
+  container.appendChild(createThreadControlMessage());
+
+  if (isNearBottom) {
+    container.scrollTop = container.scrollHeight;
+  } else {
+    container.scrollTop = previousScrollTop;
+  }
   ensureActionHandlers();
 }
 
@@ -52,6 +62,109 @@ function createMessageElement(msg) {
     messageElement.appendChild(timeText);
     attachActionMenu(messageElement, msg);
     wireRevealTrigger(timeText, actionMenuToggleBehavior);
+  } else if (msg.type === 'sticker') {
+    messageElement.classList.add(msg.isSender ? "sender" : "receiver");
+
+    const avatarElement = document.createElement('img');
+    avatarElement.classList.add('chat-image');
+    avatarElement.src = msg.isSender ? msg.senderImage : msg.receiverImage;
+    avatarElement.alt = msg.isSender ? msg.sender : msg.receiver;
+
+    avatarElement.onerror = () => {
+      avatarElement.src = './src/char-img/default.png';
+      avatarElement.onerror = null;
+    };
+
+    const messageWrapper = document.createElement("div");
+    messageWrapper.classList.add("message-wrapper");
+
+    const messageName = document.createElement("div");
+    messageName.classList.add("message-name");
+    messageName.textContent = msg.isSender ? msg.sender : msg.receiver;
+
+    const bubbleRow = document.createElement("div");
+    bubbleRow.classList.add("bubble-row");
+
+    const stickerCard = document.createElement("div");
+    stickerCard.classList.add("chat-bubble", "sticker-bubble");
+
+    const stickerDef = getStickerById(msg.stickerId);
+    const stickerLabel = msg.stickerId === 'custom' ? 'Custom Sticker' : stickerDef.label;
+    const stickerImage = document.createElement("img");
+    stickerImage.classList.add("sticker-image");
+    stickerImage.src = msg.stickerId === 'custom' && msg.imageData
+      ? msg.imageData
+      : makeStickerSvgDataUrl(stickerDef);
+    stickerImage.alt = stickerLabel;
+    stickerCard.appendChild(stickerImage);
+    bubbleRow.appendChild(stickerCard);
+    messageWrapper.appendChild(messageName);
+    messageWrapper.appendChild(bubbleRow);
+    if (msg.isSender) {
+      messageElement.appendChild(messageWrapper);
+      messageElement.appendChild(avatarElement);
+    } else {
+      messageElement.appendChild(avatarElement);
+      messageElement.appendChild(messageWrapper);
+    }
+
+    avatarElement.setAttribute("role", "button");
+    avatarElement.setAttribute("tabindex", "0");
+    avatarElement.setAttribute("aria-label", "Show message actions");
+    attachActionMenu(messageElement, msg);
+  } else if (msg.type === 'image') {
+    messageElement.classList.add(msg.isSender ? "sender" : "receiver");
+
+    const avatarElement = document.createElement('img');
+    avatarElement.classList.add('chat-image');
+    avatarElement.src = msg.isSender ? msg.senderImage : msg.receiverImage;
+    avatarElement.alt = msg.isSender ? msg.sender : msg.receiver;
+
+    avatarElement.onerror = () => {
+      avatarElement.src = './src/char-img/default.png';
+      avatarElement.onerror = null;
+    };
+
+    const imageElement = document.createElement('img');
+    imageElement.classList.add('chat-message-image');
+    imageElement.src = msg.imageData;
+    imageElement.alt = msg.text || 'Message image';
+
+    imageElement.onerror = () => {
+      imageElement.src = './src/char-img/default.png';
+      imageElement.onerror = null;
+    };
+
+    const messageWrapper = document.createElement("div");
+    messageWrapper.classList.add("message-wrapper");
+
+    const messageName = document.createElement("div");
+    messageName.classList.add("message-name");
+    messageName.textContent = msg.isSender ? msg.sender : msg.receiver;
+
+    const bubbleRow = document.createElement("div");
+    bubbleRow.classList.add("bubble-row");
+
+    const bubbleElement = document.createElement("div");
+    bubbleElement.classList.add("chat-bubble", "image-bubble");
+
+    bubbleElement.appendChild(imageElement);
+    bubbleRow.appendChild(bubbleElement);
+    messageWrapper.appendChild(messageName);
+    messageWrapper.appendChild(bubbleRow);
+
+    if (msg.isSender) {
+      messageElement.appendChild(messageWrapper);
+      messageElement.appendChild(avatarElement);
+    } else {
+      messageElement.appendChild(avatarElement);
+      messageElement.appendChild(messageWrapper);
+    }
+
+    avatarElement.setAttribute("role", "button");
+    avatarElement.setAttribute("tabindex", "0");
+    avatarElement.setAttribute("aria-label", "Show message actions");
+    attachActionMenu(messageElement, msg);
   } else {
     messageElement.classList.add(msg.isSender ? "sender" : "receiver");
 
@@ -127,7 +240,7 @@ function attachActionMenu(element, msg) {
 
   element.appendChild(actionMenu);
 
-  const toggleTarget = element.querySelector('.chat-image');
+  const toggleTarget = element.querySelector('.chat-image, .chat-message-image, .sticker-image');
   if (toggleTarget) {
     toggleTarget.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -140,6 +253,28 @@ function attachActionMenu(element, msg) {
       }
     });
   }
+}
+
+function createThreadControlMessage() {
+  const control = document.createElement('div');
+  control.classList.add('chat-message', 'thread-control-message');
+  control.innerHTML = `
+    <button type="button" id="threadToggleBtn" class="thread-toggle-btn">Hide</button>
+  `;
+
+  const btn = control.querySelector('#threadToggleBtn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const upper = document.getElementById('chatInputUpper');
+      const lower = document.getElementById('chatInputLower');
+      if (!upper || !lower) return;
+      upper.classList.toggle('hidden');
+      lower.classList.toggle('hidden');
+      btn.textContent = upper.classList.contains('hidden') ? 'Show' : 'Hide';
+    });
+  }
+
+  return control;
 }
 
 function toggleActionMenu(actionMenu) {
