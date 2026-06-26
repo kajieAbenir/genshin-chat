@@ -5,3 +5,4 @@ node_modules
 .agents
 AI-PROMPT-RULES.md
 test_index.html
+test_api.html

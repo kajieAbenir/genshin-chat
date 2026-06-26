@@ -502,6 +502,9 @@ body::-webkit-scrollbar-thumb {
   border-radius: 20px;
   position: relative;
   font-size: inherit;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Specific style for sender bubble */
@@ -1340,7 +1343,7 @@ input:checked + .slider:before {
 }
 
 .chat-message-image {
-  max-width: min(320px, 70vw);
+  max-width: min(250px, 60vw);
   width: 100%;
   height: auto;
   border-radius: 16px;
@@ -1688,5 +1691,52 @@ input:checked + .slider:before {
 
   .sticker-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Chat Input Responsiveness */
+  .chat-input {
+    padding: 8px 4px 0;
+  }
+
+  .chat-input input {
+    min-width: 0; /* Allows flex-shrink to work properly */
+    padding: 8px;
+  }
+
+  .chat-input button {
+    margin: 0 3px;
+    padding: 8px 10px;
+    font-size: calc(14px * var(--text-scale));
+  }
+
+  .chat-input button#inputList {
+    min-width: 38px;
+    padding: 8px;
+  }
+
+  #chatInputLower {
+    flex-wrap: wrap; /* Allow wrapping on narrow screens */
+    justify-content: center;
+    gap: 8px 6px;
+    padding-bottom: 8px;
+  }
+
+  .message-type-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 0;
+    gap: 8px;
+  }
+
+  /* Floating Window Responsiveness */
+  .floating-content {
+    min-width: 90%;
+    width: 95%;
+    max-width: 95%;
+    padding: 15px;
+  }
+
+  .charlist {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   }
 }

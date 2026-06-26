@@ -47,3 +47,36 @@ export function getCharacterIconURL(apiSlug) {
   const resolvedSlug = slugMap[apiSlug] || apiSlug;
   return `https://gi.yatta.moe/assets/UI/UI_AvatarIcon_${resolvedSlug}.png`;
 }
+
+export function getLocalCharacterIconURL(characterName, characterData) {
+  if (!characterData || !characterData.characters || !characterName) {
+    return "./src/char-img/default.png";
+  }
+
+  const nationCodes = {
+    "MC": "mc",
+    "Mondstadt": "00",
+    "Liyue": "01",
+    "Inazuma": "02",
+    "Sumeru": "03",
+    "Fontaine": "04",
+    "Natlan": "05",
+    "Snezhnaya": "06",
+    "Khaenri'ah": "07",
+    "Others": "08",
+    "Skins": "skins",
+    "Non-Playable": "non-playable"
+  };
+
+  for (const region in characterData.characters) {
+    if (characterData.characters[region].hasOwnProperty(characterName)) {
+      const code = nationCodes[region];
+      if (code) {
+        const normalizedName = characterName.replace(/\s/g, '_').toLowerCase();
+        return `./src/char-img/fallback/${code}-${normalizedName}.png`;
+      }
+    }
+  }
+
+  return "./src/char-img/default.png";
+}

@@ -99,8 +99,7 @@
       "Lynette": "Linette",
       "Freminet": "Freminet",
       "Charlotte": "Charlotte",
-      "Chevreuse": "Chevreuse",
-      "Arlecchino": "Arlecchino"
+      "Chevreuse": "Chevreuse"
     },
     "Natlan": {
       "Mualani": "Mualani",
@@ -111,7 +110,7 @@
       "Mavuika": "Mavuika",
       "Varesa": "Varesa",
       "Kachina": "Kachina",
-      "Ororon": "Oloron",
+      "Ororon": "Olorun",
       "Iansan": "Iansan",
       "Ifa": "Ifa"
     },
@@ -128,15 +127,25 @@
       "Illuga": "Illuga",
       "Aino": "Aino",
       "Jahoda": "Jahoda",
-      "Zibai": "Zibai",
-      "Gretel": "Gretel"
+      "Zibai": "Zibai"
     },
     "Snezhnaya": {
       "Tartaglia": "Tartaglia",
       "Columbina": "Columbina",
       "Sandrone": "Sandrone",
+      "Arlecchino": "Arlecchino",
+      "Pulcinella": "Pulcinella",
+      "Pantalone": "Pantalone",
+      "Pierro": "Pierro",
+      "The Tsaritsa": "Tsaritsa",
       "Vodyanitsa": "Vodyanitsa",
-      "The Tsaritsa": "Tsaritsa"
+      "Alyosha": "Alyosha",
+      "Noy": "Noy",
+      "Mitya": "Mitya",
+      "Vesna": "Vesna",
+      "Danica": "Danica",
+      "Odette": "Odette",
+      "Valeriy": "Valeriy"
     },
     "Celestia": {},
     "Khaenri'ah": {
@@ -147,12 +156,13 @@
     },
     "Others": {
       "Aloy": "Aloy",
-      "Skirk": "Skirk"
+      "Skirk": "SkirkNew"
     },
     "Non-Playable": {
       "Scaramouche": "Scaramouche",
-      "Signora": "Signora",
-      "Capitano": "Capitano"
+      "La Signora": "La_Signora",
+      "Capitano": "Capitano",
+      "Dottore": "Dottore"
     }
   }
 }

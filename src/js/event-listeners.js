@@ -6,6 +6,7 @@ import { clearMessages, saveCurrentChat, loadChat, deleteSavedChat, getSavedChat
 import { renderMessages } from "./message-renderer.js";
 import { onStateChange, getReceiver, getSender } from "./app-state.js";
 import { getStickerDefs, getStickerById, makeStickerSvgDataUrl } from "./sticker-data.js";
+import { getJSONList, getLocalCharacterIconURL } from "./api.js";
 
 /* EVENT LISTENERS */
 
@@ -653,11 +654,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeChar = isSender ? getSender() : getReceiver();
     
     avatarImg.src = activeChar.image || './src/char-img/default.png';
-    avatarImg.alt = activeChar.name || 'Active Character';
+    const charName = activeChar.name || 'Active Character';
+    avatarImg.alt = charName;
+    avatarImg.setAttribute('data-char-name', charName);
     
-    avatarImg.onerror = () => {
-      avatarImg.src = './src/char-img/default.png';
-      avatarImg.onerror = null;
+    avatarImg.onerror = async () => {
+      const name = avatarImg.getAttribute('data-char-name');
+      if (name && name !== 'Active Character') {
+        const list = await getJSONList();
+        const fallbackSrc = getLocalCharacterIconURL(name, list);
+        avatarImg.onerror = () => {
+          avatarImg.src = './src/char-img/default.png';
+          avatarImg.onerror = null;
+        };
+        avatarImg.src = fallbackSrc;
+      } else {
+        avatarImg.src = './src/char-img/default.png';
+        avatarImg.onerror = null;
+      }
     };
 
     // Set custom styles/classes on wrapper button for frame styling

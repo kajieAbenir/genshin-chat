@@ -1,7 +1,7 @@
 import { deleteMessage, editMessage, getMessages, moveMessageUp, moveMessageDown, switchMessageSender, updateMessageCharacter } from './message-manager.js';
 import { getReceiver, getSender } from './app-state.js';
 import { getStickerById, makeStickerSvgDataUrl } from './sticker-data.js';
-
+import { getJSONList, getLocalCharacterIconURL } from './api.js';
 export function renderMessages() {
   const container = document.getElementById("chat-messages");
   if (!container) return;
@@ -68,11 +68,24 @@ function createMessageElement(msg) {
     const avatarElement = document.createElement('img');
     avatarElement.classList.add('chat-image');
     avatarElement.src = msg.isSender ? msg.senderImage : msg.receiverImage;
-    avatarElement.alt = msg.isSender ? msg.sender : msg.receiver;
+    const charName = msg.isSender ? msg.sender : msg.receiver;
+    avatarElement.alt = charName;
+    avatarElement.setAttribute('data-char-name', charName);
 
-    avatarElement.onerror = () => {
-      avatarElement.src = './src/char-img/default.png';
-      avatarElement.onerror = null;
+    avatarElement.onerror = async () => {
+      const name = avatarElement.getAttribute('data-char-name');
+      if (name) {
+        const list = await getJSONList();
+        const fallbackSrc = getLocalCharacterIconURL(name, list);
+        avatarElement.onerror = () => {
+          avatarElement.src = './src/char-img/default.png';
+          avatarElement.onerror = null;
+        };
+        avatarElement.src = fallbackSrc;
+      } else {
+        avatarElement.src = './src/char-img/default.png';
+        avatarElement.onerror = null;
+      }
     };
 
     const messageWrapper = document.createElement("div");
@@ -118,11 +131,24 @@ function createMessageElement(msg) {
     const avatarElement = document.createElement('img');
     avatarElement.classList.add('chat-image');
     avatarElement.src = msg.isSender ? msg.senderImage : msg.receiverImage;
-    avatarElement.alt = msg.isSender ? msg.sender : msg.receiver;
+    const charName = msg.isSender ? msg.sender : msg.receiver;
+    avatarElement.alt = charName;
+    avatarElement.setAttribute('data-char-name', charName);
 
-    avatarElement.onerror = () => {
-      avatarElement.src = './src/char-img/default.png';
-      avatarElement.onerror = null;
+    avatarElement.onerror = async () => {
+      const name = avatarElement.getAttribute('data-char-name');
+      if (name) {
+        const list = await getJSONList();
+        const fallbackSrc = getLocalCharacterIconURL(name, list);
+        avatarElement.onerror = () => {
+          avatarElement.src = './src/char-img/default.png';
+          avatarElement.onerror = null;
+        };
+        avatarElement.src = fallbackSrc;
+      } else {
+        avatarElement.src = './src/char-img/default.png';
+        avatarElement.onerror = null;
+      }
     };
 
     const imageElement = document.createElement('img');
@@ -174,11 +200,24 @@ function createMessageElement(msg) {
     const imageElement = document.createElement('img');
     imageElement.classList.add('chat-image');
     imageElement.src = msg.isSender ? msg.senderImage : msg.receiverImage;
-    imageElement.alt = msg.isSender ? msg.sender : msg.receiver;
+    const charName = msg.isSender ? msg.sender : msg.receiver;
+    imageElement.alt = charName;
+    imageElement.setAttribute('data-char-name', charName);
 
-    imageElement.onerror = () => {
-      imageElement.src = './src/char-img/default.png';
-      imageElement.onerror = null;
+    imageElement.onerror = async () => {
+      const name = imageElement.getAttribute('data-char-name');
+      if (name) {
+        const list = await getJSONList();
+        const fallbackSrc = getLocalCharacterIconURL(name, list);
+        imageElement.onerror = () => {
+          imageElement.src = './src/char-img/default.png';
+          imageElement.onerror = null;
+        };
+        imageElement.src = fallbackSrc;
+      } else {
+        imageElement.src = './src/char-img/default.png';
+        imageElement.onerror = null;
+      }
     };
 
     const messageWrapper = document.createElement("div");
@@ -229,12 +268,12 @@ function attachActionMenu(element, msg) {
   const actionMenu = document.createElement("div");
   actionMenu.classList.add("action-menu", "hidden");
 
-  const isTextMessage = msg.type === 'text';
+  const showCharControls = msg.type !== 'action' && msg.type !== 'timestamp';
   actionMenu.innerHTML = `
-    ${isTextMessage ? '<button class="action-btn change-char-btn" type="button" title="Change Character" data-action="change-char">👥</button>' : ''}
+    ${showCharControls ? '<button class="action-btn change-char-btn" type="button" title="Change Character" data-action="change-char">👥</button>' : ''}
     <button class="action-btn up-btn" type="button" title="Move Up" data-action="up">⬆️</button>
     <button class="action-btn down-btn" type="button" title="Move Down" data-action="down">⬇️</button>
-    ${isTextMessage ? '<button class="action-btn switch-btn" type="button" title="Switch Sender/Receiver" data-action="switch">🔄</button>' : ''}
+    ${showCharControls ? '<button class="action-btn switch-btn" type="button" title="Switch Sender/Receiver" data-action="switch">🔄</button>' : ''}
     <button class="action-btn delete-btn" type="button" title="Delete" data-action="delete">🗑️</button>
   `;
 

@@ -1,0 +1,46 @@
+image coding for fallbacks images
+
+fallback images - backup images for characters who are not available yet.
+
+reference from `api.js`:
+
+const nationCodes = {
+  "MC": "mc",
+  "Mondstadt": "00",
+  "Liyue": "01",
+  "Inazuma": "02",
+  "Sumeru": "03",
+  "Fontaine": "04",
+  "Natlan": "05",
+  "Snezhnaya": "06",
+  "Khaenri'ah": "07",
+  "Others": "08",
+  "Skins": "skins",
+  "Non-Playable": "non-playable"
+};
+
+filename: `code-name`.png
+example:
+  02-scaramouche.png
+  non-playable-capitano.png
+
+last update - june 26 2026
+unplayables:
+"Snezhnaya": {
+  "Sandrone": "Sandrone",
+  "Pulcinella": "Pulcinella",
+  "Pantalone": "Pantalone",
+  "Pierro": "Pierro",
+  "Dottore": "Dottore",
+  "The Tsaritsa": "Tsaritsa",
+  "Vodyanitsa": "Vodyanitsa",
+  "Alyosha": "Alyosha",
+  "Noy": "Noy",
+  "Mitya": "Mitya",
+  "Vesna": "Vesna",
+  "Danica": "Danica",
+  "Odette": "Odette",
+  "Valeriy": "Valeriy"
+},
+
+note: idk if Anastasya Feodorovna Snezhnaya is the Tsaritsa herself lol

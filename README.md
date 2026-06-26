@@ -14,7 +14,7 @@ Access the app here at [gi-chat.pages.dev](https://gi-chat.pages.dev)
 
 This is version **v1.1.0**.
 
-*Please see the [changelog here](release-notes/v1-0-0_release-notes.md) on what was changed since last version.*
+*Please see the [changelog here](release-notes/v1-1-0_release-notes.md) on what was changed since last version.*
 
 
 ## ⚠ Disclaimer
@@ -22,6 +22,8 @@ This is version **v1.1.0**.
 Genshin Chat is a fan-made project and is not affiliated with or endorsed by HoYoverse.
 
 Genshin Impact and all related trademarks, assets, and characters belong to their respective owners.
+
+Notice of usage of fanmade icons can be [found here](release-notes/other/file-use-acknowledgement.md)
 
 ## 📸 Screenshots
 
@@ -155,19 +157,23 @@ Works on all modern browsers, including phones and tablets. Straightforward as y
 
 ### 🌧 On character selections...
 
-I acknowledge the following characters below that appeared in the game are not available as of this moment due to their missing **official** sprites. In the meantime, you can always use a custom image and pretend nothing happened. Thanks!
+*For fair use statement regarding with fan-art icons, please refer to [this section](#-disclaimer).*
 
-- **Khaenri'ah**
-  - Dainsleif
-- **Inazuma**
-  - Scaramouche
-  - Signora
-- **Natlan**
-  - Capitano
-
-The following character/s is/are *temporarily* available, since we don't have sprites yet until this character is officially released.
+The following character/s is/are available, but we don't have the icons yet *until the character/s is/are officially released*. This list is tentative and I will also keep watch of it. ~Pls remind me as well by pulling up an Issue lol~
 
 - **Sandrone** - July 1, 2026
+- **Pulcinella** - version 7.X
+- **Pantalone** - version 7.X
+- **Pierro** - version 7.X
+- **Tsaritsa/Snezhnaya** - version 7.X
+- **Alyosha** - version 7.X
+- **Noy** - version 7.X
+- **Mitya** - version 7.X
+- **Vesna** - version 7.X
+- **Danica** - version 7.X
+- **Odette** - version 7.X
+- **Valeriy** - version 7.X
+- **Alice** - version 7.X
 
 ### 🤔 Future Considerations?
 
@@ -187,7 +193,7 @@ Feedback and suggestions are always welcome!
 
 ## 📢 Promotions
 
-I am also promoting via the Facebook group "Angel's Share Bar and Resto"!
+I am also promoting via the Facebook group **"Angel's Share Bar and Resto"**!
 
 ![ASBR Screenshot](assets/screenshots/asbr-promo-post.png)
 
