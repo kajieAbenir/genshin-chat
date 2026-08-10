@@ -12,9 +12,9 @@ Access the app here at [gi-chat.pages.dev](https://gi-chat.pages.dev)
 
 ### Version & Changes
 
-This is version **v1.1.0**.
+This is version **v1.1.1**.
 
-*Please see the [changelog here](release-notes/v1-1-0_release-notes.md) on what was changed since last version.*
+*Please see the [changelog here](release-notes/v1-1-1_release-notes.md) on what was changed since last version.*
 
 
 ## ⚠ Disclaimer
